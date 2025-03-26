@@ -65,7 +65,7 @@
 
       <!-- Liens et pseudo -->
       <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-        <ul class="navbar-nav liens me-5 d-flex">
+        <ul class="navbar-nav  liens  d-flex justify-content-center">
           <li class="nav-item">
             <a class="nav-link" href="#">
               <div class="frame-4">
@@ -127,16 +127,14 @@
       </div>
       <div class="frame-58 d-flex ">
         <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-          <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span
-              class="fw-bold">15/03/2025</span></span>
+          <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
+              15/03/2025</span></span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- le liste a voter  -->
-
-
 
   <article class="voting-card-wrapper d-flex justify-content-center align-items-center py-5">
     <div class="voting-card container p-4 shadow rounded">
@@ -150,14 +148,14 @@
         </div>
         <div class="image-container text-center">
           <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid"
-            style="max-width: 100px;">
+            style="">
         </div>
       </div>
 
       <section class="progress-section">
         <div class="progress-container">
           <div class="progress-bar "></div>
-          <p class="progress-text text-center ">42% (108 votes)</p>
+          <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
         </div>
       </section>
       <footer class="confirmation-section">
@@ -167,13 +165,7 @@
             <div class="icon-container">
 
               <img alt="icon" class="check-square" src="image/user_icons/check-square0.svg" />
-              <!-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                class="check-icon">
-                <path
-                  d="M6 7.33333L8 9.33333L14.6667 2.66667M14 8V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V3.33333C2 2.97971 2.14048 2.64057 2.39052 2.39052C2.64057 2.14048 2.97971 2 3.33333 2H10.6667"
-                  stroke="#F5F5F5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                </path>
-              </svg> -->
+
             </div>
           </button>
         </div>
@@ -185,12 +177,148 @@
     </div>
   </article>
 
+  <!-- resutat en direct  -->
 
+  <div class="results-container container-fluid ">
+    <h1 class="results-title text-nowrap">Résultat en temps réel</h1>
+    <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="vote-total">256</span></p>
+  </div>
+
+  <!-- list  -->
+
+  <div class="row">
+    <!-- premier -->
+    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+
+      <div class="voting-card container  p-4 shadow rounded">
+        <div
+          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
+          <figure class="logo-container text-center mb-3 mb-md-0">
+            <p class="logo-text fw-bold">Logo Liste</p>
+          </figure>
+          <div class="title-section text-center text-md-start">
+            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
+          </div>
+          <div class="image-container text-center">
+            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+          </div>
+        </div>
+
+        <section class="progress-section">
+          <div class="progress-container">
+            <div class="progress-bar ">
+            </div>
+            <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- deuxieme -->
+    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+
+      <div class="voting-card container  p-4 shadow rounded">
+        <div
+          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
+          <figure class="logo-container text-center mb-3 mb-md-0">
+            <p class="logo-text fw-bold">Logo Liste</p>
+          </figure>
+          <div class="title-section text-center text-md-start">
+            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
+          </div>
+          <div class="image-container text-center">
+            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+          </div>
+        </div>
+
+        <section class="progress-section">
+          <div class="progress-container">
+            <div class="progress-bar2 ">
+            </div>
+            <p class="progress-text text-center text-nowrap ">28% (72 votes)</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+
+    <!-- 3eme -->
+
+    <div class=" col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+
+      <div class="voting-card container  p-4 shadow rounded">
+        <div
+          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
+          <figure class="logo-container text-center mb-3 mb-md-0">
+            <p class="logo-text fw-bold">Logo Liste</p>
+          </figure>
+          <div class="title-section text-center text-md-start">
+            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
+          </div>
+          <div class="image-container text-center">
+            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+          </div>
+        </div>
+
+        <section class="progress-section">
+          <div class="progress-container">
+            <div class="progress-bar3 ">
+            </div>
+            <p class="progress-text text-center text-nowrap ">38% (76 votes)</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+
+<!-- footer  -->
 
 
 
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<footer class="footer container-fluid">
+  <div class="row align-items-center text-center text-md-start">
+      
+      <!-- Logo et réseaux sociaux -->
+      <div class="col-md-4 d-flex flex-column align-items-center">
+          <div class=" logo-footer ">
+            <div class="frugb-vote">
+              <a href="#accueil">
+                <img alt="img" class="ugb-vote-1" src="image/user_image/logoUBGvote.png" />
+              </a>
+            </div>
+              <div class="button-list d-flex justify-content-center ">
+                  <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+                  <img class="img-fluid" src="image/user_icons/logo-instagram0.svg" alt="Instagram">
+                  <img class="img-fluid" src="image/user_icons/logo-you-tube0.svg" alt="YouTube">
+                  <img class="img-fluid" src="image/user_icons/linked-in0.svg" alt="LinkedIn">
+              </div>
+          </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="col-md-4 text-center">
+          <p class="_2025-ugb-vote">© 2025 UGBVote</p>
+      </div>
+
+      <!-- Liens utiles -->
+      <div class="col-md-4 text-center">
+          <div class="lienutiles align-items-start">
+              <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
+                  <strong>Lien Utiles</strong><br>
+                  <a href="https://www.ugb.sn" target="_blank">www.ugb.sn</a><br>
+                  <a href="https://portail.ugbnumerique.sn" target="_blank">portail.ugbnumerique.sn</a>
+              </p>
+          </div>
+      </div>
+      
+  </div>
+</footer>
 
 </html>

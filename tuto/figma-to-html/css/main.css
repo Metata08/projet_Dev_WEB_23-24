@@ -1,203 +1,149 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@500&display=swap");
-
-.voting-card-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: rgba(245, 245, 245, 0.5);
-  padding: 45px;
+.footer,
+.footer * {
+  box-sizing: border-box;
 }
-
-.voting-card {
-  width: 100%;
-  max-width: 1183px;
-  border-radius: 16px;
-  border: 1px solid #666;
-  background-color: #d9d9d9;
+.footer {
+  background: #d9d9d9;
+  padding: 1.1875rem 1.3125rem 1.1875rem 1.3125rem;
+  display: flex;
+  flex-direction: row;
+  gap: 26.25rem;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
   overflow: hidden;
 }
-
-.card-header {
-  width: 411px;
-  background-color: #ab775b;
-  border-radius: 10px;
-  padding: 18px;
-  display: flex;
-  align-items: flex-start;
-  gap: 37px;
-}
-
-.logo-container {
-  margin: 0;
-  width: 164px;
-  height: 147px;
-  background-color: #d9d9d9;
-  border-radius: 10px;
-  border: 1px solid #666;
-  padding: 0 35px;
-}
-
-.logo-text {
-  color: #000;
-  font-family: Inter, sans-serif;
-  font-size: 20px;
-  line-height: 140%;
-  margin: 0;
-}
-
-.title-section {
+.logo-footer {
   display: flex;
   flex-direction: column;
-  gap: 11px;
-}
-
-.list-title {
-  color: #000;
-  font-family: Roboto, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 140%;
-  height: 36px;
-  padding: 0 4px;
-  border-radius: 10px;
-  border: 1px solid #666;
-  background-color: #d9d9d9;
-  width: 180px;
-  margin: 0;
-}
-
-.image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 39px;
-}
-
-.list-image {
-  width: 105px;
-  height: 105px;
-}
-
-.progress-section {
-  flex: 1;
-  padding: 47px 16px;
-}
-
-.progress-container {
-  height: 148px;
-  border-radius: 100px;
-  background-color: #fff;
+  gap: 1.5rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 9.375rem;
   position: relative;
 }
-
-.progress-bar {
-  width: 42%;
-  height: 100%;
-  border-radius: 100px;
-  background-color: #ab775b;
+.logo {
+  display: flex;
+  flex-direction: row;
+  gap: 0rem;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 3.3125rem;
+  position: relative;
+}
+.frugb-vote {
+  border-radius: 1.875rem;
+  padding: 0rem 1.1875rem 0rem 1.1875rem;
+  flex-shrink: 0;
+  width: 9.375rem;
+  height: 3.3125rem;
+  position: relative;
+  overflow: hidden;
+}
+.ugb-vote-1 {
+  width: 9.375rem;
+  height: 4.4375rem;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0rem;
+  top: 0rem;
+  object-fit: cover;
 }
-
-.progress-text {
-  color: #000;
-  font-family: "Roboto Mono", monospace;
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 100%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-}
-
-.confirmation-section {
+.button-list {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-400, 1rem);
   align-items: center;
-  padding: 20px;
-  gap: 20px;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 1.5rem;
+  position: relative;
 }
-
-.button-wrapper {
+.x-logo {
+  flex-shrink: 0;
+  width: 1.49875rem;
+  height: 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+.logo-instagram {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+.logo-you-tube {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+.linked-in {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+.copyritgh {
+  padding: 0.625rem;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  gap: 0.625rem;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 12.02375rem;
+  height: 2.75rem;
+  position: relative;
 }
-
-.confirm-button {
+._2025-ugb-vote {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 1.25rem;
+  line-height: 140%;
+  font-weight: 400;
+  position: relative;
+}
+.lienutiles {
+  padding: 0.625rem;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  gap: 0.625rem;
   align-items: center;
-  gap: 8px;
-  padding: 10px 29px;
-  background-color: #ab775b;
-  border-radius: var(--sds-size-radius-200, 8px);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  border: none;
-  cursor: pointer;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 17.353125rem;
+  height: 5.875rem;
+  position: relative;
 }
-
-.button-text {
-  color: #f5f5f5;
-  font-family: Inter, sans-serif;
+.lien-utiles-www-ugb-sn-portail-ugbnumerique-sn {
+  color: #000000;
+  text-align: left;
+  font-family: "-", sans-serif;
+  font-size: 1.25rem;
+  line-height: 140%;
+  font-weight: 400;
+  position: relative;
+}
+.lien-utiles-www-ugb-sn-portail-ugbnumerique-sn-span {
+  color: #000000;
+  font-family: "Inter-Bold", sans-serif;
   font-size: 20px;
+  line-height: 140%;
   font-weight: 700;
 }
-
-.warning-text {
-  color: #000;
-  text-align: center;
-  font-family: "Roboto Mono", monospace;
-  font-size: 16px;
-  margin: 0;
-}
-
-@media (max-width: 991px) {
-  .voting-card-wrapper {
-    padding: 30px;
-  }
-
-  .card-header {
-    width: 100%;
-  }
-
-  .progress-section {
-    padding: 30px 16px;
-  }
-
-  .progress-text {
-    font-size: 30px;
-  }
-
-  .warning-text {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 640px) {
-  .voting-card-wrapper {
-    padding: 20px;
-  }
-
-  .card-header {
-    width: 100%;
-  }
-
-  .progress-section {
-    padding: 20px 16px;
-  }
-
-  .progress-text {
-    font-size: 24px;
-  }
-
-  .warning-text {
-    font-size: 12px;
-  }
+.lien-utiles-www-ugb-sn-portail-ugbnumerique-sn-span2 {
+  color: #000000;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 20px;
+  line-height: 140%;
+  font-weight: 400;
 }
 
