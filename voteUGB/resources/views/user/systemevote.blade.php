@@ -46,74 +46,74 @@
       padding: 0;
     }
   </style>
-<header class="">
-  <div class="header-principal w-100 ">
-    <nav class="navbar navbar-expand-lg ">
-      <!-- Logo -->
-      <div class="frugb-vote me-auto">
-        <a href="#accueil">
-          <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-        </a>
-      </div>
+  <header class="">
+    <div class="header-principal w-100 ">
+      <nav class="navbar navbar-expand-lg ">
+        <!-- Logo -->
+        <div class="frugb-vote me-auto">
+          <a href="#accueil">
+            <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+          </a>
+        </div>
 
-      <!-- Bouton toggle pour les petits écrans -->
-      <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
-        data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <!-- Bouton toggle pour les petits écrans -->
+        <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
+          data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <!-- Liens et pseudo -->
-      <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-        <ul class="navbar-nav  liens  d-flex justify-content-center">
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <div class="frame-4">
-                <div class="elections">Élections</div>
-              </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <div class="frame-5">
-                <div class="resultats">Résultats</div>
-              </div>
-            </a>
-          </li>
-        </ul>
+        <!-- Liens et pseudo -->
+        <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
+          <ul class="navbar-nav  liens  d-flex justify-content-center">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <div class="frame-4">
+                  <div class="elections">Élections</div>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <div class="frame-5">
+                  <div class="resultats">Résultats</div>
+                </div>
+              </a>
+            </li>
+          </ul>
 
-        <!-- Pseudo à droite -->
-        <div class="pseudo me-5 justify-content-end">
-          <div class="frame-36">
-            <div class="avatar-block">
-              <div class="avatar">
-                <div class="initials">A</div>
-              </div>
-              <div class="info">
-                <div class="title">Prenom</div>
-                <div class="description">NOM</div>
+          <!-- Pseudo à droite -->
+          <div class="pseudo me-5 justify-content-end">
+            <div class="frame-36">
+              <div class="avatar-block">
+                <div class="avatar">
+                  <div class="initials">A</div>
+                </div>
+                <div class="info">
+                  <div class="title">Prenom</div>
+                  <div class="description">NOM</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="frame-93 ms-3">
-            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+            <div class="frame-93 ms-3">
+              <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+            </div>
           </div>
         </div>
+      </nav>
+      <!-- image-header -->
+
+
+
+      <div class="imageHeader">
+        <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
+        <div class="election-du-repr-sentant-des-tudiants">
+          Election du représentant des étudiants
+        </div>
       </div>
-    </nav>
-    <!-- image-header -->
 
-
-
-    <div class="imageHeader">
-      <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-      <div class="election-du-repr-sentant-des-tudiants">
-        Election du représentant des étudiants
-      </div>
     </div>
 
-  </div>
-
-</header>
+  </header>
 
 <body class="">
   <!-- voter pour votre reppresentant  -->
@@ -160,7 +160,7 @@
             <span class="button-text">CONFIRMER</span>
             <div class="icon-container">
 
-              <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}}" />
+              <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
 
             </div>
           </button>
@@ -290,7 +290,7 @@
           </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
-        <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+          <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
           <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
