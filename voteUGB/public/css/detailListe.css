@@ -1,0 +1,287 @@
+/* header */
+
+
+.header-principal {
+    width: 100%;
+    height: auto;
+    /* Adapter à son contenu */
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    /* position: absolute; */
+    left: 0;
+    top: 0;
+  
+    /* border: 0.1875rem solid #522504; */
+    /* width: 100%; */
+    /* height: auto; S'ajuste automatiquement */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* position: fixed; Fixer le header en haut */
+    top: 0;
+    left: 0;
+    /* background: #f0e0cd; */
+    /* border-bottom: 2px solid #522504; */
+    z-index: 1000;
+    /* Toujours au-dessus des autres éléments */
+    width: 100%;
+  
+  }
+  
+  /* navbar */
+  .navbar {
+    background: #f0e0cd;
+    border: 0.1875rem solid #522504;
+    height: 133px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  
+  /* logo ugb vote */
+  .frugb-vote {
+    border-radius: 1.875rem;
+    padding: 0rem 1.1875rem;
+    width: 12.5rem;
+    height: 4.4375rem;
+    margin-left: 2rem;
+  
+  
+  }
+  
+  .ugb-vote-1 {
+    border-radius: 1.875rem;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* liens sur le navbar */
+  .liens-speudo {
+    gap: 10rem;
+  }
+  
+  
+  .liens {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .frame-4,
+  .frame-5 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.625rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .elections,
+  .resultats {
+    color: #000;
+    font-family: "Roboto-SemiBold", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  
+  /* Pseudo */
+  .pseudo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .avatar-block {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #522504;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .title {
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  
+  .description {
+    font-size: 0.8rem;
+    color: gray;
+  }
+  
+  .frame-93 img {
+    width: 48px;
+    cursor: pointer;
+  }
+  
+  /* Adaptation responsive */
+  @media (max-width: 991px) {
+    .frugb-vote {
+      align-self: flex-start;
+    }
+  
+  
+  
+    .navbar {
+      flex-direction: row;
+      height: auto;
+      padding: 1rem;
+    }
+  
+    .navbar-nav {
+      flex-direction: row !important;
+      text-align: center;
+      gap: 1rem;
+    }
+  
+    .pseudo {
+      flex-direction: row;
+      align-items: center;
+      margin-top: 1rem;
+    }
+  
+    .frugb-vote {
+      margin: 0;
+    }
+  
+    .liens-speudo {
+      padding-top: 16px;
+    }
+  
+  }
+  
+  
+  /* image-header */
+  
+  
+  .imageHeader {
+    position: relative;
+    /* Permet de positionner l'enfant en absolu */
+  
+    height: auto;
+    width: 100%;
+    /* Pour s'adapter au conteneur */
+    height: auto;
+    display: flex;
+    justify-content: center;
+    /* width: 97.4%; */
+  
+  }
+  
+  .design-sans-titre-1 {
+    width: 90%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0rem 0rem 1rem 1rem;
+    object-fit: cover;
+  }
+  
+  .election-du-repr-sentant-des-tudiants {
+    transform: translate(-50%, -50%);
+    /* Centre exactement */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-weight: bold;
+    text-align: center;
+  
+    color: #522504;
+    font-family: "Audiowide";
+    font-size: 3vw;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 80%;
+  }
+  
+
+/* footer  */
+
+
+.footer {
+    background: #d9d9d9;
+    padding: 20px 30px;
+    margin-top:100px ; ;
+  }
+  
+  .logo-footer {
+  
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    text-align: center;
+  }
+  
+  .button-list img {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .button-list{
+    margin-top: 16px;
+  }
+  
+  .button-list img:hover {
+    transform: scale(1.2);
+  }
+  
+  .copyrigth,
+  .lienutiles {
+    text-align: center;
+  }
+  
+  ._2025-ugb-vote {
+    font-family: "Inter-Regular";
+    font-size: 1rem;
+    color: #000;
+  }
+  
+  .lien-utiles-www-ugb-sn-portail-ugbnumerique-sn {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+        text-align: center;
+    }
+  
+    .button-list {
+        justify-content: center;
+    }
+  }
+  
+  
+
+  btn-member{
+    margin-top: 16px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #522504 !important;
+    color: #522504;
+    transition: background-color 0.3s ease;
+  }

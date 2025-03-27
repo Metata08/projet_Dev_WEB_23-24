@@ -46,7 +46,6 @@
       padding: 0;
     }
   </style>
-</head>
 <header class="">
   <div class="header-principal w-100 ">
     <nav class="navbar navbar-expand-lg ">
@@ -83,7 +82,7 @@
         </ul>
 
         <!-- Pseudo à droite -->
-        <div class="pseudo me-5 justify-content-center ">
+        <div class="pseudo me-5 justify-content-end">
           <div class="frame-36">
             <div class="avatar-block">
               <div class="avatar">
@@ -96,7 +95,7 @@
             </div>
           </div>
           <div class="frame-93 ms-3">
-            <img alt="img" class="log-out" src="image/user_icons/log-out0.svg" />
+            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
           </div>
         </div>
       </div>
@@ -111,8 +110,6 @@
         Election du représentant des étudiants
       </div>
     </div>
-
-
 
   </div>
 
@@ -147,7 +144,7 @@
           <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
         </div>
         <div class="image-container text-center">
-          <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+          <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
         </div>
       </div>
 
@@ -163,7 +160,7 @@
             <span class="button-text">CONFIRMER</span>
             <div class="icon-container">
 
-              <img alt="icon" class="check-square" src="image/user_icons/check-square0.svg" />
+              <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}}" />
 
             </div>
           </button>
@@ -199,7 +196,7 @@
             <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
           </div>
           <div class="image-container text-center">
-            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
           </div>
         </div>
 
@@ -227,7 +224,7 @@
             <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
           </div>
           <div class="image-container text-center">
-            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
           </div>
         </div>
 
@@ -257,7 +254,7 @@
             <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
           </div>
           <div class="image-container text-center">
-            <img src="image/user_image/pictogrammers-material-vote-512-10.png" alt="Logo" class="list-image img-fluid">
+            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
           </div>
         </div>
 
@@ -289,14 +286,14 @@
       <div class=" logo-footer ">
         <div class="frugb-vote">
           <a href="#accueil">
-            <img alt="img" class="ugb-vote-1" src="image/user_image/logoUBGvote.png" />
+            <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
           </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
-          <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
-          <img class="img-fluid" src="image/user_icons/logo-instagram0.svg" alt="Instagram">
-          <img class="img-fluid" src="image/user_icons/logo-you-tube0.svg" alt="YouTube">
-          <img class="img-fluid" src="image/user_icons/linked-in0.svg" alt="LinkedIn">
+        <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+          <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
+          <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
+          <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
         </div>
       </div>
     </div>
