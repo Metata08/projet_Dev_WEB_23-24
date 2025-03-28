@@ -1,3 +1,31 @@
+a,
+button,
+input,
+select,
+h1,
+h2,
+h3,
+h4,
+h5,
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  background: none;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+menu,
+ol,
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 .header-principal {
   width: 100%;
   height: auto;
@@ -7,20 +35,8 @@
   gap: 0.125rem;
   align-items: flex-start;
   justify-content: flex-start;
-  /* position: absolute; */
   left: 0;
   top: 0;
-
-  /* border: 0.1875rem solid #522504; */
-  /* width: 100%; */
-  /* height: auto; S'ajuste automatiquement */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* position: fixed; Fixer le header en haut */
-  top: 0;
-  left: 0;
-  /* background: #f0e0cd; */
-  /* border-bottom: 2px solid #522504; */
   z-index: 1000;
   /* Toujours au-dessus des autres éléments */
   width: 100%;
@@ -183,7 +199,6 @@
   height: auto;
   display: flex;
   justify-content: center;
-  /* width: 97.4%; */
 
 }
 
@@ -211,6 +226,10 @@
   flex-wrap: wrap;
   max-width: 80%;
 }
+
+/* Fin header */
+
+
 
 /* section vote */
 

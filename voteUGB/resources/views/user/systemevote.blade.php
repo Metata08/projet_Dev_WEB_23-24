@@ -17,36 +17,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <style>
-    a,
-    button,
-    input,
-    select,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      border: none;
-      text-decoration: none;
-      background: none;
 
-      -webkit-font-smoothing: antialiased;
-    }
-
-    menu,
-    ol,
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <header class="">
+    <header class="">
     <div class="header-principal w-100 ">
       <nav class="navbar navbar-expand-lg ">
         <!-- Logo -->
@@ -117,19 +89,19 @@
 
 <body class="">
   <!-- voter pour votre reppresentant  -->
-  <div class="container-fluid  m-3 p-3">
-    <div class="voter">
-      <div class="voter-pour-votre-repr-sentant">
-        Voter pour votre représentant
-      </div>
-      <div class="frame-58 d-flex ">
-        <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-          <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
-              15/03/2025</span></span>
+    <div class="container-fluid  m-3 p-3">
+      <div class="voter">
+        <div class="voter-pour-votre-repr-sentant">
+          Voter pour votre représentant
+        </div>
+        <div class="frame-58 d-flex ">
+          <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
+            <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
+                15/03/2025</span></span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
   <!-- le liste a voter  -->
 

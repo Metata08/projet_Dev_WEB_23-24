@@ -1,0 +1,26 @@
+
+/* Section principale avec toute la largeur disponible */
+.container-fluid {
+    width: 100%; /* Utilise 100% de la largeur disponible */
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Formulaire */
+.full-width-card {
+    width: 100%;    
+    max-width: 100%; /* Il occupe toute la largeur de son conteneur */
+    max-height: 80vh; /* Limite la hauteur */
+    overflow: hidden;
+}
+
+.form-control {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+
+.image-form{
+    height: auto;
+}

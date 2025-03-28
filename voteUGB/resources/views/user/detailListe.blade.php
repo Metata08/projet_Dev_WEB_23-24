@@ -178,8 +178,9 @@
 
     </div>
 
-    <div class="button-wrapper">
-                <button class="confirm-button">
+    <div class="button-wrapper" action>
+                <a href="{{ route('systemevote') }}">
+                <button class="confirm-button" >
                     <span class="button-text">JE VOTE</span>
                     <div class="icon-container">
 
@@ -187,10 +188,8 @@
 
                     </div>
                 </button>
+                </a>
             </div>
-
-    <!-- Bootstrap core JS-->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
 
