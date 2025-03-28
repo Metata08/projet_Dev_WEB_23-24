@@ -31,27 +31,33 @@
             <img src="images/urne.png" alt="" srcset="">
         </div>
         <div class="col-md-8 col-12 conteneur-form">
+            <div id="alert"></div>
             <h1 class="text">Inscrivez-Vous !</h1>
-            <form id="inscriptionForm" method="post" novalidate name="formulaire">
+            <form action="{{route('ajouterEtudiants')}}" id="inscriptionForm" method="post" novalidate name="formulaire">
+                @csrf
                 <div class="row">
                     <div class="form-group mb-3 position-relative col">
                         <label for="prenom" class="form-label position-absolute bg-white px-2">
                             Entrez votre prénom
                         </label>
-                        <input type="text" name="prenom" class="form-control" id="prenom" required>
+                        <input type="text" name="prenom" class="form-control" id="prenom" value="{{ old('prenom') }}" required>
+                        @error('prenom') <span class="error">{{ $message }}</span> @enderror
                     </div>
                     <div class="form-group mb-3 position-relative col">
                         <label for="nom" class="form-label position-absolute bg-white px-2">
                             Entrez votre nom
                         </label>
-                        <input type="text" name="nom" id="nom" class="form-control" required>
+                        <input type="text" name="nom" id="nom" class="form-control" value="{{ old('nom') }}" required>
+                        @error('nom') <span class="error">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="form-group mb-3 position-relative">
                     <label for="email" class="form-label position-absolute bg-white px-2">
                         Entrez votre e-mail
                     </label>
-                    <input type="email" name="email" id="email" class="form-control" required>
+                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
+                    @error('email') <span class="error">{{ $message }}</span> @enderror
+
                 </div>
                 <div class="form-group mb-3 position-relative">
                     <label for="ufr" class="form-label position-absolute bg-white px-2">
@@ -69,12 +75,13 @@
                         Entrer votre password
                     </label>
                     <input type="password" name="password" id="password" class="form-control" required>
+                    @error('password') <span class="error">{{ $message }}</span> @enderror
                 </div>
                 <div class="form-group mb-3 position-relative">
                     <label for="confpassword" class="form-label position-absolute bg-white px-2">
                         Confirmer votre password
                     </label>
-                    <input type="password" name="confpassword" id="confpassword" class="form-control" required>
+                    <input type="password" name="password_confirmation" id="confpassword" class="form-control" required>
                 </div>
                 <div class="row">
                     <div class="col">
@@ -95,6 +102,8 @@
         <div class="col col-md-4">@ 2025 UGBVote</div>
         <div class="col col-md-4">Liens utiles</div>
     </footer>
-    
+    <script>
+        
+    </script>
 </body>
 </html>
