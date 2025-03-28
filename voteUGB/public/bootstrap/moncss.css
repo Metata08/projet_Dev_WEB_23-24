@@ -1,0 +1,30 @@
+.mg{
+    margin-top: 0.4em;
+    margin-left: 1.3em;
+    margin-right: 1em;
+}
+
+.mt-h{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.mg-h{
+    margin-bottom: 2em;
+}
+
+.coul-h{
+    background-color: rgba(114, 114, 179, 0.379);
+}
+
+.error{
+    color: red !important;
+}
+
+
+
+.mt-h{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
