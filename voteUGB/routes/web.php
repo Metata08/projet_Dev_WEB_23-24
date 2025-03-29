@@ -11,4 +11,12 @@ Route::get('/inscription', function () {
     return view('inscription');
 });
 
+Route::get('admin/index', function () {
+    return view('admin.index');
+});
+
+Route::get('admin/home', function () {
+    return view('admin.home');
+});
+
 Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
