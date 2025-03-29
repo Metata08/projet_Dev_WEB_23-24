@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Etudiant;
+
 
 class login_controller extends Controller
 {
-    public function showLoginForm()
+    // accueil
+    public function accueil(): View
+    {
+        return view('ugbvote');
+    }
+    public function showLoginForm(): View
     {
         return view('user.login');
     }
@@ -16,32 +27,40 @@ class login_controller extends Controller
     {
         return view('user.election');
     }
-// inscriotion
+    // inscription
     public function inscription()
     {
         return view('user.inscription');
     }
 
 
-/* 
+
+    // pour gerer la connection des users 
     public function login(Request $request)
     {
-        // Valider les données du formulaire
+        // Validation des champs
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'mail' => 'required|email',
+            'mdp' => 'required|string',
         ]);
 
-        // Tenter de s'authentifier
-        if (Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-        ], $request->remember)) {
-            return redirect()->intended('/');
+        // Vérifier si l'utilisateur existe
+        $etudiant = Etudiant::where('mail', $request->mail)->first();
+
+        if (!$etudiant || $request->mdp !== $etudiant->mdp) {
+
+            return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
         }
 
-        return back()->withErrors([
-            'email' => 'Les informations de connexion sont incorrectes.',
-        ]);
-    } */
+        // Authentifier l'utilisateur
+        Auth::login($etudiant,true);
+
+        return redirect()->route('election')->with('success', 'Connexion réussie');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Déconnexion réussie');
+    }
 }

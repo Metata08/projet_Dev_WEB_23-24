@@ -9,19 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('etudiants', function (Blueprint $table) {
-            $table->id();
-            $table->string('prenom');
+            $table->id('id_etudiant');
             $table->string('nom');
+            $table->string('prenom');
+            $table->string('code_etudiant')->unique();
             $table->string('email')->unique();
-            $table->string('ufr');
-            $table->string('password');
-            $table->boolean('tete')->default(false);
+            $table->string('mdp');
+            $table->unsignedBigInteger('ufr_id');
+            $table->foreign('ufr_id')->references('id_ufr')->on('u_f_r_s')->onDelete('cascade');
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

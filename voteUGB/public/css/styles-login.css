@@ -24,3 +24,21 @@
 .image-form{
     height: auto;
 }
+
+.inscrivez-vous{
+    color:rgb(174, 114, 40) ;
+    font-family:'Courier New', Courier, monospace;
+  }
+
+  label {
+    font-size: 14px;
+    color: #333;
+    font-family: "Roboto Mono", monospace;
+}
+
+::placeholder {
+    color: gray !important;
+    opacity: 0.1; /* Assure que la couleur est bien visible */
+    font-family: "Roboto Mono", monospace;
+    font-size: 16px !important;
+}

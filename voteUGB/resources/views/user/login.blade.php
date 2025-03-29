@@ -15,67 +15,41 @@
   <link rel="stylesheet" href="{{ asset('css/bootstrap-5.3.3-dist/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ asset('css/systemeDeVote.css') }}">
   <link rel="stylesheet" href="{{ asset('css/styles-login.css') }}">
+  <!-- <link rel="stylesheet" href="{{ asset('bootstrap/css/inscription.css') }}"> -->
+
 
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <style>
-    a,
-    button,
-    input,
-    select,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      border: none;
-      text-decoration: none;
-      background: none;
 
-      -webkit-font-smoothing: antialiased;
-    }
-
-    menu,
-    ol,
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
   <header class="">
     <div class="header-principal w-100 ">
       <nav class="navbar navbar-expand-lg ">
         <!-- Logo -->
         <div class="frugb-vote me-auto">
-          <a href="#accueil">
+          <a href="{{ url('/') }}">
             <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
           </a>
         </div>
 
         <!-- Bouton toggle pour les petits écrans -->
-  
+
 
         <!-- Liens et pseudo -->
         <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
           <ul class="navbar-nav  liens  d-flex justify-content-center">
             <li class="nav-item">
-              
+
             </li>
             <li class="nav-item">
-          
+
             </li>
           </ul>
 
           <!-- Pseudo à droite -->
           <div class="pseudo me-5 justify-content-end">
             <div class="frame-36">
-            
+
             </div>
             <div class="frame-93 ms-3">
             </div>
@@ -83,7 +57,7 @@
         </div>
       </nav>
 
-      
+
       <!-- image-header -->
 
 
@@ -101,42 +75,56 @@
 
 <body>
 
-  <div class=" p-3 m-3 ">
-
-    <!-- Conteneur du formulaire -->
-    <div class=" col container mx-auto my-auto justify-content-center">
-      <div class="row justify-content-center align-items-center ">
+  <div class="container ">
+    <div class="container mx-auto my-auto h-100">
+      <div class="row justify-content-center align-items-center pt-5 h-100">
 
         <!-- Image qui disparaît sur petits écrans -->
-        <div class="image-form card  col-md-6 d-none d-md-block ">
-          <img src="{{ asset('image/user_image/vote.png') }}" alt="Vote" class="img-fluid my-3">
+        <div class="image-form col-md-6 d-none d-md-block  h-100">
+          <img src="{{ asset('image/user_image/vote.png') }}" alt="Vote" class="img-fluid my-3 h-100 w-100 object-fit-cover">
         </div>
 
         <!-- Formulaire -->
-        <div class="col-12 col-md-6 mx-auto my-auto">
-          <div class="card p-4 border border-dark rounded-3 shadow">
-            <h3 class="text-center text-brown">Connectez-Vous !</h3>
+        <div class="col-12 col-md-6 mx-auto my-auto h-100 d-flex flex-column">
+          <div class="card  border-alert rounded shadow h-100">
+            <h3 class="text-center text-brown voter-pour-votre-repr-sentant">Connectez-Vous !</h3>
 
             <!-- Message d'alerte -->
-            <div id="message" class="d-none alert" role="alert"></div>
+            <div id="message" class="d-none alert" role="alert">
+              @if(session('success'))
+              <div class="alert alert-success">{{ session('success') }}</div>
+              @endif
+              @if($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+              @endif
+            </div>
 
-            <form method="GET" action="{{ route('election') }}" class="mt-4" id="loginForm">
+            <form method="POST" action="{{ route('login.post') }}" class="mt-4 d-flex flex-column h-100 p-3 m-3 " id="loginForm">
               @csrf
 
-              <div class="mb-3 text-center">
-                <label for="email" class="form-label fw-bold">E-mail</label>
-                <input type="email" class="form-control w-100 w-md-50 mx-auto" id="email" name="email" required>
-              </div>
 
-              <div class="mb-3 text-center">
-                <label for="password" class="form-label fw-bold">Mot de passe</label>
-                <input type="password" class="form-control w-100 w-md-50 mx-auto" id="password" name="password" required>
-              </div>
+              <div class="col">
+                <div class="mb-3 row ">
+                  <label for="email" class="form-label fw-bold">E-mail</label>
+                  <input type="email" class="form-control w-100 w-md-50 mx-auto" id="mail" name="mail" placeholder="etudiant@ugb.edu.sn" required>
+                </div>
 
-              <div class="d-flex justify-content-center mb-3">
-                <a href="#" class="text-decoration-none">Mot de passe oublié ?</a>
-              </div>
+                <div class="mb-3 row">
+                  <label for="password" class="form-label fw-bold">Mot de passe</label>
+                  <input type="password" class="form-control w-100 w-md-50 mx-auto" id="mdp" name="mdp" placeholder="mot de passe" required>
+                </div>
 
+                <div class="d-flex justify-content-center mb-3">
+                  <a href="#" class="text-decoration-none">Mot de passe oublié ?</a>
+                </div>
+
+              </div>
               <div class="d-flex justify-content-center">
                 <button type="submit" class="confirm-button">
                   <span class="button-text">CONNECTER</span>
@@ -148,13 +136,15 @@
             </form>
 
             <p class="mt-3 text-center">
-              Vous n’avez pas de compte ? <a href="{{ route('inscription') }}">Inscrivez-vous</a>
+              Vous n’avez pas de compte ? <a href="{{ route('inscription') }}" class="inscrivez-vous text-decoration-none">Inscrivez-vous</a>
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
 
 
   <!-- <script src="{{ asset('js/app.js') }}"></script> -->
@@ -167,7 +157,7 @@
     <div class="col-md-4 d-flex flex-column align-items-center">
       <div class=" logo-footer ">
         <div class="frugb-vote">
-          <a href="#accueil">
+          <a href="{{ route('ugbvote') }}">
             <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
           </a>
         </div>

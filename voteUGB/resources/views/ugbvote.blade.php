@@ -5,10 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description1" content="Plateforme de vote en ligne pour l'élection des représentants étudiants de l'UGB">
-
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
-    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Tienne&display=swap" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/accueil.css') }}">
 
@@ -33,7 +29,7 @@
         <nav class="navbar navbar-expand-lg ">
             <!-- Logo -->
             <div class="frugb-vote me-auto">
-                <a href="#accueil">
+             <a href="{{ route('ugbvote') }}">
                     <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
                 </a>
             </div>
@@ -222,9 +218,9 @@
         <div class="col-md-4 d-flex flex-column align-items-center">
             <div class=" logo-footer ">
                 <div class="frugb-vote">
-                    <a href="#accueil">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
+                    <a href="{{ route('ugbvote') }}">
+                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
                     <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">

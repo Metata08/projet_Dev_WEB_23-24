@@ -55,9 +55,9 @@
             <nav class="navbar navbar-expand-lg ">
                 <!-- Logo -->
                 <div class="frugb-vote me-auto">
-                    <a href="#accueil">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
+                    <a href="{{ route('ugbvote') }}">
+                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                </a>
                 </div>
 
                 <!-- Bouton toggle pour les petits écrans -->
@@ -70,14 +70,14 @@
                 <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
                     <ul class="navbar-nav  liens  d-flex justify-content-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('election') }}">
                                 <div class="frame-4">
                                     <div class="elections">Élections</div>
                                 </div>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('resultat') }}">
                                 <div class="frame-5">
                                     <div class="resultats">Résultats</div>
                                 </div>
@@ -205,9 +205,9 @@
         <div class="col-md-4 d-flex flex-column align-items-center">
             <div class=" logo-footer ">
                 <div class="frugb-vote">
-                    <a href="#accueil">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
+                    <a href="{{ route('ugbvote') }}">
+                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
                     <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">

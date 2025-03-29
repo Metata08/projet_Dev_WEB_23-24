@@ -23,4 +23,9 @@ class user_controller extends Controller
     public function page_vote():View {
         return view('user.systemevote');
     }
+
+    //fonction resultat
+    public function resultat():View {
+        return view('user.resultat');
+    }
 }

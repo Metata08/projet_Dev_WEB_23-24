@@ -9,20 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('etudiants_officiels', function (Blueprint $table) {
-            $table->id();
-            $table->string('email_etudiant')->unique();
+        Schema::create('votes', function (Blueprint $table) {
+            $table->id('id_vote');
+            $table->date('date_debut');
+            $table->date('date_fin');
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('etudiants_officiels');
+        Schema::dropIfExists('votes');
     }
 };

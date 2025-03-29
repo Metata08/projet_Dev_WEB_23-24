@@ -89,75 +89,20 @@
   </header>
 
 <body class="">
-  <!-- voter pour votre reppresentant  -->
-    <div class="container-fluid  m-3 p-3">
-      <div class="voter">
-        <div class="voter-pour-votre-repr-sentant">
-          Voter pour votre représentant
-        </div>
-        <div class="frame-58 d-flex ">
-          <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-            <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
-                15/03/2025</span></span>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  <!-- le liste a voter  -->
-
-  <article class="voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-    <div class="voting-card container p-4 shadow rounded">
-      <div
-        class="card-header text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-        <figure class="logo-container text-center mb-3 mb-md-0">
-          <p class="logo-text fw-bold">Logo Liste</p>
-        </figure>
-        <div class="title-section text-center text-md-start">
-          <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-        </div>
-        <div class="image-container text-center">
-          <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-        </div>
-      </div>
-
-      <section class="progress-section">
-        <div class="progress-container">
-          <div class="progress-bar "></div>
-          <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
-        </div>
-      </section>
-      <footer class="confirmation-section">
-        <div class="button-wrapper">
-          <button class="confirm-button">
-            <span class="button-text">CONFIRMER</span>
-            <div class="icon-container">
-
-              <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
-
-            </div>
-          </button>
-        </div>
-        <p class="warning-text">
-          <strong>Attention</strong>:votre vote est definitif et ne poura pas être
-          modifié !
-        </p>
-      </footer>
-    </div>
-  </article>
 
   <!-- resutat en direct  -->
 
-  <div class="results-container container-fluid ">
+  <div class="results-container container-fluid  m-3 p-3 ">
     <h1 class="results-title text-nowrap">Résultat en temps réel</h1>
     <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="vote-total">256</span></p>
   </div>
 
   <!-- list  -->
 
-  <div class="row">
+  <div class="container">
     <!-- premier -->
-    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+    <div class="row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
 
       <div class="voting-card container  p-4 shadow rounded">
         <div
@@ -185,7 +130,7 @@
     </div>
 
     <!-- deuxieme -->
-    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+    <div class="row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
 
       <div class="voting-card container  p-4 shadow rounded">
         <div
@@ -215,7 +160,7 @@
 
     <!-- 3eme -->
 
-    <div class=" col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
+    <div class=" row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
 
       <div class="voting-card container  p-4 shadow rounded">
         <div

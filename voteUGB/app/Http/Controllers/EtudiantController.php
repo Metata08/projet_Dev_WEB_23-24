@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class EtudiantController extends Controller
 {
-    public function ajouterEtudiants(Request $request)
+   /*  public function ajouterEtudiants(Request $request)
     {
         $request->validate([
             'prenom' => 'required|string|max:255',
@@ -41,9 +41,9 @@ class EtudiantController extends Controller
             $etudiant->password = Hash::make($request->input('password'));
             $etudiant->save();
 
-            return redirect('/')->with('success', 'Inscription réussie');
+            return redirect('/login')->with('success', 'Inscription réussie');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'Une erreur est survenue lors de l\'inscription.');
         }
-    }
+    } */
 }

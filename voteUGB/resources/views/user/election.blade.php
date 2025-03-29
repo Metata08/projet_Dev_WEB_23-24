@@ -12,11 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles-vote.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/election.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap-5.3.3-dist/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/systemeDeVote.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/detailListe.css') }}">
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +28,7 @@
         <nav class="navbar navbar-expand-lg ">
             <!-- Logo -->
             <div class="frugb-vote me-auto">
-                <a href="#accueil">
+                <a href="{{ route('ugbvote') }}">
                     <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
                 </a>
             </div>
@@ -42,41 +41,41 @@
 
             <!-- Liens et pseudo -->
             <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-                <ul class="navbar-nav  liens  d-flex justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-4">
-                                <div class="elections">Élections</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-5">
-                                <div class="resultats">Résultats</div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="navbar-nav  liens  d-flex justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('election') }}">
+                                <div class="frame-4">
+                                    <div class="elections">Élections</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('resultat') }}">
+                                <div class="frame-5">
+                                    <div class="resultats">Résultats</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
 
-                <!-- Pseudo à droite -->
-                <div class="pseudo me-5 justify-content-end">
-                    <div class="frame-36">
-                        <div class="avatar-block">
-                            <div class="avatar">
-                                <div class="initials">A</div>
-                            </div>
-                            <div class="info">
-                                <div class="title">Prenom</div>
-                                <div class="description">NOM</div>
+                    <!-- Pseudo à droite -->
+                    <div class="pseudo me-5 justify-content-end">
+                        <div class="frame-36">
+                            <div class="avatar-block">
+                                <div class="avatar">
+                                    <div class="initials">A</div>
+                                </div>
+                                <div class="info">
+                                    <div class="title">Prenom</div>
+                                    <div class="description">NOM</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="frame-93 ms-3">
-                        <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+                        <div class="frame-93 ms-3">
+                            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+                        </div>
                     </div>
                 </div>
-            </div>
         </nav>
         <!-- image-header -->
 
@@ -110,7 +109,7 @@
     </div>
 
 
-    <div class="container " id="custom-cards">
+    <div class="container" id="custom-cards">
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch">
             <!-- card 1 -->
             <div class="col">
@@ -226,9 +225,9 @@
         <div class="col-md-4 d-flex flex-column align-items-center">
             <div class=" logo-footer ">
                 <div class="frugb-vote">
-                    <a href="#accueil">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
+                    <a href="{{ route('ugbvote') }}">
+                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
                     <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
