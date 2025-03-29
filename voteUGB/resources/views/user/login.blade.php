@@ -120,7 +120,7 @@
             <!-- Message d'alerte -->
             <div id="message" class="d-none alert" role="alert"></div>
 
-            <form method="GET" action="{{ route('vote') }}" class="mt-4" id="loginForm">
+            <form method="GET" action="{{ route('election') }}" class="mt-4" id="loginForm">
               @csrf
 
               <div class="mb-3 text-center">
@@ -148,7 +148,7 @@
             </form>
 
             <p class="mt-3 text-center">
-              Vous n’avez pas de compte ? <a href="#">Inscrivez-vous</a>
+              Vous n’avez pas de compte ? <a href="{{ route('inscription') }}">Inscrivez-vous</a>
             </p>
           </div>
         </div>

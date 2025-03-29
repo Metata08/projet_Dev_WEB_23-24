@@ -11,9 +11,15 @@ class login_controller extends Controller
         return view('user.login');
     }
 
+
     public function connecter()
     {
-        return view('user.vote');
+        return view('user.election');
+    }
+// inscriotion
+    public function inscription()
+    {
+        return view('user.inscription');
     }
 
 

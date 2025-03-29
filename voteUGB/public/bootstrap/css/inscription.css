@@ -1,101 +1,62 @@
 
-header {
-    background-color: #f0e0cd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    position: relative;
-    z-index: 10;
-}
-.header-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-}
 
-.header-container img {
-    width: 80%;
-    margin-left: 10%;
-    height: auto;
-    max-height: 150px;
-    object-fit: cover;
-    display: block;
-}
-
-.header-container h1{
-    width: 65%;
-}
-
-.text{
-    font-family: "Audiowide", sans-serif;
-}
-
-.page-title {
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    font-family: "Audiowide", sans-serif;
-    font-weight: bold;
-    color: #522504;
-    font-size: clamp(1.5rem, 4vw, 3rem);
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-    padding: 0 1rem;
-}
-.logo{
-    width: 15%;
-    
-}
-.logo img, .urne{
-    margin-top: 5px;
-    width: 100%;
-}
-
-.urne>img{
-    width: 100%;
-    height: 500px;
-}
-main{
+main {
     padding: 20px;
 }
-.conteneur-form{
+
+form {
+    max-width: 500px;
     margin: auto;
-    text-align: center;
-    width: 500px;
-    padding: 5px;
-}
-form{
-    width: 500px;
-    border: 1px solid;
-    margin: auto;
-    padding: 20px;
     border-radius: 10px;
+    border: 1px solid #f0e0cd;
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+    font-family: "Roboto Mono", monospace;
+}
+
+input, select {
     border-color: #f0e0cd !important;
 }
-label{
-    top: -10px; left: 10px; font-size: 14px; color: #333; font-family: "roboto mono";
+
+.valider {
+    background-color: rgb(174, 114, 40) !important;
+    color: white;
 }
-input,select{
-    border-color: #f0e0cd !important;
+
+.annuler {
+    background-color: red !important;
+    color: white;
 }
-.valider{
-    background-color:rgb(174, 114, 40) !important; 
-}
-footer{
-    padding: 1em;
-    background-color: gray;
-}
-footer>div{
-    text-align: center;
-}
-.form-group{
-    text-align: left !important;
-}
-.error{
+
+.error {
     color: red;
 }
 
+/* Cacher l'image sur les petits écrans */
+@media (max-width: 768px) {
+    .urne {
+        display: none;
+    }
+    form {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+
+.confirm-button-annuler {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 29px;
+    background-color: #f30000;
+    border-radius: var(--sds-size-radius-200, 8px);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border: none;
+    cursor: pointer;
+  }
+  
