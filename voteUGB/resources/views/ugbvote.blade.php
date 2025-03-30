@@ -241,8 +241,9 @@
             <div class="lienutiles align-items-start">
                 <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
                     <strong>Lien Utiles</strong><br>
-                    <a href="https://www.ugb.sn" target="_blank">www.ugb.sn</a><br>
-                    <a href="https://portail.ugbnumerique.sn" target="_blank">portail.ugbnumerique.sn</a>
+                    <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
+                    <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
+                
                 </p>
             </div>
         </div>

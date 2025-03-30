@@ -75,6 +75,9 @@
 
 <body>
 
+
+
+
   <div class="container ">
     <div class="container mx-auto my-auto h-100">
       <div class="row justify-content-center align-items-center pt-5 h-100">
@@ -88,9 +91,8 @@
         <div class="col-12 col-md-6 mx-auto my-auto h-100 d-flex flex-column">
           <div class="card  border-alert rounded shadow h-100">
             <h3 class="text-center text-brown voter-pour-votre-repr-sentant">Connectez-Vous !</h3>
-
             <!-- Message d'alerte -->
-            <div id="message" class="d-none alert" role="alert">
+            <div id="message" class=" alert" role="alert">
               @if(session('success'))
               <div class="alert alert-success">{{ session('success') }}</div>
               @endif
@@ -112,12 +114,12 @@
               <div class="col">
                 <div class="mb-3 row ">
                   <label for="email" class="form-label fw-bold">E-mail</label>
-                  <input type="email" class="form-control w-100 w-md-50 mx-auto" id="mail" name="mail" placeholder="etudiant@ugb.edu.sn" required>
+                  <input type="email" class="form-control w-100 w-md-50 mx-auto" id="email" name="email" placeholder="etudiant@ugb.edu.sn" required>
                 </div>
 
                 <div class="mb-3 row">
                   <label for="password" class="form-label fw-bold">Mot de passe</label>
-                  <input type="password" class="form-control w-100 w-md-50 mx-auto" id="mdp" name="mdp" placeholder="mot de passe" required>
+                  <input type="password" class="form-control w-100 w-md-50 mx-auto" id="password" name="password" placeholder="mot de passe" required>
                 </div>
 
                 <div class="d-flex justify-content-center mb-3">

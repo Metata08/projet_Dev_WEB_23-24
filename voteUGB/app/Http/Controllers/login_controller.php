@@ -40,27 +40,25 @@ class login_controller extends Controller
     {
         // Validation des champs
         $request->validate([
-            'mail' => 'required|email',
-            'mdp' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string',
         ]);
 
-        // Vérifier si l'utilisateur existe
-        $etudiant = Etudiant::where('mail', $request->mail)->first();
-
-        if (!$etudiant || $request->mdp !== $etudiant->mdp) {
-
-            return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
+        // Vérification et tentative d'authentification
+        if (Auth::attempt(['mail' => $request->email, 'password' => $request->password])) {
+            $request->session()->regenerate(); // Regénérer la session pour la sécurité
+            return redirect()->route('election')->with('success', 'Connexion réussie');
         }
 
-        // Authentifier l'utilisateur
-        Auth::login($etudiant,true);
-
-        return redirect()->route('election')->with('success', 'Connexion réussie');
+        // Si la connexion échoue
+        return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login')->with('success', 'Déconnexion réussie');
     }
 }

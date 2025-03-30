@@ -2,26 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+
 class Etudiant extends Authenticatable
 {
-    use Notifiable;
+    protected $primaryKey = 'id_etudiant'; // ou 'matricule' si c'est votre clé
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $table = 'etudiants'; // Vérifiez que c'est le bon nom de votre table
 
-    protected $table = 'etudiants'; // Si le nom de la table est différent de "etudiants"
-    
-    protected $fillable = [
-        'mail',
-        'mdp',
-    ];
+    protected $fillable = ['nom', 'mail', 'mdp']; // Ajoutez les champs nécessaires
 
-    protected $hidden = [
-        'mdp',
-    ];
-    use HasFactory;
-    // protected $fillable = ['id_etudiant', 'nom', 'prenom', 'code_etudiant', 'mail', 'mdp', 'ufr_id'];
+    protected $hidden = ['mdp']; // Cache le mot de passe
+
+    public function getAuthPassword()
+    {
+        return $this->mdp;
+    }
 
     public function ufr()
     {
@@ -33,4 +30,3 @@ class Etudiant extends Authenticatable
         return $this->hasMany(Votes::class);
     }
 }
-

@@ -21,43 +21,15 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        a,
-        button,
-        input,
-        select,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            border: none;
-            text-decoration: none;
-            background: none;
 
-            -webkit-font-smoothing: antialiased;
-        }
-
-        menu,
-        ol,
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
     <header class="">
         <div class="header-principal w-100 ">
             <nav class="navbar navbar-expand-lg ">
                 <!-- Logo -->
                 <div class="frugb-vote me-auto">
                     <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                    </a>
                 </div>
 
                 <!-- Bouton toggle pour les petits écrans -->
@@ -98,9 +70,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="frame-93 ms-3">
-                            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                        </div>
+                        <!-- Formulaire de déconnexion caché -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+
+                        <!-- Image cliquable avec confirmation pour se déconnecter -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <div class="frame-93 ms-3">
+                                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+                            </div>
+                        </a>
+
+
                     </div>
                 </div>
             </nav>
@@ -120,6 +102,7 @@
     </header>
 
 <body class="">
+    <!-- contenu -->
 
     <div class=" d-flex m-3" id="wrapper">
         <!-- Sidebar-->
@@ -179,21 +162,52 @@
     </div>
 
     <div class="button-wrapper" action>
-                <a href="{{ route('systemevote') }}">
-                <button class="confirm-button" >
-                    <span class="button-text">JE VOTE</span>
-                    <div class="icon-container">
+        <a href="{{ route('systemevote') }}">
+            <button class="confirm-button">
+                <span class="button-text">JE VOTE</span>
+                <div class="icon-container">
 
-                        <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
+                    <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
 
-                    </div>
-                </button>
-                </a>
-            </div>
+                </div>
+            </button>
+        </a>
+    </div>
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
 
 
+    <!-- Modal de confirmation de déconnexion -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir vous déconnecter ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        document.getElementById('confirmLogout').addEventListener('click', function() {
+            document.getElementById('logout-form').submit();
+        });
+    </script>
+
+    
 
 </body>
 
@@ -206,8 +220,8 @@
             <div class=" logo-footer ">
                 <div class="frugb-vote">
                     <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                    </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
                     <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
@@ -228,8 +242,9 @@
             <div class="lienutiles align-items-start">
                 <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
                     <strong>Lien Utiles</strong><br>
-                    <a href="https://www.ugb.sn" target="_blank">www.ugb.sn</a><br>
-                    <a href="https://portail.ugbnumerique.sn" target="_blank">portail.ugbnumerique.sn</a>
+                    <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
+                    <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
+
                 </p>
             </div>
         </div>

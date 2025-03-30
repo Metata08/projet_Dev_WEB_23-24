@@ -50,9 +50,15 @@ Route::get('/login', [login_controller::class, 'showLoginForm'])->name('login');
 Route::post('/login', [login_controller::class, 'login'])->name('login.post');
 Route::post('/logout', [login_controller::class, 'logout'])->name('logout');
 
-Route::get('/election', function () {
-    return view('election'); // Page après connexion
-})->middleware('auth')->name('election');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/election', function () {
+        return view('user.election'); 
+    })->name('election');
+});
 
 
 // Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
+
+
+
+

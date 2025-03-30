@@ -67,9 +67,19 @@
                                 </div>
                             </div>
                         </div>
+                         <!-- Formulaire de déconnexion caché -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <!-- Image cliquable avec confirmation pour se déconnecter -->
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <div class="frame-93 ms-3">
                             <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
                         </div>
+                    </a>
+
+
                     </div>
                 </div>
       </nav>
@@ -247,6 +257,37 @@
   <!-- footer  -->
 
 
+<!-- Modal de confirmation de déconnexion -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir vous déconnecter ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        document.getElementById('confirmLogout').addEventListener('click', function() {
+            document.getElementById('logout-form').submit();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>
