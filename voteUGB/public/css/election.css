@@ -57,8 +57,8 @@
 }
 
 .list-nom {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 18px !important;
+  font-weight: 500 !important;
   border-radius: 10px;
   border: 1px solid #666;
   background-color: #d9d9d9;

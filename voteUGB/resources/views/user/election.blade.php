@@ -36,14 +36,14 @@
             <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav liens d-flex justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('election') }}">
+                        <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
                             <div class="frame-4">
                                 <div class="elections">Élections</div>
                             </div>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('resultat') }}">
+                        <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
                             <div class="frame-5">
                                 <div class="resultats">Résultats</div>
                             </div>
@@ -55,32 +55,28 @@
                     <div class="frame-36">
                         <div class="avatar-block">
                             <div class="avatar">
-                                <div class="initials">A</div>
+                                <div class="initials">V</div>
                             </div>
+                            @if(isset($etudiant))
                             <div class="info">
-                                <div class="title">Prenom</div>
-                                <div class="description">NOM</div>
+                                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
+                                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
                             </div>
+                            @endif
                         </div>
                     </div>
-                    <!-- Formulaire de déconnexion caché -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+
 
                     <!-- Image cliquable avec confirmation pour se déconnecter -->
                     <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                         <!-- Formulaire de déconnexion caché -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                        <!-- Formulaire de déconnexion caché -->
 
-                    <!-- Image cliquable avec confirmation pour se déconnecter -->
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <div class="frame-93 ms-3">
-                            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                        </div>
-                    </a>
+                        <!-- Image cliquable avec confirmation pour se déconnecter -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <div class="frame-93 ms-3">
+                                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+                            </div>
+                        </a>
 
                 </div>
             </div>
@@ -127,6 +123,10 @@
 
 
     <!-- LE CONTENU DE VOTRE PAGE -->
+
+
+
+
     <div class="container-fluid m-3 p-3">
         <!-- Votre contenu ici -->
         <div class="voter">
@@ -143,22 +143,33 @@
     </div>
 
     <div class="container" id="custom-cards">
+
+
         <div class="row row-cols-1 row-cols-lg-3 align-items-stretch">
             <!-- Exemple de card -->
+
+            @if(isset($message))
+            <div class="alert alert-info">
+                {{ $message }}
+            </div>
+
+            @elseif(isset($listes))
+            @foreach($listes as $liste)
+
             <div class="col">
                 <div class="vot-card-container">
                     <div class="vot-card">
                         <header class="carte-header">
                             <div class="logo-carte">Logo Liste</div>
                             <div class="liste-info">
-                                <h2 class="list-nom">NOM DE LA LISTE</h2>
+                                <h2 class="list-nom text-uppercase text-bold">{{ $liste->name_list }}</h2>
                                 <div class="vote-icon-wrapper">
                                     <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Vote icon" />
                                 </div>
                             </div>
                         </header>
                         <nav class="programme-nav">
-                            <a href="{{ route('detailListe') }}"><button class="programme-button">Voir programme</button></a>
+                            <a href="{{ route('detailListe',['id'=> $liste->id_list] ) }}"><button class="programme-button">Voir programme</button></a>
                         </nav>
                         <footer class="vote-actionn">
                             <a href="{{ route('systemevote') }}" class="text-decoration-none">
@@ -174,65 +185,14 @@
                 </div>
             </div>
             <!-- Répétez pour d'autres cards -->
-            <!-- Exemple de card -->
-            <div class="col">
-                <div class="vot-card-container">
-                    <div class="vot-card">
-                        <header class="carte-header">
-                            <div class="logo-carte">Logo Liste</div>
-                            <div class="liste-info">
-                                <h2 class="list-nom">NOM DE LA LISTE</h2>
-                                <div class="vote-icon-wrapper">
-                                    <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Vote icon" />
-                                </div>
-                            </div>
-                        </header>
-                        <nav class="programme-nav">
-                            <a href="{{ route('detailListe') }}"><button class="programme-button">Voir programme</button></a>
-                        </nav>
-                        <footer class="vote-actionn">
-                            <a href="{{ route('systemevote') }}" class="text-decoration-none">
-                                <button class="confirm-button">
-                                    <span class="button-text">VOTER</span>
-                                    <div class="icon-container">
-                                        <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
-                                    </div>
-                                </button>
-                            </a>
-                        </footer>
-                    </div>
-                </div>
-            </div>
 
             <!-- Exemple de card -->
-            <div class="col">
-                <div class="vot-card-container">
-                    <div class="vot-card">
-                        <header class="carte-header">
-                            <div class="logo-carte">Logo Liste</div>
-                            <div class="liste-info">
-                                <h2 class="list-nom">NOM DE LA LISTE</h2>
-                                <div class="vote-icon-wrapper">
-                                    <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Vote icon" />
-                                </div>
-                            </div>
-                        </header>
-                        <nav class="programme-nav">
-                            <a href="{{ route('detailListe') }}"><button class="programme-button">Voir programme</button></a>
-                        </nav>
-                        <footer class="vote-actionn">
-                            <a href="{{ route('systemevote') }}" class="text-decoration-none">
-                                <button class="confirm-button">
-                                    <span class="button-text">VOTER</span>
-                                    <div class="icon-container">
-                                        <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
-                                    </div>
-                                </button>
-                            </a>
-                        </footer>
-                    </div>
-                </div>
-            </div>
+            @endforeach
+            @else
+            <p class="text-danger">Aucune donnée disponible.</p>
+            @endif
+
+
         </div>
     </div>
 

@@ -13,5 +13,12 @@ class MembresListe extends Model
     {
         return $this->belongsTo(Listes::class);
     }
+    
+    public function etudiant()
+    {
+        return $this->belongsTo(Etudiant::class, 'id_membre', 'id_etudiant');
+    }
+    
+    
 }
 

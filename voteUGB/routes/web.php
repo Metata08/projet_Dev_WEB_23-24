@@ -5,12 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
 
-Route::get('/', function () {
-    // return view('welcome');
-    // return view('user.systemevote');
-    // return view('user.detailListe');
-    // return view('user.login');
-});
 
 
 Route::get('/', function () {
@@ -33,10 +27,11 @@ Route ::get ('/inscription', [login_controller::class, 'inscription'])->name('in
 
 // Définir la route pour la page election
 
-Route::get('/election', [login_controller::class, 'connecter'])->name('election');
+// Route::get('/election', [login_controller::class, 'connecter'])->name('election');
+Route::get('/election/{id_ufr}', [user_controller::class, 'election'])->name('election');
 
 // Définir la route pour la page détailListe
-Route::get('/detailListe', [user_controller::class, 'detailListe'])->name('detailListe');
+Route::get('/detailListe/{id}', [user_controller::class, 'detailListe'])->name('detailListe');
 
 
 

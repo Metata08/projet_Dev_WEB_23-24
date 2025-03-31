@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Votes extends Model
 {
@@ -13,6 +14,11 @@ class Votes extends Model
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class);
+    }
+
+    public function ufrs(): HasMany
+    {
+        return $this->hasMany(UFR::class);
     }
 }
 

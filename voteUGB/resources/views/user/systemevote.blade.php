@@ -19,100 +19,105 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-   <header class="">
-    <div class="header-principal w-100 ">
-      <nav class="navbar navbar-expand-lg ">
-        <!-- Logo -->
-        <div class="frugb-vote me-auto">
-          <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
-        </div>
-
-        <!-- Bouton toggle pour les petits écrans -->
-        <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
-          data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Liens et pseudo -->
-       <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-                    <ul class="navbar-nav  liens  d-flex justify-content-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('election') }}">
-                                <div class="frame-4">
-                                    <div class="elections">Élections</div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('resultat') }}">
-                                <div class="frame-5">
-                                    <div class="resultats">Résultats</div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Pseudo à droite -->
-                    <div class="pseudo me-5 justify-content-end">
-                        <div class="frame-36">
-                            <div class="avatar-block">
-                                <div class="avatar">
-                                    <div class="initials">A</div>
-                                </div>
-                                <div class="info">
-                                    <div class="title">Prenom</div>
-                                    <div class="description">NOM</div>
-                                </div>
-                            </div>
-                        </div>
-                         <!-- Formulaire de déconnexion caché -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-
-                    <!-- Image cliquable avec confirmation pour se déconnecter -->
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <div class="frame-93 ms-3">
-                            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                        </div>
-                    </a>
-
-
-                    </div>
-                </div>
-      </nav>
-      <!-- image-header -->
-
-
-
-      <div class="imageHeader">
-        <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-        <div class="election-du-repr-sentant-des-tudiants">
-          Election du représentant des étudiants
-        </div>
+<header class="">
+  <div class="header-principal w-100 ">
+    <nav class="navbar navbar-expand-lg ">
+      <!-- Logo -->
+      <div class="frugb-vote me-auto">
+        <a href="{{ route('ugbvote') }}">
+          <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+        </a>
       </div>
 
-    </div>
+      <!-- Bouton toggle pour les petits écrans -->
+      <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  </header>
+      <!-- Liens et pseudo -->
+      <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav liens d-flex justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+              <div class="frame-4">
+                <div class="elections">Élections</div>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
+              <div class="frame-5">
+                <div class="resultats">Résultats</div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- Pseudo -->
+        <div class="pseudo me-5 justify-content-end">
+          <div class="frame-36">
+            <div class="avatar-block">
+              <div class="avatar">
+                <div class="initials">V</div>
+              </div>
+              @if(isset($etudiant))
+              <div class="info">
+                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
+                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
+              </div>
+              @endif
+            </div>
+          </div>
+
+
+          <!-- Image cliquable avec confirmation pour se déconnecter -->
+          <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <!-- Formulaire de déconnexion caché -->
+
+            <!-- Image cliquable avec confirmation pour se déconnecter -->
+            <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+              <div class="frame-93 ms-3">
+                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+              </div>
+            </a>
+        </div>
+      </div>
+      <!-- Pseudo à droite -->
+
+
+  </div>
+  </div>
+  </nav>
+  <!-- image-header -->
+
+
+
+  <div class="imageHeader">
+    <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
+    <div class="election-du-repr-sentant-des-tudiants">
+      Election du représentant des étudiants
+    </div>
+  </div>
+
+  </div>
+
+</header>
 
 <body class="">
   <!-- voter pour votre reppresentant  -->
-    <div class="container-fluid  m-3 p-3">
-      <div class="voter">
-        <div class="voter-pour-votre-repr-sentant">
-          Voter pour votre représentant
-        </div>
-        <div class="frame-58 d-flex ">
-          <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-            <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
-                15/03/2025</span></span>
-          </div>
+  <div class="container-fluid  m-3 p-3">
+    <div class="voter">
+      <div class="voter-pour-votre-repr-sentant">
+        Voter pour votre représentant
+      </div>
+      <div class="frame-58 d-flex ">
+        <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
+          <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
+              15/03/2025</span></span>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- le liste a voter  -->
 
@@ -257,37 +262,37 @@
   <!-- footer  -->
 
 
-<!-- Modal de confirmation de déconnexion -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Êtes-vous sûr de vouloir vous déconnecter ?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
-                </div>
-            </div>
+  <!-- Modal de confirmation de déconnexion -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          Êtes-vous sûr de vouloir vous déconnecter ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
+        </div>
+      </div>
     </div>
+  </div>
 
 
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+  </form>
 
-    <script>
-        document.getElementById('confirmLogout').addEventListener('click', function() {
-            document.getElementById('logout-form').submit();
-        });
-    </script>
+  <script>
+    document.getElementById('confirmLogout').addEventListener('click', function() {
+      document.getElementById('logout-form').submit();
+    });
+  </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>
@@ -300,8 +305,8 @@
       <div class=" logo-footer ">
         <div class="frugb-vote">
           <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+            <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+          </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
           <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">

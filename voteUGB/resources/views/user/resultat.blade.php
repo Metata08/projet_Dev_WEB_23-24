@@ -19,84 +19,85 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-   <header class="">
-    <div class="header-principal w-100 ">
-      <nav class="navbar navbar-expand-lg ">
-        <!-- Logo -->
-        <div class="frugb-vote me-auto">
-          <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
-        </div>
+<header class="">
+  <div class="header-principal w-100 ">
+    <nav class="navbar navbar-expand-lg ">
+      <!-- Logo -->
+      <div class="frugb-vote me-auto">
+        <a href="{{ route('ugbvote') }}">
+          <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+        </a>
+      </div>
 
-        <!-- Bouton toggle pour les petits écrans -->
-        <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
-          data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      <!-- Bouton toggle pour les petits écrans -->
+      <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <!-- Liens et pseudo -->
-       <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-                    <ul class="navbar-nav  liens  d-flex justify-content-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('election') }}">
-                                <div class="frame-4">
-                                    <div class="elections">Élections</div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('resultat') }}">
-                                <div class="frame-5">
-                                    <div class="resultats">Résultats</div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Pseudo à droite -->
-                    <div class="pseudo me-5 justify-content-end">
-                        <div class="frame-36">
-                            <div class="avatar-block">
-                                <div class="avatar">
-                                    <div class="initials">A</div>
-                                </div>
-                                <div class="info">
-                                    <div class="title">Prenom</div>
-                                    <div class="description">NOM</div>
-                                </div>
+      <!-- Liens et pseudo -->
+     <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav liens d-flex justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+                            <div class="frame-4">
+                                <div class="elections">Élections</div>
                             </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
+                            <div class="frame-5">
+                                <div class="resultats">Résultats</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Pseudo -->
+                <div class="pseudo me-5 justify-content-end">
+                    <div class="frame-36">
+                        <div class="avatar-block">
+                            <div class="avatar">
+                                <div class="initials">V</div>
+                            </div>
+                            @if(isset($etudiant))
+                            <div class="info">
+                                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
+                                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
+                            </div>
+                            @endif
                         </div>
-                         <!-- Formulaire de déconnexion caché -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                    </div>
+
 
                     <!-- Image cliquable avec confirmation pour se déconnecter -->
                     <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <div class="frame-93 ms-3">
-                            <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                        </div>
-                    </a>
+                        <!-- Formulaire de déconnexion caché -->
 
+                        <!-- Image cliquable avec confirmation pour se déconnecter -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <div class="frame-93 ms-3">
+                                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+                            </div>
+                        </a>
 
-                    </div>
                 </div>
-      </nav>
-      <!-- image-header -->
+            </div>
+    </nav>
+    <!-- image-header -->
 
 
 
-      <div class="imageHeader">
-        <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-        <div class="election-du-repr-sentant-des-tudiants">
-          Election du représentant des étudiants
-        </div>
+    <div class="imageHeader">
+      <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
+      <div class="election-du-repr-sentant-des-tudiants">
+        Election du représentant des étudiants
       </div>
-
     </div>
 
-  </header>
+  </div>
+
+</header>
 
 <body class="">
 
@@ -199,39 +200,39 @@
   </div>
 
 
- 
 
-<!-- Modal de confirmation de déconnexion -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Êtes-vous sûr de vouloir vous déconnecter ?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
-                </div>
-            </div>
+
+  <!-- Modal de confirmation de déconnexion -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          Êtes-vous sûr de vouloir vous déconnecter ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
+        </div>
+      </div>
     </div>
+  </div>
 
 
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+  </form>
 
-    <script>
-        document.getElementById('confirmLogout').addEventListener('click', function() {
-            document.getElementById('logout-form').submit();
-        });
-    </script>
+  <script>
+    document.getElementById('confirmLogout').addEventListener('click', function() {
+      document.getElementById('logout-form').submit();
+    });
+  </script>
 
-  
+
 
 
 
@@ -245,8 +246,8 @@
       <div class=" logo-footer ">
         <div class="frugb-vote">
           <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+            <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+          </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
           <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
