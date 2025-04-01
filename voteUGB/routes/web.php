@@ -65,3 +65,20 @@ Route::get('/systemevote/{id}', [user_controller::class, 'showSystemeVote'])->na
 Route::post('/systemevote/{id}', [user_controller::class, 'storeVote'])->name('systemevote.vote');
 
 
+
+    return view('welcome');
+});
+
+Route::get('/inscription', function () {
+    return view('inscription');
+});
+
+Route::get('admin/index', function () {
+    return view('admin.index');
+});
+
+Route::get('admin/home', function () {
+    return view('admin.home');
+});
+
+Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
