@@ -40,7 +40,7 @@
         <nav class="navbar navbar-expand-lg ">
             <!-- Logo -->
             <div class="frugb-vote me-auto">
-             <a href="{{ route('ugbvote') }}">
+                <a href="{{ route('ugbvote') }}">
                     <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
                 </a>
             </div>
@@ -99,82 +99,91 @@
 <body>
 
     <main class="container">
-    <div class="row m-3 justify-content-center">
-    <!-- Image -->
-    <div class="col-md-4 d-none d-md-block rounded h-100">
-        <img src="images/urne.png" alt="image" class="rounded img-fluid urne h-100 w-100 object-fit-cover">
-    </div>
-
-    <!-- Formulaire -->
-    <div class="col-md-8 col-12 d-flex flex-column h-100">
-        <div id="alert"></div>
-        <h1 class="text text-center KT">Inscrivez-Vous !</h1>
-        <form action="#" id="inscriptionForm" method="post" novalidate name="formulaire" 
-              class="p-5 shadow rounded bg-white h-100 d-flex flex-column flex-grow-1">
-            @csrf
-            <div class="row g-3 flex-grow-1">
-                <div class="col-md-6">
-                    <label for="prenom" class="form-label">Entrez votre prénom</label>
-                    <input type="text" name="prenom" class="form-control" id="prenom" value="{{ old('prenom') }}" required>
-                    @error('prenom') <span class="error">{{ $message }}</span> @enderror
-                </div>
-                <div class="col-md-6">
-                    <label for="nom" class="form-label">Entrez votre nom</label>
-                    <input type="text" name="nom" id="nom" class="form-control" value="{{ old('nom') }}" required>
-                    @error('nom') <span class="error">{{ $message }}</span> @enderror
-                </div>
+        <div class="row m-3 justify-content-center">
+            <!-- Image -->
+            <div class="col-md-4 d-none d-md-block rounded h-100">
+                <img src="images/urne.png" alt="image" class="rounded img-fluid urne h-100 w-100 object-fit-cover">
             </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Entrez votre e-mail</label>
-                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
-                @error('email') <span class="error">{{ $message }}</span> @enderror
-            </div>
+            <!-- Exemple simplifié de votre formulaire d'inscription -->
+            <div class="col-md-8 col-12 d-flex flex-column h-100">
+                <div id="alert"></div>
+                <h1 class="text text-center voter-pour-votre-repr-sentant">Inscrivez-Vous !</h1>
+                <form action="{{ route('inscription.register') }}" id="inscriptionForm" method="POST" novalidate name="formulaire"
+                    class="p-5 shadow rounded bg-white h-100 d-flex flex-column flex-grow-1">
+                    @csrf
 
-            <div class="mb-3">
-                <label for="ufr" class="form-label">Sélectionnez votre UFR</label>
-                <select name="ufr" id="ufr" class="form-select">
-                    <option value="">Veuillez sélectionner votre UFR</option>
-                    <option value="sat">SAT</option>
-                    <option value="lsh">LSH</option>
-                    <option value="sjp">SJP</option>
-                    <option value="s2ata">S2ATA</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Entrez votre mot de passe</label>
-                <input type="password" name="password" id="password" class="form-control w-100 w-md-50 mx-auto" required>
-                @error('password') <span class="error">{{ $message }}</span> @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="confpassword" class="form-label">Confirmez votre mot de passe</label>
-                <input type="password" name="password_confirmation" id="confpassword" class="form-control  w-100 w-md-50 mx-auto" required>
-            </div>
-
-            <div class="row g-3 mt-auto">
-                <div class="col">
-                    <button type="submit" class="container-fluid confirm-button">
-                        <span class="button-text">Valider</span>
-                        <div class="icon-container">
-                            <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
+                    <div class="row g-3 flex-grow-1">
+                        <div class="col-md-6">
+                            <label for="prenom" class="form-label">Entrez votre prénom</label>
+                            <input type="text" name="prenom" class="form-control" id="prenom" value="{{ old('prenom') }}" required>
+                            @error('prenom') <span class="error">{{ $message }}</span> @enderror
                         </div>
-                    </button>
-                </div>
-                <div class="col">
-                    <button type="reset" class="container-fluid confirm-button-annuler">
-                        <span class="button-text">Annuler</span>
-                    </button>
-                </div>
+                        <div class="col-md-6">
+                            <label for="nom" class="form-label">Entrez votre nom</label>
+                            <input type="text" name="nom" id="nom" class="form-control" value="{{ old('nom') }}" required>
+                            @error('nom') <span class="error">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Entrez votre Code</label>
+                        <input type="text" name="code" id="code" class="form-control" value="{{ old('code') }}" required>
+                        @error('code') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Entrez votre e-mail</label>
+                        <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
+                        @error('email') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ufr" class="form-label">Sélectionnez votre UFR</label>
+                        <select name="ufr" id="ufr" class="form-select" required>
+                            <option value="">Veuillez sélectionner votre UFR</option>
+                            <option value="1">SAT</option>
+                            <option value="2">SJP</option>
+                            <option value="3">LSH</option>
+                            <option value="4">S2ATA</option>
+                        </select>
+                        @error('ufr') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Entrez votre mot de passe</label>
+                        <input type="password" name="password" id="password" class="form-control w-100 w-md-50 mx-auto" required>
+                        @error('password') <span class="error">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confpassword" class="form-label">Confirmez votre mot de passe</label>
+                        <input type="password" name="password_confirmation" id="confpassword" class="form-control w-100 w-md-50 mx-auto" required>
+                    </div>
+
+                    <div class="row g-3 mt-auto">
+                        <div class="col">
+                            <button type="submit" class="container-fluid confirm-button">
+                                <span class="button-text">Valider</span>
+                                <div class="icon-container">
+                                    <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
+                                </div>
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="reset" class="container-fluid confirm-button-annuler">
+                                <span class="button-text">Annuler</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <p>Avez-vous déjà un compte? <a href="{{ route('login') }}" class="text-decoration-none connecter-vous">Connectez-vous</a></p>
+                    </div>
+                </form>
             </div>
 
-            <div class="mt-3 text-center">
-                <p>Avez-vous déjà un compte? <a href="{{ route('login') }}" class="text-decoration-none connecter-vous">Connectez-vous</a></p>
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
     </main>
 
@@ -190,11 +199,11 @@
             <div class=" logo-footer ">
                 <div class="frugb-vote">
                     <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                    </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
-                    <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
                     <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
@@ -214,7 +223,7 @@
                     <strong>Lien Utiles</strong><br>
                     <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
                     <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
-                
+
                 </p>
             </div>
         </div>

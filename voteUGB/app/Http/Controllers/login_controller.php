@@ -24,12 +24,6 @@ class login_controller extends Controller
     }
 
 
-    /*  public function connecter()
-    {
-        return view('user.election');
-    } */
-
-
 
     // inscription
     public function inscription()
@@ -53,17 +47,16 @@ class login_controller extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            $request->session()->put('ufr_id', $user->ufr_id);
+            // $request->session()->put('ufr_id', $user->ufr_id);
 
             // Par exemple, récupérer les listes de vote pour cet UFR
             $listes = Listes::where('ufr_id',  $user->ufr_id)->get();
 
-            if ($listes->isEmpty()) {#
+            if ($listes->isEmpty()) { #
                 return view('user.election')->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.');
             }
-
-            return view('user.election', ['listes' => $listes,'etudiant'=> $user])->with('success', 'Connexion réussie');
-            // return redirect()->route('election', ['ufr_id' => $user->ufr_id])->with('success', 'Connexion réussie');
+            
+            return view('user.election', ['listes' => $listes, 'etudiant' => $user])->with('success', 'Connexion réussie');
         }
 
         // Si la connexion échoue
@@ -76,12 +69,12 @@ class login_controller extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login')->with('success', 'Déconnexion réussie');
- 
-   }
+    }
 
 
-   public function compose(ViewView $view)
+    public function compose(ViewView $view)
     {
+        
         $view->with('etudiant', Auth::check() ? Auth::user() : null);
     }
 }

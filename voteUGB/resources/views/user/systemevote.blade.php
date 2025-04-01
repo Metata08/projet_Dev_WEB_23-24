@@ -39,7 +39,7 @@
       <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav liens d-flex justify-content-center">
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+            <a class="nav-link" href="{{ route('election') }}">
               <div class="frame-4">
                 <div class="elections">Élections</div>
               </div>
@@ -105,18 +105,50 @@
 
 <body class="">
   <!-- voter pour votre reppresentant  -->
-  <div class="container-fluid  m-3 p-3">
+  <div class="container-fluid m-3 p-3">
+    <!-- Votre contenu ici -->
     <div class="voter">
       <div class="voter-pour-votre-repr-sentant">
         Voter pour votre représentant
       </div>
-      <div class="frame-58 d-flex ">
+      <div class="frame-58 d-flex">
         <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-          <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
-              15/03/2025</span></span>
+          <span>Election <span class="fw-bold">2024-2025 </span>
+            @if($dateFinVote)
+            - En cours jusqu’au<span class="fw-bold">
+              {{ \Carbon\Carbon::parse($dateFinVote)->format('d/m/Y') }}
+              @else
+              <p>Aucun vote en cours pour votre UFR.</p>
+              @endif
+            </span></span>
         </div>
       </div>
     </div>
+  </div>
+
+  @if(isset($voteId))
+    <div class="container-fluid m-3 p-3">
+        <p>
+        <h2>Votre vote pour la liste : <span class="text-uppercase">{{ $voteId }}</span></h2>
+        <p>Vous avez déjà voté pour cette liste.</p>
+        </p>
+        </p>
+    </div>
+    @endif
+  <!-- Message d'alerte -->
+  <div id="message" class=" alert" role="alert">
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+    <div class="alert alert-danger">
+      <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+    @endif
   </div>
 
   <!-- le liste a voter  -->
@@ -129,7 +161,7 @@
           <p class="logo-text fw-bold">Logo Liste</p>
         </figure>
         <div class="title-section text-center text-md-start">
-          <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
+          <h2 class="list-title fw-bold text-uppercase text-center">{{ $liste->name_list }}</h2>
         </div>
         <div class="image-container text-center">
           <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
@@ -144,14 +176,17 @@
       </section>
       <footer class="confirmation-section">
         <div class="button-wrapper">
-          <button class="confirm-button">
-            <span class="button-text">CONFIRMER</span>
-            <div class="icon-container">
+          <form action="{{ route('systemevote.vote', ['id' => $liste->id_list,'vote_id'=>$voteId]) }}" method="POST">
+            @csrf
+            <!-- Autres champs du formulaire si nécessaire -->
+            <button type="submit" class="confirm-button">
+              <span class="button-text">CONFIRMER</span>
+              <div class="icon-container">
+                <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
+              </div>
+            </button>
+          </form>
 
-              <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
-
-            </div>
-          </button>
         </div>
         <p class="warning-text">
           <strong>Attention</strong>:votre vote est definitif et ne poura pas être
@@ -309,7 +344,7 @@
           </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
-          <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+          <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
           <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
@@ -327,8 +362,8 @@
       <div class="lienutiles align-items-start">
         <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
           <strong>Lien Utiles</strong><br>
-          <a href="https://www.ugb.sn" target="_blank">www.ugb.sn</a><br>
-          <a href="https://portail.ugbnumerique.sn" target="_blank">portail.ugbnumerique.sn</a>
+          <a href="https://www.ugb.sn" target="_blank" class="text-decoration-none">www.ugb.sn</a><br>
+          <a href="https://portail.ugbnumerique.sn" target="_blank" class="text-decoration-none">portail.ugbnumerique.sn</a>
         </p>
       </div>
     </div>

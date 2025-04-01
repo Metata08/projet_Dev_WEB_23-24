@@ -39,7 +39,7 @@
      <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav liens d-flex justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+                        <a class="nav-link" href="{{ route('election') }}">
                             <div class="frame-4">
                                 <div class="elections">Élections</div>
                             </div>
@@ -250,7 +250,7 @@
           </a>
         </div>
         <div class="button-list d-flex justify-content-center ">
-          <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+          <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
           <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
           <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
@@ -268,8 +268,8 @@
       <div class="lienutiles align-items-start">
         <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
           <strong>Lien Utiles</strong><br>
-          <a href="https://www.ugb.sn" target="_blank">www.ugb.sn</a><br>
-          <a href="https://portail.ugbnumerique.sn" target="_blank">portail.ugbnumerique.sn</a>
+          <a href="https://www.ugb.sn" target="_blank" class="text-decoration-none">www.ugb.sn</a><br>
+          <a href="https://portail.ugbnumerique.sn" target="_blank" class="text-decoration-none">portail.ugbnumerique.sn</a>
         </p>
       </div>
     </div>

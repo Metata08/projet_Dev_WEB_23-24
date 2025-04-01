@@ -11,6 +11,7 @@ class Listes extends Model
     
     // Définir la clé primaire si elle n'est pas "id"
     protected $primaryKey = 'id_list';
+    
 
     use HasFactory;
     protected $fillable = ['id_list', 'programme','titre', 'name_list', 'ufr_id'];

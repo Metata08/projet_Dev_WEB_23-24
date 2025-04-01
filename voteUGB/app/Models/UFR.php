@@ -11,6 +11,7 @@ class UFR extends Model
     use HasFactory;
     protected $fillable = ['id_ufr', 'nom'];
 
+    protected $primaryKey='id_ufr';
     public function etudiants()
     {
         return $this->hasMany(Etudiant::class);
@@ -26,5 +27,11 @@ class UFR extends Model
     {
         return $this->belongsTo(Votes::class);
     }
-}
 
+    public function currentVote()
+    {
+        // On suppose qu'une UFR peut avoir plusieurs votes,
+        // ici nous récupérons celui dont la date_fin est future
+        return $this->hasOne(Votes::class)->where('date_fin', '>', now())->latest('date_debut');
+    }
+}

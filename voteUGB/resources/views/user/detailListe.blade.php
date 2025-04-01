@@ -43,7 +43,7 @@
                 <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav liens d-flex justify-content-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+                            <a class="nav-link" href="{{ route('election') }}">
                                 <div class="frame-4">
                                     <div class="elections">Élections</div>
                                 </div>
@@ -114,8 +114,8 @@
             <!-- <div class="sidebar-heading border-bottom bg-light fw-bold text-center">  Membres :</div> -->
             <div class="list-group list-group-flush">
                 <ul>
-                      @foreach($membres as $membre)    
-                    <li class="list-group-item list-group-item-action list-group-item-light p-3 fw-bold text-capitalize ">{{ $membre->etudiant->prenom }}  <span class="text-capitalize">{{ $membre->etudiant->nom }}</span> </li>
+                    @foreach($membres as $membre)
+                    <li class="list-group-item list-group-item-action list-group-item-light p-3 fw-bold text-capitalize ">{{ $membre->etudiant->prenom }} <span class="text-capitalize">{{ $membre->etudiant->nom }}</span> </li>
                     @endforeach
                 </ul>
             </div>
@@ -128,7 +128,7 @@
             <!-- Page content-->
             <div class=" container-fluid  mx-auto my-auto">
                 <div class="col m-3 p-3">
-                    <h1 class="mt-4"> {{ $liste->name_list }} : <span class="name-list fw-bold ">{{ $liste->titre }} </span> </h1>
+                    <h1 class="mt-4">LISTE :<span class="name-list fw-bold text-uppercase "> {{ $liste->name_list }}</span> . <br> <span>Titre du Programme : <span class="name-list fw-bold ">{{ $liste->titre }} </span></span> </h1>
                     <p class="text-programme mx-auto my-auto">{{ $liste->programme }}</p>
                 </div>
             </div>
@@ -136,20 +136,17 @@
 
 
     </div>
-
     <div class="button-wrapper" action>
-        <a href="{{ route('systemevote') }}" class="text-decoration-none">
+        <a href="{{ route('systemevote', ['id' => $liste->id_list]) }}" class="text-decoration-none">
             <button class="confirm-button">
-                <span class="button-text ">JE VOTE</span>
+                <span class="button-text">VOTER</span>
                 <div class="icon-container">
-
-                    <img alt="icon" class="check-square" src="{{asset('image/user_icons/check-square0.svg') }}" />
-
+                    <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
                 </div>
             </button>
         </a>
     </div>
-  
+
 
 
     <!-- Modal de confirmation de déconnexion -->
@@ -182,8 +179,8 @@
         });
     </script>
 
-      <!-- Core theme JS-->
-      <script src="{{ asset('js/scripts.js') }}"></script>
+    <!-- Core theme JS-->
+    <script src="{{ asset('js/scripts.js') }}"></script>
 </body>
 
 

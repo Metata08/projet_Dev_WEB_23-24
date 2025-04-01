@@ -36,7 +36,7 @@
             <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav liens d-flex justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('election',['id'=>$etudiant->ufr_id]) }}">
+                        <a class="nav-link" href="{{ route('election') }}">
                             <div class="frame-4">
                                 <div class="elections">Élections</div>
                             </div>
@@ -92,6 +92,7 @@
 </header>
 
 <body>
+
     <!-- Modal -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -135,12 +136,20 @@
             </div>
             <div class="frame-58 d-flex">
                 <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-                    <span>Election <span class="fw-bold">2024-2025 </span> - En cours jusqu’au<span class="fw-bold">
-                            15/03/2025</span></span>
+                    <span>Election <span class="fw-bold">2024-2025 </span>
+                        @if($dateFinVote)
+                        - En cours jusqu’au<span class="fw-bold">
+                            {{ \Carbon\Carbon::parse($dateFinVote)->format('d/m/Y') }}
+                            @else
+                            <p>Aucun vote en cours pour votre UFR.</p>
+                            @endif
+                        </span></span>
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <div class="container" id="custom-cards">
 
@@ -172,7 +181,7 @@
                             <a href="{{ route('detailListe',['id'=> $liste->id_list] ) }}"><button class="programme-button">Voir programme</button></a>
                         </nav>
                         <footer class="vote-actionn">
-                            <a href="{{ route('systemevote') }}" class="text-decoration-none">
+                            <a href="{{ route('systemevote', ['id' => $liste->id_list]) }}" class="text-decoration-none">
                                 <button class="confirm-button">
                                     <span class="button-text">VOTER</span>
                                     <div class="icon-container">
@@ -180,13 +189,14 @@
                                     </div>
                                 </button>
                             </a>
+
                         </footer>
                     </div>
                 </div>
             </div>
             <!-- Répétez pour d'autres cards -->
 
-            <!-- Exemple de card -->
+
             @endforeach
             @else
             <p class="text-danger">Aucune donnée disponible.</p>
@@ -243,7 +253,7 @@
                     </a>
                 </div>
                 <div class="button-list d-flex justify-content-center">
-                    <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
                     <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">

@@ -9,9 +9,17 @@ class Etudiant extends Authenticatable
     protected $primaryKey = 'id_etudiant'; // ou 'matricule' si c'est votre clé
     // public $incrementing = false;
     protected $keyType = 'string';
-    protected $table = 'etudiants'; // Vérifiez que c'est le bon nom de votre table
 
-    protected $fillable = ['nom', 'mail', 'mdp','ufr_id']; // Ajoutez les champs nécessaires
+    public $incrementing = true; // Doit être true pour auto-incrémenter
+    protected $table = 'etudiants'; // Vérifiez que c'est le bon nom de votre table
+    protected $fillable = [
+        'nom',
+        'prenom',
+        'code_etudiant',
+        'mail',
+        'ufr_id',
+        'mdp',
+    ];
 
     protected $hidden = ['mdp']; // Cache le mot de passe
 

@@ -223,7 +223,7 @@
                 </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
-                    <img class="img-fluid" src="image/user_icons/imasex.png" alt="Twitter">
+                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
                     <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
                     <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
