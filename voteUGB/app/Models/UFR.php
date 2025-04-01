@@ -4,27 +4,38 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UFR extends Model
 {
     use HasFactory;
-    protected $fillable = ['id_ufr', 'nom'];
 
-    public function etudiants()
+    // Si votre table s'appelle 'ufrs' (convention Laravel)
+    protected $table = 'ufrs'; 
+    
+    // Si vous utilisez 'id_ufr' comme clé primaire
+    protected $primaryKey = 'id_ufr';
+    
+    public $incrementing = true; // Si c'est un auto-increment
+    protected $keyType = 'int';  // Type de la clé primaire
+    
+    protected $fillable = ['nom']; // 'id_ufr' n'est pas nécessaire ici
+
+    // Relation avec les étudiants
+    public function etudiants(): HasMany
     {
-        return $this->hasMany(Etudiant::class);
+        return $this->hasMany(Etudiant::class, 'ufr_id', 'id_ufr');
     }
 
-    public function listes()
+    // Relation avec les listes
+    public function listes(): HasMany
     {
-        return $this->hasMany(Listes::class);
+        return $this->hasMany(Liste::class, 'ufr_id', 'id_ufr');
     }
 
-
-    public function vote(): BelongsTo
+    // Relation avec les votes (à vérifier selon votre structure)
+    public function votes(): HasMany
     {
-        return $this->belongsTo(Votes::class);
+        return $this->hasMany(Vote::class, 'ufr_id', 'id_ufr');
     }
 }
-

@@ -135,10 +135,11 @@
                 <label for="ufr" class="form-label">Sélectionnez votre UFR</label>
                 <select name="ufr" id="ufr" class="form-select">
                     <option value="">Veuillez sélectionner votre UFR</option>
-                    <option value="sat">SAT</option>
-                    <option value="lsh">LSH</option>
-                    <option value="sjp">SJP</option>
-                    <option value="s2ata">S2ATA</option>
+                    @foreach(App\Models\Ufr::all() as $ufr)
+                        <option value="{{ $ufr->nom }}" {{ old('ufr') == $ufr->nom ? 'selected' : '' }}>
+                            {{ $ufr->nom }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 

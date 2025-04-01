@@ -2,89 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Etudiant;
 use App\Models\Listes;
-use Illuminate\Contracts\View\View as ViewView;
+use Illuminate\View\View;
 
 class login_controller extends Controller
 {
-    // accueil
-    public function accueil()
+    // Accueil
+    public function accueil(): View
     {
         return view('ugbvote');
     }
-    public function showLoginForm()
+
+    // Formulaire de connexion
+    public function showLoginForm(): View
     {
         return view('user.login');
     }
 
-
-    /*  public function connecter()
-    {
-        return view('user.election');
-    } */
-
-
-
-    // inscription
-    public function inscription()
+    // Formulaire d'inscription
+    public function inscription(): View
     {
         return view('user.inscription');
     }
 
-
-
-    // pour gerer la connection des users 
+    // Traitement de la connexion
     public function login(Request $request)
     {
-        // Validation des champs
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // Vérification et tentative d'authentification
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             $user = Auth::user();
-            $request->session()->put('ufr_id', $user->ufr_id);
+            
+            // Stocker l'UFR dans la session
+            session(['ufr_id' => $user->ufr_id]);
 
-            // Par exemple, récupérer les listes de vote pour cet UFR
-            $listes = Listes::where('ufr_id',  $user->ufr_id)->get();
+            // Récupérer les listes pour l'UFR de l'étudiant
+            $listes = Listes::where('ufr_id', $user->ufr_id)->get();
 
-            if ($listes->isEmpty()) {#
-                return view('user.election')->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.');
+            if ($listes->isEmpty()) {
+                return view('user.election')
+                    ->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.')
+                    ->with('etudiant', $user);
             }
 
-            return view('user.election', ['listes' => $listes,'etudiant'=> $user])->with('success', 'Connexion réussie');
-            // return redirect()->route('election', ['ufr_id' => $user->ufr_id])->with('success', 'Connexion réussie');
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate(); // Regénérer la session pour la sécurité
-            return redirect()->route('election')->with('success', 'Connexion réussie');
+            return view('user.election')
+                ->with('listes', $listes)
+                ->with('etudiant', $user)
+                ->with('success', 'Connexion réussie');
         }
 
-        // Si la connexion échoue
-        return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
+        return back()
+            ->withInput($request->only('email'))
+            ->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
     }
-}
 
+    // Déconnexion
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Déconnexion réussie');
- 
-   }
+        
+        return redirect()->route('login')
+            ->with('success', 'Déconnexion réussie');
+    }
 
-
-   public function compose(ViewView $view)
+    // Partage des données d'étudiant avec les vues
+    public function compose(View $view)
     {
         $view->with('etudiant', Auth::check() ? Auth::user() : null);
     }
