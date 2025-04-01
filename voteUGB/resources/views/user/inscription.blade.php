@@ -109,7 +109,7 @@
     <div class="col-md-8 col-12 d-flex flex-column h-100">
         <div id="alert"></div>
         <h1 class="text text-center KT">Inscrivez-Vous !</h1>
-        <form action="#" id="inscriptionForm" method="post" novalidate name="formulaire" 
+        <form action="{{route('ajouterEtudiants')}}" id="inscriptionForm" method="post" novalidate name="formulaire" 
               class="p-5 shadow rounded bg-white h-100 d-flex flex-column flex-grow-1">
             @csrf
             <div class="row g-3 flex-grow-1">

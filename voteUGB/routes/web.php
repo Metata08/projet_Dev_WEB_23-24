@@ -4,7 +4,7 @@ use App\Http\Controllers\login_controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
-
+use App\Http\Controllers\EtudiantController;
 
 
 Route::get('/', function () {
@@ -52,8 +52,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
-
-
-
-
+Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');

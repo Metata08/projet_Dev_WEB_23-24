@@ -49,7 +49,7 @@ class login_controller extends Controller
         ]);
 
         // Vérification et tentative d'authentification
-        if (Auth::attempt(['mail' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
 
             $user = Auth::user();
@@ -64,11 +64,15 @@ class login_controller extends Controller
 
             return view('user.election', ['listes' => $listes,'etudiant'=> $user])->with('success', 'Connexion réussie');
             // return redirect()->route('election', ['ufr_id' => $user->ufr_id])->with('success', 'Connexion réussie');
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $request->session()->regenerate(); // Regénérer la session pour la sécurité
+            return redirect()->route('election')->with('success', 'Connexion réussie');
         }
 
         // Si la connexion échoue
         return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
     }
+}
 
     public function logout(Request $request)
     {
