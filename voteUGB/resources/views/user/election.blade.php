@@ -169,7 +169,8 @@
                 <div class="vot-card-container">
                     <div class="vot-card">
                         <header class="carte-header">
-                            <div class="logo-carte">Logo Liste</div>
+                            <div class="logo-carte"> <img src="{{ asset('image/user_image/image-carte.png') }}" alt="Logo" class="list-image img-fluid"></div>
+
                             <div class="liste-info">
                                 <h2 class="list-nom text-uppercase text-bold">{{ $liste->name_list }}</h2>
                                 <div class="vote-icon-wrapper">
