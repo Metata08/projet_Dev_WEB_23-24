@@ -6,7 +6,8 @@ use App\Http\Controllers\ResultatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
-
+use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', function () {
@@ -71,15 +72,20 @@ Route::get('/inscription', function () {
     return view('inscription');
 });
 
-Route::get('admin/index', function () {
-    return view('admin.index');
-});
 
-Route::get('admin/home', function () {
-    return view('admin.home');
-});
+// Afficher la page de connexion
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 
-Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
-// resutats en temps reel 
+// Vérifier l'authentification
+Route::post('/admin/login', [AdminController::class, 'loginAdmin'])->name('admin.login');
 
-Route::get('/resultats/json', [ResultatController::class, 'getResultats'])->name('resultats.json');
+Route::get('/dashboardAdmin', [AdminController::class, 'dashboardAdmin'])->name('dashboardAdmin');
+Route::post('/logoutAdmin', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
+Route::get('/listeCandidats', [AdminController::class, 'listeCandidats'])->name('listeCandidats');
+Route::get('/listePostes', [AdminController::class, 'listePostes'])->name('listePostes');
+Route::get('/afficherEtudiant', [AdminController::class, 'afficherEtudiant'])->name('afficherEtudiant');
+Route::get('/listeElecteurs', [AdminController::class, 'listeElecteurs'])->name('listeElecteurs');
+
+Route::delete('/deleteElecteur/{id}', [AdminController::class, 'deleteElecteur'])->name('deleteElecteur');
+Route::post('/enregistrer-list', [AdminController::class, 'enregistrerList'])->name('enregistrerList');
+

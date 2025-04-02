@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UFR extends Model
 {
@@ -14,18 +14,19 @@ class UFR extends Model
     protected $primaryKey='id_ufr';
     public function etudiants()
     {
-        return $this->hasMany(Etudiant::class);
+        return $this->hasMany(Etudiant::class, 'ufr_id', 'id_ufr');
     }
 
-    public function listes()
+    // Relation avec les listes
+    public function listes(): HasMany
     {
-        return $this->hasMany(Listes::class);
+        return $this->hasMany(Liste::class, 'ufr_id', 'id_ufr');
     }
 
-
-    public function vote(): BelongsTo
+    // Relation avec les votes (à vérifier selon votre structure)
+    public function votes(): HasMany
     {
-        return $this->belongsTo(Votes::class);
+        return $this->hasMany(Vote::class, 'ufr_id', 'id_ufr');
     }
 
     public function currentVote()

@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Etudiant;
 use App\Models\Listes;
-use Illuminate\Contracts\View\View as ViewView;
+use Illuminate\View\View;
 
 class login_controller extends Controller
 {
-    // accueil
-    public function accueil()
+    // Accueil
+    public function accueil(): View
     {
         return view('ugbvote');
     }
-    public function showLoginForm()
+
+    // Formulaire de connexion
+    public function showLoginForm(): View
     {
         return view('user.login');
     }
@@ -31,26 +30,23 @@ class login_controller extends Controller
         return view('user.inscription');
     }
 
-
-
-    // pour gerer la connection des users 
+    // Traitement de la connexion
     public function login(Request $request)
     {
-        // Validation des champs
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // Vérification et tentative d'authentification
-        if (Auth::attempt(['mail' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
             $user = Auth::user();
             // $request->session()->put('ufr_id', $user->ufr_id);
 
-            // Par exemple, récupérer les listes de vote pour cet UFR
-            $listes = Listes::where('ufr_id',  $user->ufr_id)->get();
+            // Récupérer les listes pour l'UFR de l'étudiant
+            $listes = Listes::where('ufr_id', $user->ufr_id)->get();
 
             if ($listes->isEmpty()) { #
                 return view('user.election')->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.');
@@ -59,10 +55,12 @@ class login_controller extends Controller
             return view('user.election', ['listes' => $listes, 'etudiant' => $user])->with('success', 'Connexion réussie');
         }
 
-        // Si la connexion échoue
-        return back()->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
+        return back()
+            ->withInput($request->only('email'))
+            ->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
     }
 
+    // Déconnexion
     public function logout(Request $request)
     {
         Auth::logout();
