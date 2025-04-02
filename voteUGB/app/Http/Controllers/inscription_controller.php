@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Etudiant;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class inscription_controller extends Controller
 {
@@ -21,7 +22,13 @@ class inscription_controller extends Controller
         $data = $request->validate([
             'prenom' => 'required|string|max:255',
             'nom'    => 'required|string|max:255',
-            'code'   => 'required|string|max:255|unique:etudiants,code_etudiant', // Vérifie que le code est unique dans la table etudiants
+            'code'   => [
+                'required',
+                'string',
+                'max:255',
+                'unique:etudiants,code_etudiant', // Le code doit être unique dans la table etudiants
+                Rule::exists('etudiant_officiels', 'code') // Le code doit exister dans la table etudiant_officiels
+            ],// Vérifie que le code est unique dans la table etudiants
             'email'  => 'required|email|max:255|unique:etudiants,mail',            // Vérifie que l'email est unique
             'ufr'    => 'required|exists:u_f_r_s,id_ufr', // Vérifie que l'ID de l'UFR existe dans la table u_f_r_s
             'password' => 'required|string|min:6|confirmed', // Le champ password_confirmation doit être présent dans le formulaire
@@ -37,10 +44,9 @@ class inscription_controller extends Controller
             'mdp'           => Hash::make($data['password']),
         ]);
 
-        // Optionnel : Connecter l'utilisateur automatiquement après l'inscription
-        // Auth::login($etudiant);
+       
 
-        // Redirection vers une page de succès (par exemple, dashboard ou election)
+        // Redirection vers la page de  connexion
         return redirect()->route('login')->with('success', 'Inscription réussie !');
     }
 
