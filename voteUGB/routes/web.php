@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\inscription_controller;
 use App\Http\Controllers\login_controller;
+use App\Http\Controllers\ResultatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
@@ -65,3 +66,6 @@ Route::get('/systemevote/{id}', [user_controller::class, 'showSystemeVote'])->na
 Route::post('/systemevote/{id}', [user_controller::class, 'storeVote'])->name('systemevote.vote');
 
 
+// resutats en temps reel 
+
+Route::get('/resultats/json', [ResultatController::class, 'getResultats'])->name('resultats.json');
