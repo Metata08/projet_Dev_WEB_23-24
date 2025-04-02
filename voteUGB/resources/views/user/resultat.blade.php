@@ -36,53 +36,53 @@
       </button>
 
       <!-- Liens et pseudo -->
-     <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav liens d-flex justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('election') }}">
-                            <div class="frame-4">
-                                <div class="elections">Élections</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
-                            <div class="frame-5">
-                                <div class="resultats">Résultats</div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- Pseudo -->
-                <div class="pseudo me-5 justify-content-end">
-                    <div class="frame-36">
-                        <div class="avatar-block">
-                            <div class="avatar">
-                                <div class="initials">V</div>
-                            </div>
-                            @if(isset($etudiant))
-                            <div class="info">
-                                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
-                                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-
-
-                    <!-- Image cliquable avec confirmation pour se déconnecter -->
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <!-- Formulaire de déconnexion caché -->
-
-                        <!-- Image cliquable avec confirmation pour se déconnecter -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                            <div class="frame-93 ms-3">
-                                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                            </div>
-                        </a>
-
-                </div>
+      <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav liens d-flex justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('election') }}">
+              <div class="frame-4">
+                <div class="elections">Élections</div>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
+              <div class="frame-5">
+                <div class="resultats">Résultats</div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- Pseudo -->
+        <div class="pseudo me-5 justify-content-end">
+          <div class="frame-36">
+            <div class="avatar-block">
+              <div class="avatar">
+                <div class="initials">V</div>
+              </div>
+              @if(isset($etudiant))
+              <div class="info">
+                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
+                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
+              </div>
+              @endif
             </div>
+          </div>
+
+
+          <!-- Image cliquable avec confirmation pour se déconnecter -->
+          <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <!-- Formulaire de déconnexion caché -->
+
+            <!-- Image cliquable avec confirmation pour se déconnecter -->
+            <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+              <div class="frame-93 ms-3">
+                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
+              </div>
+            </a>
+
+        </div>
+      </div>
     </nav>
     <!-- image-header -->
 
@@ -100,103 +100,30 @@
 </header>
 
 <body class="">
+  <!-- code de test  -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  <script>
+    var resultatsUrl = "{{ route('resultats.json') }}";
+    var logoVote= "{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}";
+    var imageCarte="{{ asset('image/user_image/image-carte.png') }}";
+  </script>
+  <script src="{{ asset('js/ajax.js') }}"></script>
 
   <!-- resutat en direct  -->
 
   <div class="results-container container-fluid  m-3 p-3 ">
     <h1 class="results-title text-nowrap">Résultat en temps réel</h1>
-    <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="vote-total">256</span></p>
+    <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="totalVotes">0</span> Votes</p>
   </div>
 
   <!-- list  -->
 
-  <div class="container">
+  <div class="container" id="resultatVote">
     <!-- premier -->
-    <div class="row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
-
-    <!-- deuxieme -->
-    <div class="row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar2 ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">28% (72 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
 
 
-    <!-- 3eme -->
 
-    <div class=" row voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar3 ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">38% (76 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
   </div>
 
 

@@ -126,27 +126,15 @@
     </div>
   </div>
 
-  @if(isset($voteId))
-    <div class="container-fluid m-3 p-3">
-        <p>
-        <h2>Votre vote pour la liste : <span class="text-uppercase">{{ $voteId }}</span></h2>
-        <p>Vous avez déjà voté pour cette liste.</p>
-        </p>
-        </p>
-    </div>
-    @endif
+
   <!-- Message d'alerte -->
   <div id="message" class=" alert" role="alert">
     @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success  container text-center">{{ session('success') }}</div>
     @endif
-    @if($errors->any())
-    <div class="alert alert-danger">
-      <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-      </ul>
+    @if(session('error'))
+    <div class="alert alert-danger  container text-center">
+      <span class="fw-bold">ATTENTION ! :</span> {{ session('error') }}
     </div>
     @endif
   </div>
@@ -158,7 +146,8 @@
       <div
         class="card-header text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
         <figure class="logo-container text-center mb-3 mb-md-0">
-          <p class="logo-text fw-bold">Logo Liste</p>
+          <!-- <p class="logo-text fw-bold">Logo Liste</p> -->
+          <img src="{{ asset('image/user_image/image-carte.png') }}" alt="Logo" class="list-image img-fluid">
         </figure>
         <div class="title-section text-center text-md-start">
           <h2 class="list-title fw-bold text-uppercase text-center">{{ $liste->name_list }}</h2>
@@ -168,16 +157,14 @@
         </div>
       </div>
 
-      <section class="progress-section">
-        <div class="progress-container">
-          <div class="progress-bar "></div>
-          <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
-        </div>
+      <section class="progress-section" id="resultatVoteSysteme">
+
       </section>
       <footer class="confirmation-section">
         <div class="button-wrapper">
-          <form action="{{ route('systemevote.vote', ['id' => $liste->id_list,'vote_id'=>$voteId]) }}" method="POST">
+          <form action="{{ route('systemevote.vote', ['id' => $liste->id_list]) }}" method="POST">
             @csrf
+            <input type="hidden" name="vote_id" id="vote_id" value="{{ $voteId }}">
             <!-- Autres champs du formulaire si nécessaire -->
             <button type="submit" class="confirm-button">
               <span class="button-text">CONFIRMER</span>
@@ -197,102 +184,73 @@
   </article>
 
   <!-- resutat en direct  -->
+  <div>
 
-  <div class="results-container container-fluid ">
-    <h1 class="results-title text-nowrap">Résultat en temps réel</h1>
-    <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="vote-total">256</span></p>
+    <!-- code de test  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      var resultatsUrl = "{{ route('resultats.json') }}";
+      var logoVote = "{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}";
+      var idList = "{{ $liste->id_list }}";
+      var imageCarte = "{{ asset('image/user_image/image-carte.png') }}";
+    </script>
+    <script src="{{ asset('js/ajax.js') }}"></script>
+    <script src="{{ asset('js/systemeVote.js') }}"></script>
+
+
+    <!-- resutat en direct  -->
+
+    <div class="results-container container-fluid  m-3 p-3 ">
+      <h1 class="results-title text-nowrap">Résultat en temps réel</h1>
+      <p class="vote-count text-nowrap">Total des votes : <span class="fw-bold" id="totalVotes">0</span> Votes</p>
+    </div>
+
+    <!-- list  -->
+
+    <div class="row m-3 p-3 d-flex justify-content-around " id="resultatVote">
+      <!-- premier -->
+    </div>
+
+
+
+
+    <!-- Modal de confirmation de déconnexion -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Êtes-vous sûr de vouloir vous déconnecter ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+      @csrf
+    </form>
+
+    <script>
+      document.getElementById('confirmLogout').addEventListener('click', function() {
+        document.getElementById('logout-form').submit();
+      });
+    </script>
+
+
+
+
+
+
   </div>
-
-  <!-- list  -->
-
-  <div class="row">
-    <!-- premier -->
-    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">42% (108 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
-
-    <!-- deuxieme -->
-    <div class="col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar2 ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">28% (72 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
-
-
-    <!-- 3eme -->
-
-    <div class=" col voting-card-wrapper d-flex justify-content-center align-items-center py-5">
-
-      <div class="voting-card container  p-4 shadow rounded">
-        <div
-          class="card-header2 text-white rounded p-3 d-flex flex-column flex-md-row align-items-center justify-content-between">
-          <figure class="logo-container text-center mb-3 mb-md-0">
-            <p class="logo-text fw-bold">Logo Liste</p>
-          </figure>
-          <div class="title-section text-center text-md-start">
-            <h2 class="list-title fw-bold">NOM DE LA LISTE</h2>
-          </div>
-          <div class="image-container text-center">
-            <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Logo" class="list-image img-fluid">
-          </div>
-        </div>
-
-        <section class="progress-section">
-          <div class="progress-container">
-            <div class="progress-bar3 ">
-            </div>
-            <p class="progress-text text-center text-nowrap ">38% (76 votes)</p>
-          </div>
-        </section>
-
-      </div>
-    </div>
-  </div>
-
 
   <!-- footer  -->
 
@@ -327,7 +285,7 @@
     });
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 
 
 </body>

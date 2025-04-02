@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\inscription_controller;
 use App\Http\Controllers\login_controller;
+use App\Http\Controllers\ResultatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
@@ -66,9 +67,6 @@ Route::post('/systemevote/{id}', [user_controller::class, 'storeVote'])->name('s
 
 
 
-    return view('welcome');
-});
-
 Route::get('/inscription', function () {
     return view('inscription');
 });
@@ -82,3 +80,6 @@ Route::get('admin/home', function () {
 });
 
 Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
+// resutats en temps reel 
+
+Route::get('/resultats/json', [ResultatController::class, 'getResultats'])->name('resultats.json');

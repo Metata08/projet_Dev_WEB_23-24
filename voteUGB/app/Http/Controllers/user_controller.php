@@ -8,6 +8,10 @@ use App\Models\VoteEtudiant;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View as ViewFacade;
+
+
+
 
 
 class user_controller extends Controller
@@ -16,7 +20,7 @@ class user_controller extends Controller
     //fonction detailListe
     public function detailListe($id_list)
     {
-    
+
 
         $membres = MembresListe::with('etudiant')->where('list_id', $id_list)->get();
 
@@ -34,8 +38,8 @@ class user_controller extends Controller
 
     //fonction election
     public function election(Request $request)
-    { // Validation des champs
-        
+    { 
+
 
         // Vérification et tentative d'authentification
         if (1) {
@@ -68,36 +72,37 @@ class user_controller extends Controller
     }
 
 
-    public function storeVote($id_list,Request $request)
+    public function storeVote($id_list, Request $request)
     {
-        
-        // Supposons que vous récupérez l'ID du vote en cours, par exemple via le formulaire ou par une logique interne.
-        $voteId = view()->share('voteId'); // Récupérer la variable globale vote_id
 
+        $voteId = $request->input('vote_id');
+
+        
         if (!$voteId) {
-            return redirect()->back()->with('error', 'Erreur : Aucun vote en cours trouvé.');
-        }// ou récupérer le vote courant autrement
+            return redirect()->back()->with('error','Erreur : Aucun vote en cours trouve');
+        }
+
         $etudiantId = Auth::user()->id_etudiant;
-    
+
         // Vérifier si l'étudiant a déjà voté pour ce vote
         $existingVote = VoteEtudiant::where('etudiant_id', $etudiantId)
-                                      ->where('vote_id', $voteId)
-                                      ->where('list_id', $id_list)
-                                      ->first();
-    
+            ->where('vote_id', $voteId)
+            ->where('list_id', $id_list)
+            ->first();
+
         if ($existingVote) {
             return redirect()->back()->with('error', 'Vous avez déjà voté pour ce vote en cours.');
         }
-    
+
         // Créer l'enregistrement du vote
         VoteEtudiant::create([
             'etudiant_id' => $etudiantId,
             'vote_id'     => $voteId,
-            'id_list'     => $id_list,  // Ajoutez l'ID de la liste si nécessaire
+            'list_id'     => $id_list,  // Ajoutez l'ID de la liste si nécessaire
             'voted_at'    => now(),
             // Ajoutez d'autres champs si nécessaire, par exemple 'choix'
         ]);
-    
+
         return redirect()->back()->with('success', 'Votre vote a bien été enregistré.');
     }
 

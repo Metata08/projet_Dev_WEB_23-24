@@ -11,9 +11,11 @@ class VoteEtudiant extends Model
     protected $fillable = [
         'etudiant_id',
         'vote_id',
+        'list_id',
         'voted_at',
-        // 'choix', si nécessaire
+        // d'autres champs si nécessaire
     ];
+    
 
     public function etudiant()
     {
@@ -24,4 +26,6 @@ class VoteEtudiant extends Model
     {
         return $this->belongsTo(Votes::class, 'vote_id', 'id_vote');
     }
+
+    
 }
