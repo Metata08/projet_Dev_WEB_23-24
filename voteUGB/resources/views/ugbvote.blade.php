@@ -29,7 +29,7 @@
         <nav class="navbar navbar-expand-lg ">
             <!-- Logo -->
             <div class="frugb-vote me-auto">
-             <a href="{{ route('ugbvote') }}">
+                <a href="{{ route('ugbvote') }}">
                     <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
                 </a>
             </div>
@@ -64,15 +64,15 @@
                     <div class="frame-36">
                         <div class="avatar-block">
 
-                            <a href="{{ route('login') }}"  class="text-decoration-none">
-                            <button class="confirm-button">
-                                <span class="button-text">Se Connecter</span>
-                                <div class="icon-container">
+                            <a href="{{ route('login') }}" class="text-decoration-none">
+                                <button class="confirm-button">
+                                    <span class="button-text">Se Connecter</span>
+                                    <div class="icon-container">
 
-                                    <img alt="icon" class="check-square" src="{{asset('image/user_icons/log-in.png') }}" />
+                                        <img alt="icon" class="check-square" src="{{asset('image/user_icons/log-in.png') }}" />
 
-                                </div>
-                            </button>
+                                    </div>
+                                </button>
                             </a>
                         </div>
                     </div>
@@ -100,13 +100,36 @@
 
     <main class=" container-fluid " role="main">
         <section aria-labelledby="process-title">
-            <div class="text-center p-3 mt-3">
-                <div class="section-image">
-                    <img src="images/ins.jpeg" alt="Processus d'inscription" class="active" loading="lazy">
-                    <img src="images/conn.jpeg" alt="Page de connexion" loading="lazy">
-                    <img src="images/choix_can.jpeg" alt="Choix des candidats" loading="lazy">
-                    <img src="images/vote_can.png" alt="Interface de vote" loading="lazy">
-                    <img src="images/resultat.png" alt="Résultats du vote" loading="lazy">
+            <!-- carousel -->
+
+
+            <div class="text-center p-3 mt-3 ">
+                <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                    <div class="  carousel-inner ">
+                        <div class="carousel-item  active" data-bs-interval="5000">
+                            <img src="{{ asset('image/carousel/inscription.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
+                        </div>
+                        <div class="carousel-item " data-bs-interval="5000">
+                            <img src="{{ asset('image/carousel/Connecter.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
+                        </div>
+                        <div class="carousel-item ">
+                            <img src="{{ asset('image/carousel/choisir.png  ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
+                        </div>
+                        <div class="carousel-item " data-bs-interval="5000">
+                            <img src="{{ asset('image/carousel/voter.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
+                        </div>
+                        <div class="carousel-item " data-bs-interval="5000">
+                            <img src="{{ asset('image/carousel/resultats.png') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually text-secondary">Précédent</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually text-secondary">Suivant</span>
+                    </button>
                 </div>
             </div>
 
@@ -154,61 +177,7 @@
         </section>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('.section-image img');
-            let currentIndex = 0;
 
-            function showNextImage() {
-                images.forEach(img => img.classList.remove('active'));
-                currentIndex = (currentIndex + 1) % images.length;
-                images[currentIndex].classList.add('active');
-            }
-
-            // Démarrer l'image
-            let intervalImage = setInterval(showNextImage, 5000);
-
-            // Pause au survol pour meilleure UX
-            const image = document.querySelector('.section-image');
-            image.addEventListener('mouseenter', () => clearInterval(intervalImage));
-            image.addEventListener('mouseleave', () => {
-                clearInterval(intervalImage);
-                intervalImage = setInterval(showNextImage, 5000);
-            });
-
-            // Gestion du touch pour mobile
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            image.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-                clearInterval(intervalImage);
-            }, {
-                passive: true
-            });
-
-            image.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-                intervalImage = setInterval(showNextImage, 3000);
-            }, {
-                passive: true
-            });
-
-            function handleSwipe() {
-                const threshold = 50;
-                if (touchStartX - touchEndX > threshold) {
-                    // Swipe gauche
-                    showNextImage();
-                } else if (touchEndX - touchStartX > threshold) {
-                    // Swipe droit
-                    images.forEach(img => img.classList.remove('active'));
-                    currentIndex = (currentIndex - 1 + images.length) % images.length;
-                    images[currentIndex].classList.add('active');
-                }
-            }
-        });
-    </script>
 </body>
 <!-- footer -->
 <footer class="footer container-fluid">
@@ -219,8 +188,8 @@
             <div class=" logo-footer ">
                 <div class="frugb-vote">
                     <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
+                    </a>
                 </div>
                 <div class="button-list d-flex justify-content-center ">
                     <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
@@ -243,7 +212,7 @@
                     <strong>Lien Utiles</strong><br>
                     <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
                     <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
-                
+
                 </p>
             </div>
         </div>
