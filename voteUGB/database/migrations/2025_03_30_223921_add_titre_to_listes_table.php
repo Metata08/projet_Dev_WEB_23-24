@@ -11,15 +11,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('listes', function (Blueprint $table) {
-            $table->string('titre')->nullable()->after('programme');
+        Schema::create('listes', function (Blueprint $table) {
+            $table->id('id_list');
+            $table->string('programme');
+            $table->string('name_list');
+            $table->unsignedBigInteger('ufr_id');
+            // Précisez que la colonne référencée dans u_f_r_s est id_ufr
+            $table->foreign('ufr_id')->references('id_ufr')->on('ufrs')->onDelete('cascade');
+            
+            $table->timestamps();
         });
     }
+    
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::table('listes', function (Blueprint $table) {
-            $table->dropColumn('titre');
-        });
+        Schema::dropIfExists('listes');
     }
 };

@@ -13,7 +13,7 @@ class Listes extends Model
     protected $primaryKey = 'id_list';
 
     use HasFactory;
-    protected $fillable = ['id_list', 'programme','titre', 'name_list', 'ufr_id'];
+    protected $fillable = ['titre', 'nom', 'programme', 'ufr'];
         
 
     public function ufr()

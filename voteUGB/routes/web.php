@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
 // use App\Http\Controllers\Auth\login_controller;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', function () {
@@ -50,6 +51,16 @@ Route::middleware(['auth'])->group(function () {
         return view('user.election'); 
     })->name('election');
 });
+
+Route::get('/dashboardAdmin', [AdminController::class, 'dashboardAdmin'])->name('dashboardAdmin');
+Route::get('/logoutAdmin', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
+Route::get('/listeCandidats', [AdminController::class, 'listeCandidats'])->name('listeCandidats');
+Route::get('/listePostes', [AdminController::class, 'listePostes'])->name('listePostes');
+Route::get('/afficherEtudiant', [AdminController::class, 'afficherEtudiant'])->name('afficherEtudiant');
+Route::get('/listeElecteurs', [AdminController::class, 'listeElecteurs'])->name('listeElecteurs');
+
+Route::delete('/deleteElecteur/{id}', [AdminController::class, 'deleteElecteur'])->name('deleteElecteur');
+Route::post('/enregistrer-list', [AdminController::class, 'enregistrerList'])->name('enregistrerList');
 
 
 Route::post('/ajouterEtudiants', [EtudiantController::class, 'ajouterEtudiants'])->name('ajouterEtudiants');
