@@ -28,7 +28,7 @@
 
     <!-- Main content -->
     <section class="content">
-    @if(isset($listes) && $listes->count() > 0)
+    @if(isset($listesC) && $listesC->count() > 0)
     <table class="table">
         <thead>
             <tr>
@@ -39,7 +39,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($listes as $liste)
+            @foreach($listesC as $liste)
                 <tr>
                     <td>{{ $liste->titre }}</td>
                     <td>{{ $liste->name_list }}</td>
@@ -101,7 +101,7 @@
                         <label for="ufr" class="form-label">UFR</label>
                         <select class="form-select" id="ufr" name="ufr" required>
                             <option value="">Veuillez sélectionner votre UFR</option>
-                            @foreach(App\Models\Ufr::all() as $ufr)
+                            @foreach(App\Models\UFR::all() as $ufr)
                                 <option value="{{ $ufr->nom }}" {{ old('ufr') == $ufr->nom ? 'selected' : '' }}>
                                     {{ $ufr->nom }}
                                 </option>

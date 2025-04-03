@@ -89,3 +89,21 @@ Route::get('/listeElecteurs', [AdminController::class, 'listeElecteurs'])->name(
 Route::delete('/deleteElecteur/{id}', [AdminController::class, 'deleteElecteur'])->name('deleteElecteur');
 Route::post('/enregistrer-list', [AdminController::class, 'enregistrerList'])->name('enregistrerList');
 
+
+
+use Illuminate\Support\Facades\DB;
+
+Route::get('/resultats/json', function () {
+    $positions = DB::table('vote_etudiants')
+        ->join('listes', 'vote_etudiants.list_id', '=', 'listes.id_list')
+        ->join('u_f_r_s', 'u_f_r_s.id_ufr', '=', 'listes.ufr_id')
+        ->select('u_f_r_s.nom as position', 'listes.name_list as candidat', DB::raw('COUNT(vote_etudiants.id) as nombre_de_votes'))
+        ->groupBy('u_f_r_s.nom', 'listes.id_list')
+        ->orderBy('u_f_r_s.nom')
+        ->orderByDesc('nombre_de_votes')
+        ->get();
+
+    return @json_encode($positions);
+})->name('resultats.json');
+
+

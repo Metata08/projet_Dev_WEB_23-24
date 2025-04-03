@@ -22,18 +22,20 @@ class AdminController extends Controller
 
     //fonction dashboard admin
     public function dashboardAdmin(){
-        $nombreDePostes = DB::table('ufrs')->count();
+        $nombreDePostes = DB::table('u_f_r_s')->count();
         $nombreDeCandidats = DB::table('listes')->count();
         $nombreTotalElecteurs = DB::table('etudiants')->count();
-        $nombreElecteursVotants = DB::table('votes')->distinct('etudiant_id')->count();
-        $positions = DB::table('votes')
-            ->join('membres_listes', 'membres_listes.id_membre', '=', 'votes.etudiant_id')
-            ->join('listes', 'listes.id_list', '=', 'membres_listes.list_id')
-            ->join('ufrs', 'ufrs.id_ufr', '=', 'listes.ufr_id')
-            ->select('ufrs.nom as position', 'membres_listes.id_membre as candidat', DB::raw('COUNT(votes.id_vote) as nombre_de_votes'))
-            ->groupBy('ufrs.nom', 'membres_listes.id_membre')
-            ->get();
+        $nombreElecteursVotants = DB::table('vote_etudiants')->distinct('etudiant_id')->count();
+        $positions = DB::table('vote_etudiants')
+        ->join('listes', 'vote_etudiants.list_id', '=', 'listes.id_list')
+        ->join('u_f_r_s', 'u_f_r_s.id_ufr', '=', 'listes.ufr_id')
+        ->select('u_f_r_s.nom as position', 'listes.name_list as candidat', DB::raw('COUNT(vote_etudiants.id) as nombre_de_votes'))
+        ->groupBy('u_f_r_s.nom', 'listes.id_list')
+        ->orderBy('u_f_r_s.nom')
+        ->orderByDesc('nombre_de_votes')
+        ->get();
 
+        // $positions =  @json_encode($position);
 
         return view('admin.home', compact(
             'nombreDePostes',
@@ -49,8 +51,8 @@ class AdminController extends Controller
     }
 
     public function listeCandidats(){
-        $listes = Listes::all();
-        return view('admin.candidates', compact('listes'));
+        $listesC = Listes::all();
+        return view('admin.candidates', compact('listesC'));
     }
 
     public function listePostes(){

@@ -40,7 +40,7 @@ class Etudiant extends Authenticatable
 
     public function votes()
     {
-        return $this->hasMany(Vote::class, 'etudiant_id');
+        return $this->hasMany(Votes::class, 'etudiant_id');
     }
 
     // Accesseur pour le nom complet

@@ -69,10 +69,8 @@ class login_controller extends Controller
         return redirect()->route('login')->with('success', 'Déconnexion réussie');
     }
 
-
-    public function compose(ViewView $view)
-    {
-        
-        $view->with('etudiant', Auth::check() ? Auth::user() : null);
+    public function compose(View $view)    
+    {                
+        $view->with('etudiant', Auth::check() ? Auth::user() : null);    
     }
 }

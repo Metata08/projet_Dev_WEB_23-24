@@ -20,13 +20,13 @@ class UFR extends Model
     // Relation avec les listes
     public function listes(): HasMany
     {
-        return $this->hasMany(Liste::class, 'ufr_id', 'id_ufr');
+        return $this->hasMany(Listes::class, 'ufr_id', 'id_ufr');
     }
 
     // Relation avec les votes (à vérifier selon votre structure)
     public function votes(): HasMany
     {
-        return $this->hasMany(Vote::class, 'ufr_id', 'id_ufr');
+        return $this->hasMany(Votes::class, 'ufr_id', 'id_ufr');
     }
 
     public function currentVote()

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ufrs', function (Blueprint $table) {
+        Schema::create('u_f_r_s', function (Blueprint $table) {
             $table->id("id_ufr");
             $table->string('nom')->unique();
             $table->timestamps();
