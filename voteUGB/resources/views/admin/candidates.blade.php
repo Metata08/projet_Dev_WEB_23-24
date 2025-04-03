@@ -50,13 +50,14 @@
                             @csrf
                             @method('DELETE') <!-- Utiliser DELETE au lieu de POST -->
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet électeur ?')">
-                                <i class="bi bi-trash"></i>
+                                <i class="fa fa-trash"></i>
+                            
                             </button>
                         </form>
 
                         <!-- Bouton d'édition -->
                         <a href="#" class="btn btn-secondary">
-                            <i class="bi bi-pencil"></i>
+                            <i class="fa fa-pencil"></i>
                         </a>
                     </td>
                 </tr>

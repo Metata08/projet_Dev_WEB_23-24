@@ -52,8 +52,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('election');
 });
 
+// Afficher la page de connexion
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+// Vérifier l'authentification
+Route::post('/admin/login', [AdminController::class, 'loginAdmin'])->name('admin.login');
+
 Route::get('/dashboardAdmin', [AdminController::class, 'dashboardAdmin'])->name('dashboardAdmin');
-Route::get('/logoutAdmin', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
+Route::post('/logoutAdmin', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
 Route::get('/listeCandidats', [AdminController::class, 'listeCandidats'])->name('listeCandidats');
 Route::get('/listePostes', [AdminController::class, 'listePostes'])->name('listePostes');
 Route::get('/afficherEtudiant', [AdminController::class, 'afficherEtudiant'])->name('afficherEtudiant');

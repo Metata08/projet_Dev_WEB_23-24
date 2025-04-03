@@ -6,12 +6,20 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Etudiant;
 use App\Models\UFR;
 use App\Models\Listes;
+use App\Models\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
+    public function index()
+    {
+        return view('admin.login');
+    }
+
     //fonction dashboard admin
     public function dashboardAdmin(){
         $nombreDePostes = DB::table('ufrs')->count();
@@ -37,7 +45,7 @@ class AdminController extends Controller
     }
 
     public function logoutAdmin(){
-        return view('admin.includes.logout');
+        return redirect()->route('admin');
     }
 
     public function listeCandidats(){
@@ -91,7 +99,31 @@ class AdminController extends Controller
             'ufr_id' => $ufr->id_ufr, // Insère l'ID au lieu du nom
         ]);
 
-        return redirect()->back()->with('success', 'Liste ajoutée avec succès.');
+        return redirect()->route('listeCandidats');
+    }
+
+
+    // Vérifier l'authentification
+    public function loginAdmin(Request $request)
+    {
+        // Validation des champs
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        // Vérification dans la table `admins`
+        $admin = Admin::where('email', $request->email)
+            ->where('password', $request->password)
+            ->first();
+
+        if ($admin) {
+            // Rediriger vers le dashboard
+            return redirect()->route('dashboardAdmin');
+        }
+
+        // Redirection avec erreur
+        return back()->with('error', 'Identifiants incorrects.');
     }
 
 }

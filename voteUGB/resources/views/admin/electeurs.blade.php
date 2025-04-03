@@ -1,6 +1,7 @@
 @include('admin.includes.session')
 @include('admin.includes.slugify')
 @include('admin.includes.header')
+<link rel="stylesheet" href="{{ asset('fontawesome-free-6.5.2-web/css/all.css') }}">
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
@@ -46,13 +47,13 @@
                             @csrf
                             @method('DELETE') <!-- Utiliser DELETE au lieu de POST -->
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet électeur ?')">
-                                <i class="bi bi-trash"></i>
+                                <i class="fa fa-trash"></i>
                             </button>
                         </form>
 
                         <!-- Bouton d'édition -->
                         <a href="#" class="btn btn-secondary">
-                            <i class="bi bi-pencil"></i>
+                            <i class="fa fa-pencil"></i>
                         </a>
                     </td>
                 </tr>

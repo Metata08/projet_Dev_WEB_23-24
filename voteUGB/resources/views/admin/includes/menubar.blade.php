@@ -21,8 +21,16 @@
       <li class=""><a href="{{route(('listePostes'))}}"><i class="fa fa-tasks"></i> <span>Postes</span></a></li>
       <li class=""><a href="{{route('listeCandidats')}}"><i class="fa fa-black-tie"></i> <span>Candidats</span></a></li>
       <li class="header">PARAMETRES</li>
-      <li class=""><a href="ballot.php"><i class="fa fa-file-text"></i> <span>Position du scrutin</span></a></li>
       <li class=""><a href="#config" data-toggle="modal"><i class="fa fa-cog"></i> <span>Titre de l'élection</span></a></li>
+      <li class="">
+        <a href="{{route('logoutAdmin')}}"onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <i class="fa fa-sign-out-alt"></i> <span>Déconnexion</span>
+        </a>
+      </li>
+
+      <form id="logout-form" action="{{ route('logoutAdmin') }}" method="POST" style="display: none;">
+        @csrf
+      </form>
     </ul>
   </section>
   <!-- /.sidebar -->
