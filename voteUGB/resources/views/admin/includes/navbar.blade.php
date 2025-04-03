@@ -2,7 +2,7 @@
   <!-- Logo -->
   <a href="{{ url('admin/home') }}" class="logo">
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Système de vote</b></span>
+    <span class="logo-lg"><b>Admin UGBvote </b></span>
   </a>
 
   <!-- Header Navbar -->
@@ -17,7 +17,7 @@
         <!-- User Account -->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="" 
+            <img src="{{ asset('image/user_image/utilisateur.png') }}" 
                  class="user-image" alt="User Image">
             <span class="hidden-xs"></span>
 
@@ -25,7 +25,7 @@
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <img src="" 
+              <img src="{{ asset('image/user_image/utilisateur.png') }}" 
                    class="img-circle" alt="User Image">
               <p>
                 <small>Member since </small>

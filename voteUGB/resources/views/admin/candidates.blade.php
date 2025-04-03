@@ -17,11 +17,11 @@
         Ajouter une liste
     </button>
       <h1>
-        Candidats
+        Listes
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ route('dashboardAdmin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Candidats</li>
+        <li class="active">Listes</li>
       </ol>
     </section>
 
@@ -32,8 +32,8 @@
     <table class="table">
         <thead>
             <tr>
+                <th scope="col">Liste</th>
                 <th scope="col">Titre</th>
-                <th scope="col">Nom</th>
                 <th scope="col">Programme</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -41,8 +41,8 @@
         <tbody>
             @foreach($listesC as $liste)
                 <tr>
-                    <td>{{ $liste->titre }}</td>
                     <td>{{ $liste->name_list }}</td>
+                    <td>{{ $liste->titre }}</td>
                     <td>{{ $liste->programme }}</td>
                     <td>
                         <!-- Bouton de suppression -->
