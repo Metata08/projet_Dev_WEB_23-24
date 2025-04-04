@@ -79,7 +79,6 @@ class AdminController extends Controller
     public function enregistrerList(Request $request)
     {
         $request->validate([
-            'titre' => 'required|string|max:255',
             'nom' => 'required|string|max:255',
             'programme' => 'required|string',
             'ufr' => 'required|string', // Nom de l'UFR
@@ -95,10 +94,9 @@ class AdminController extends Controller
 
         // Insérer les données avec l'ID de l'UFR
         DB::table('listes')->insert([
-            'titre' => $request->titre,
             'name_list' => $request->nom,
             'programme' => $request->programme,
-            'ufr_id' => $ufr->id_ufr, // Insère l'ID au lieu du nom
+            'ufr_id' => $ufr->id_ufr, 
         ]);
 
         return redirect()->route('listeCandidats');

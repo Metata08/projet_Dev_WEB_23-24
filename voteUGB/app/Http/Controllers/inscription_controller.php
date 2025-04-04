@@ -26,10 +26,10 @@ class inscription_controller extends Controller
                 'required',
                 'string',
                 'max:255',
-                'unique:etudiants,code_etudiant', // Le code doit être unique dans la table etudiants
+                'unique:etudiants,code_etudiant',
                 Rule::exists('etudiant_officiels', 'code') // Le code doit exister dans la table etudiant_officiels
-            ],// Vérifie que le code est unique dans la table etudiants
-            'email'  => 'required|email|max:255|unique:etudiants,mail',            // Vérifie que l'email est unique
+            ],
+            'email'  => 'required|email|max:255|unique:etudiants,email',           
             'ufr'    => 'required|exists:u_f_r_s,id_ufr', // Vérifie que l'ID de l'UFR existe dans la table u_f_r_s
             'password' => 'required|string|min:6|confirmed', // Le champ password_confirmation doit être présent dans le formulaire
         ]);
@@ -39,7 +39,7 @@ class inscription_controller extends Controller
             'prenom'        => $data['prenom'],
             'nom'           => $data['nom'],
             'code_etudiant' => $data['code'],  // Correspond à votre champ code dans le formulaire
-            'mail'          => $data['email'],
+            'email'          => $data['email'],
             'ufr_id'        => $data['ufr'],
             'mdp'           => Hash::make($data['password']),
         ]);
@@ -49,7 +49,4 @@ class inscription_controller extends Controller
         // Redirection vers la page de  connexion
         return redirect()->route('login')->with('success', 'Inscription réussie !');
     }
-
-
-
 }

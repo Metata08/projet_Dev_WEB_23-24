@@ -32,8 +32,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Liste</th>
-                <th scope="col">Titre</th>
+                <th scope="col">Nom de la Liste</th>
                 <th scope="col">Programme</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -42,7 +41,6 @@
             @foreach($listesC as $liste)
                 <tr>
                     <td>{{ $liste->name_list }}</td>
-                    <td>{{ $liste->titre }}</td>
                     <td>{{ $liste->programme }}</td>
                     <td>
                         <!-- Bouton de suppression -->
@@ -73,7 +71,7 @@
   @include('admin.includes.footer')
 
 </div>
-<!-- ./wrapper -->
+
  <!-- Fenêtre modale -->
 <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -85,10 +83,6 @@
             <div class="modal-body">
                 <form action="{{ route('enregistrerList') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label for="titre" class="form-label">Titre de la liste</label>
-                        <input type="text" class="form-control" id="titre" name="titre" required>
-                    </div>
                     <div class="mb-3">
                         <label for="nom" class="form-label">Nom de la liste</label>
                         <input type="text" class="form-control" id="nom" name="nom" required>

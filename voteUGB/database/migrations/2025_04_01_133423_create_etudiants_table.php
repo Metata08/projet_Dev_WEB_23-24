@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id('id_etudiant');
             $table->string('nom');
             $table->string('prenom');
+            $table->string('code_etudiant')->unique();
             $table->string('email')->unique();
             $table->string('mdp');
             $table->unsignedBigInteger('ufr_id');
-            $table->foreign('ufr_id')->references('id_ufr')->on('ufrs')->onDelete('cascade');
+            $table->foreign('ufr_id')->references('id_ufr')->on('u_f_r_s')->onDelete('cascade');
+            $table->foreign('code_etudiant')->references('code')->on('etudiant_officiels')->onDelete('cascade');
             $table->timestamps();
         });
     }

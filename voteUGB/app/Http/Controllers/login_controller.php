@@ -11,13 +11,13 @@ use Illuminate\View\View;
 class login_controller extends Controller
 {
     // Accueil
-    public function accueil(): View
+    public function accueil()
     {
         return view('ugbvote');
     }
 
     // Formulaire de connexion
-    public function showLoginForm(): View
+    public function showLoginForm()
     {
         return view('user.login');
     }
