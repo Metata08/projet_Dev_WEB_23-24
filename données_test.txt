@@ -1,0 +1,7 @@
+étudiants
+	email : ameth@gmail.com
+	password : ameth31
+
+admin
+	email : admin@gmail.com
+	password : admin123
