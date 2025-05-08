@@ -11,6 +11,24 @@ class UgbvoteSeeder extends Seeder
 {
     public function run()
     {
+        
+        // 6. Insertion des Votes
+        DB::table('votes')->insert([
+            [
+                'id_vote'   => 1,
+                'date_debut'=> '2025-04-04',
+                'date_fin'  => '2025-05-05',
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+            [
+                'id_vote'   => 2,
+                'date_debut'=> '2025-04-06',
+                'date_fin'  => '2025-04-15',
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+        ]);
         // 1. Insertion des UFR
         DB::table('u_f_r_s')->insert([
             [
@@ -264,25 +282,6 @@ class UgbvoteSeeder extends Seeder
         ]);
         
 
-        // 6. Insertion des Votes
-        DB::table('votes')->insert([
-            [
-                'id_vote'   => 1,
-                'date_debut'=> '2025-04-04',
-                'date_fin'  => '2025-05-05',
-                'etudiant_id'  => 1,
-                'created_at'=> now(),
-                'updated_at'=> now(),
-            ],
-            [
-                'id_vote'   => 2,
-                'date_debut'=> '2025-04-06',
-                'date_fin'  => '2025-04-15',
-                'etudiant_id'  => 2,
-                'created_at'=> now(),
-                'updated_at'=> now(),
-            ],
-        ]);
 
         DB::table('vote_etudiants')->insert([
             [

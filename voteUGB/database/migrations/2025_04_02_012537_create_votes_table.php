@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id('id_vote');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->unsignedBigInteger('etudiant_id');
-            $table->foreign('etudiant_id')->references('id_etudiant')->on('etudiants')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

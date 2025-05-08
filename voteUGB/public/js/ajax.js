@@ -5,6 +5,7 @@ function fetchResults() {
       method: "GET",
       dataType: "json",
       success: function(data) {
+        console.log("AJAX response:", data);
         $("#totalVotes").text(data.total_votes);
 
         let resultsHtml = "";

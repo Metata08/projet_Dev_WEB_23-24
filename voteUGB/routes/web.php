@@ -71,16 +71,39 @@ Route::post('/enregistrer-list', [AdminController::class, 'enregistrerList'])->n
 use Illuminate\Support\Facades\DB;
 
 Route::get('/resultats/json', function () {
+    // 1) récupérer tous les résultats agrégés
     $positions = DB::table('vote_etudiants')
         ->join('listes', 'vote_etudiants.list_id', '=', 'listes.id_list')
         ->join('u_f_r_s', 'u_f_r_s.id_ufr', '=', 'listes.ufr_id')
-        ->select('u_f_r_s.nom as position', 'listes.name_list as candidat', DB::raw('COUNT(vote_etudiants.id) as nombre_de_votes'))
+        ->select(
+            'u_f_r_s.nom as position',
+            'listes.name_list as candidat',
+            DB::raw('COUNT(vote_etudiants.id) as nombre_de_votes')
+        )
         ->groupBy('u_f_r_s.nom', 'listes.id_list')
         ->orderBy('u_f_r_s.nom')
         ->orderByDesc('nombre_de_votes')
         ->get();
 
-    return @json_encode($positions);
-})->name('resultats.json');
+    // 2) total des votes
+    $total = DB::table('vote_etudiants')->count();
 
+    // 3) formater le résultat en calculant le pourcentage
+    $resultats = $positions->map(function($row) use($total){
+        $votes = (int)$row->nombre_de_votes;
+        $pct = $total > 0
+            ? round( ($votes / $total) * 100 , 2 )
+            : 0;
+        return [
+            'liste'       => $row->candidat,
+            'votes'       => $votes,
+            'pourcentage' => $pct,
+        ];
+    });
+
+    return Response::json([
+        'total_votes' => $total,
+        'resultats'   => $resultats,
+    ]);
+})->name('resultats.json');
 

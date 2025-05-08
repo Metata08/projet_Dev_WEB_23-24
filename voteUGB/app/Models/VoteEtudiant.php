@@ -13,7 +13,6 @@ class VoteEtudiant extends Model
         'vote_id',
         'list_id',
         'voted_at',
-        // d'autres champs si nécessaire
     ];
     
 

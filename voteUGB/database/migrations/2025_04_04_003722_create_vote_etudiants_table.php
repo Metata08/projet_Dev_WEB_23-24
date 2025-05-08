@@ -13,8 +13,6 @@ class CreateVoteEtudiantsTable extends Migration
             $table->unsignedBigInteger('etudiant_id');
             $table->unsignedBigInteger('vote_id');
             $table->timestamp('voted_at')->useCurrent(); // Date et heure du vote
-            // Vous pouvez ajouter d'autres colonnes, par exemple un champ 'choix' si besoin :
-            // $table->string('choix')->nullable();
             $table->timestamps();
 
             // Clés étrangères
