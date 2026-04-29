@@ -13,12 +13,7 @@ return new class extends Migration
     {
         Schema::create('listes', function (Blueprint $table) {
             $table->id('id_list');
-<<<<<<< Updated upstream
             $table->text('programme');
-=======
-            
-            $table->string('programme');
->>>>>>> Stashed changes
             $table->string('name_list');
             $table->unsignedBigInteger('ufr_id');
             // Précisez que la colonne référencée dans u_f_r_s est id_ufr

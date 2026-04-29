@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id('id_etudiant');
             $table->string('nom');
             $table->string('prenom');
+<<<<<<< Updated upstream
             $table->string('code_etudiant')->unique();
+=======
+            $table->string('code_etudiant');
+>>>>>>> Stashed changes
             $table->string('email')->unique();
             $table->string('mdp');
             $table->unsignedBigInteger('ufr_id');

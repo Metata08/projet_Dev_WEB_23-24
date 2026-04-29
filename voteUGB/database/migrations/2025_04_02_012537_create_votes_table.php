@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id('id_vote');
+
             $table->date('date_debut');
             $table->date('date_fin');
             $table->timestamps();
