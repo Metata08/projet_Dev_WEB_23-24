@@ -224,23 +224,10 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
    npm install
    ```
 
-3. **Configurer l'environnement** — créer un fichier `.env` à la racine de `voteUGB/` (aucun `.env.example` n'est fourni) avec au minimum :
+3. **Configurer l'environnement** — copier le fichier d'exemple fourni (base MySQL `ugbvote` par défaut) et l'adapter si besoin (`DB_USERNAME`, `DB_PASSWORD`…) :
 
-   ```dotenv
-   APP_NAME="UGB Vote"
-   APP_ENV=local
-   APP_KEY=
-   APP_DEBUG=true
-   APP_URL=http://localhost:8000
-
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=ugbvote
-   DB_USERNAME=root
-   DB_PASSWORD=
-
-   SESSION_DRIVER=database
+   ```bash
+   cp .env.example .env
    ```
 
    puis générer la clé de l'application :
@@ -255,7 +242,7 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
    php artisan migrate --seed
    ```
 
-   > ⚠️ Voir la section [Limites connues](#12-limites-connues-et-pistes-damélioration) : certaines migrations doivent être corrigées avant de pouvoir être exécutées sur une base vide.
+   Pour repartir d'une base vide : `php artisan migrate:fresh --seed`.
 
 5. **Lancer l'application**
 
@@ -410,11 +397,6 @@ Encadrement : **Awa DIATTARA** & **Abdou Khadre GUEYE** — UE Compléments de p
 ---
 
 ## 12. Limites connues et pistes d'amélioration
-
-**À corriger pour une installation depuis zéro :**
-- Les migrations `2025_04_01_133423_create_etudiants_table.php` et `2025_04_02_143105_create_listes_table.php` contiennent encore des marqueurs de conflit Git (`<<<<<<< Updated upstream` / `>>>>>>> Stashed changes`) qu'il faut résoudre.
-- Aucune migration ne crée la table `u_f_r_s` (seule une migration l'altère), et deux migrations créent la table `listes`.
-- Aucun fichier `.env.example` n'est fourni (voir l'étape 3 de l'installation).
 
 **Pistes d'amélioration :**
 - Protéger les routes administrateur par un middleware (`auth:admin`) et la page de vote par `auth`.
