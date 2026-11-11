@@ -14,7 +14,7 @@
   <img alt="PHP" src="https://img.shields.io/badge/PHP-%E2%89%A5%208.2-777BB4?logo=php&logoColor=white">
   <img alt="Design system" src="https://img.shields.io/badge/Design%20system-maison%20(0%20CDN)-ab775b">
   <img alt="CSP" src="https://img.shields.io/badge/CSP-stricte-522504">
-  <img alt="Tests" src="https://img.shields.io/badge/tests-16%20pass%C3%A9s-2f7a4f">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-24%20pass%C3%A9s-2f7a4f">
 </p>
 
 ---
@@ -37,7 +37,8 @@
 | **Temps réel** | Graphique rechargé en AJAX | Classement, anneau de répartition et participation actualisés toutes les 5 s, avec réordonnancement animé |
 | **Dépendances front** | ≈ 9 400 fichiers tiers dans `public/` (jQuery, CKEditor, Flot…) et plusieurs CDN | **Aucun CDN, aucune bibliothèque** : polices, icônes et scripts auto-hébergés (≈ 1 Mo) |
 | **Administration** | Accessible **sans connexion**, mot de passe **en clair** | Garde `auth:admin`, mot de passe haché (bcrypt), vraie déconnexion |
-| **Vote** | Double vote possible (une fois par liste), `vote_id` fourni par le navigateur | **Un bulletin par étudiant et par scrutin** garanti par un index unique en base ; scrutin déduit côté serveur |
+| **Vote** | Double vote possible (une fois par liste), `vote_id` fourni par le navigateur, choix de chaque étudiant lisible en base | **Un vote par étudiant et par scrutin** garanti par un index unique ; scrutin déduit côté serveur ; **bulletin anonyme** avec reçu vérifiable |
+| **Campagne** | Un nom de liste et un texte | Page de campagne (slogan, logo, propositions par thème, bilan, équipe), espace candidat, comparateur de programmes |
 
 ### Sécurité et fiabilité
 
@@ -49,7 +50,52 @@
 - **En-têtes HTTP** : Content-Security-Policy stricte (`script-src 'self'`, `style-src 'self'`, aucun script ni style « inline »), `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, HSTS en HTTPS.
 - **Sessions** : identifiant régénéré à la connexion, session invalidée à la déconnexion, chiffrement activé (`SESSION_ENCRYPT=true`), jeton CSRF sur tous les formulaires.
 - **Surface d'attaque réduite** : suppression des anciens scripts PHP exécutables dans `public/includes/` et des bibliothèques tierces obsolètes.
-- **16 tests automatisés** (`php artisan test`) couvrent ces règles : double vote, vote hors UFR, vote hors période, accès administrateur, inscription, limitation de débit, en-têtes de sécurité.
+- **Secret du vote** : l'émargement (qui a voté) et le bulletin (pour qui) sont deux tables sans lien ; un bulletin ne porte ni étudiant, ni date, ni numéro d'ordre.
+- **24 tests automatisés** (`php artisan test`) couvrent ces règles : double vote, vote hors UFR, vote hors période, anonymat du bulletin, reçu, résultats masqués, espace candidat, envoi de fichiers, accès administrateur, inscription, mot de passe oublié, limitation de débit, en-têtes de sécurité.
+
+### Nouvelles fonctionnalités
+
+**Confiance dans le scrutin**
+
+- **Vote anonyme et reçu vérifiable** : après son vote, l'étudiant reçoit un code (`UGB-XXXX-XXXX-XXXX`) affiché une seule fois. La page « Vérifier mon reçu » confirme que le bulletin est dans l'urne, **sans jamais indiquer la liste choisie** (un reçu ne peut donc pas servir à prouver son vote à un tiers).
+- **Résultats en direct ou à la clôture** : l'administrateur choisit, UFR par UFR. En mode « à la clôture », seule la participation est visible pendant le vote.
+- **Mot de passe oublié** : lien à usage unique envoyé par e-mail, valable 60 minutes.
+- **Import des codes étudiants** : fichier CSV ou texte, ou ajout à l'unité, depuis l'administration.
+
+| Reçu de vote | Vérification du reçu |
+|---|---|
+| ![Reçu](image_pages/v2/pc-recu.jpg) | ![Reçu vérifié](image_pages/v2/pc-recu-verifie.jpg) |
+
+| Résultats masqués jusqu'à la clôture | Mot de passe oublié |
+|---|---|
+| ![Résultats masqués](image_pages/v2/pc-resultats-masques.jpg) | ![Mot de passe oublié](image_pages/v2/pc-mot-de-passe-oublie.jpg) |
+
+**Campagne**
+
+- **Page de campagne** par liste : logo, slogan, présentation, propositions classées par thème, **bilan et réalisations** de l'équipe, membres avec leur rôle.
+- **Espace candidat** : la tête de liste rédige elle-même sa page (menu « Ma liste »). Toute modification repasse **en attente de validation** : les autres étudiants ne la voient qu'une fois validée par l'administrateur.
+- **Comparateur** : les propositions de toutes les listes de l'UFR, côte à côte, thème par thème.
+
+![Page de campagne](image_pages/v2/pc-campagne.jpg)
+
+| Espace candidat | Comparateur de programmes |
+|---|---|
+| ![Espace candidat](image_pages/v2/pc-espace-candidat.jpg) | ![Comparateur](image_pages/v2/pc-comparateur.jpg) |
+
+**Suivi et administration**
+
+- **E-mails** : confirmation de participation (sans le choix ni le reçu), rappel le dernier jour aux seuls non-votants, annonce des résultats le lendemain de la clôture.
+- **Gestion d'une liste** : validation de la page de campagne, ajout et retrait de membres, désignation de la tête de liste.
+- **Procès-verbal** de dépouillement par UFR, imprimable ou enregistrable en PDF depuis le navigateur.
+- **Journal** des actions d'administration (connexion, suppressions, imports, modifications de scrutin…).
+
+| Gestion d'une liste | Codes étudiants |
+|---|---|
+| ![Gestion d'une liste](image_pages/v2/pc-admin-liste.jpg) | ![Codes](image_pages/v2/pc-admin-codes.jpg) |
+
+| Procès-verbal | Journal |
+|---|---|
+| ![Procès-verbal](image_pages/v2/pc-admin-proces-verbal.jpg) | ![Journal](image_pages/v2/pc-admin-journal.jpg) |
 
 ### Espace étudiant
 
@@ -57,7 +103,7 @@
 |---|---|
 | ![Connexion](image_pages/v2/pc-connexion.jpg) | ![Inscription](image_pages/v2/pc-inscription.jpg) |
 
-| Listes candidates et compte à rebours | Programme d'une liste |
+| Listes candidates et compte à rebours | Page de campagne d'une liste |
 |---|---|
 | ![Élections](image_pages/v2/pc-election.jpg) | ![Programme](image_pages/v2/pc-programme.jpg) |
 
@@ -107,10 +153,10 @@
   <img src="image_pages/v2/mobile-resultats.jpg" width="24%" alt="Résultats — mobile">
   <img src="image_pages/v2/mobile-inscription.jpg" width="24%" alt="Inscription — mobile">
   <img src="image_pages/v2/mobile-admin-menu.jpg" width="24%" alt="Menu administrateur — mobile">
-  <img src="image_pages/v2/mobile-admin-electeurs.jpg" width="24%" alt="Électeurs — mobile">
+  <img src="image_pages/v2/mobile-campagne.jpg" width="24%" alt="Page de campagne — mobile">
 </p>
 
-Toutes les captures (46) sont dans [`image_pages/v2/`](image_pages/v2). Les sections suivantes reprennent la présentation
+Toutes les captures (69) sont dans [`image_pages/v2/`](image_pages/v2). Les sections suivantes reprennent la présentation
 d'origine du projet ; les captures du [manuel d'utilisation](#8-manuel-dutilisation) montrent l'ancienne interface.
 
 ---
@@ -240,12 +286,20 @@ La plateforme doit :
 | GET / POST | `/systemevote/{id}` | Page de vote et enregistrement du vote |
 | GET | `/resultat` | Page des résultats |
 | GET | `/resultats/json` | API JSON des résultats (consommée en AJAX) |
+| GET / POST | `/recu` | Vérification d'un reçu de vote |
+| GET | `/comparer` | Comparateur de programmes de l'UFR |
+| GET / PUT / POST / DELETE | `/ma-liste`, `/ma-liste/propositions`, `/ma-liste/realisations` | Espace candidat (tête de liste) |
+| GET / POST | `/mot-de-passe-oublie`, `/reinitialiser/{token}` | Réinitialisation du mot de passe |
 | GET / POST | `/admin`, `/admin/login` | Connexion administrateur |
 | POST | `/admin/logout` | Déconnexion administrateur |
 | GET | `/admin/tableau-de-bord`, `/admin/stats.json` | Tableau de bord et son flux temps réel |
 | GET / DELETE | `/admin/electeurs`, `/admin/electeurs/{id}` | Consultation et suppression des électeurs |
 | GET / POST / DELETE | `/admin/listes`, `/admin/listes/{id}` | Consultation, ajout et suppression des listes |
-| GET / PUT | `/admin/scrutins`, `/admin/scrutins/{id}` | Périodes de vote par UFR |
+| GET / PUT | `/admin/scrutins`, `/admin/scrutins/{id}` | Périodes de vote et visibilité des résultats par UFR |
+| GET | `/admin/scrutins/{id}/proces-verbal` | Procès-verbal imprimable |
+| GET / POST / DELETE | `/admin/listes/{id}`, `…/valider`, `…/membres` | Campagne et membres d'une liste |
+| GET / POST / DELETE | `/admin/codes` | Codes étudiants officiels (ajout, import CSV, suppression) |
+| GET | `/admin/journal` | Journal des actions d'administration |
 
 Les routes de l'espace étudiant exigent le garde `web`, celles de `/admin/*` le garde `admin`.
 
@@ -257,7 +311,11 @@ voteUGB/
 │   ├── login_controller.php        # accueil, connexion, déconnexion étudiant
 │   ├── inscription_controller.php  # inscription + validation des données
 │   ├── user_controller.php         # élections, détail d'une liste, vote, résultats
-│   └── AdminController.php         # connexion admin, tableau de bord, gestion
+│   ├── CampagneController.php      # espace candidat, comparateur, logo
+│   ├── MotDePasseController.php    # mot de passe oublié
+│   ├── AdminController.php         # connexion admin, tableau de bord, gestion
+│   └── AdminGestionController.php  # campagne d'une liste, codes, procès-verbal, journal
+├── app/Notifications/              # e-mails (réinitialisation, confirmation, rappel, résultats)
 ├── app/Http/Middleware/SecurityHeaders.php  # CSP et en-têtes de sécurité
 ├── app/Support/Depouillement.php   # calcul des résultats d'une UFR
 ├── app/Models/                     # Etudiant, EtudiantOfficiel, UFR, Listes,
@@ -274,7 +332,7 @@ voteUGB/
 │   └── admin/                      # login, home (dashboard), candidates, postes, electeurs
 ├── public/assets/                  # app.css (design system), app.js (animations, temps réel), theme.js
 ├── public/fonts/                   # polices Sora et Inter auto-hébergées
-├── tests/Feature/SecuriteVoteTest.php  # règles de sécurité du scrutin
+├── tests/Feature/                  # règles du scrutin, anonymat, campagne, administration
 └── routes/web.php
 ```
 
@@ -354,7 +412,21 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
 
    L'application est accessible sur <http://localhost:8000>, l'espace administrateur sur <http://localhost:8000/admin>.
 
-6. **Lancer les tests** (base SQLite en mémoire, sans toucher à vos données)
+6. **E-mails** (facultatif en local) — par défaut `MAIL_MAILER=log` : les messages (lien de réinitialisation, confirmation de vote, rappels) sont écrits dans `storage/logs/laravel.log`. Pour un envoi réel, renseigner les variables `MAIL_*` du `.env` (SMTP de l'université, par exemple).
+
+   Les rappels de vote et l'annonce des résultats partent une fois par jour. Sur le serveur, ajouter cette ligne à la crontab :
+
+   ```bash
+   * * * * * cd /chemin/vers/voteUGB && php artisan schedule:run >> /dev/null 2>&1
+   ```
+
+   ou lancer l'envoi à la main :
+
+   ```bash
+   php artisan ugbvote:notifier
+   ```
+
+7. **Lancer les tests** (base SQLite en mémoire, sans toucher à vos données)
 
    ```bash
    php artisan test
@@ -363,12 +435,16 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
 > **Mise à jour d'une installation existante** : `php artisan migrate` suffit. La migration
 > `2026_11_11_000000_securise_votes_et_admins` hache les mots de passe administrateur encore en clair et, si un
 > étudiant avait plusieurs bulletins pour un même scrutin, ne conserve que le premier avant d'ajouter l'index unique.
+> La migration `2026_11_12_000000_campagne_et_secret_du_vote` convertit ensuite les votes existants en émargements et en
+> bulletins anonymes, puis **supprime définitivement** l'ancienne table nominative `vote_etudiants` : faites une sauvegarde
+> de la base avant si vous souhaitez conserver l'historique nominatif.
 
 ### Comptes de test
 
 | Rôle | E-mail | Mot de passe |
 |---|---|---|
 | Étudiant (a déjà voté) | `ameth@gmail.com` | `ameth31` |
+| Tête de liste (espace candidat « Ma liste ») | `anta@gmail.com` | `anta31` |
 | Administrateur | `admin@gmail.com` | `admin123` |
 
 Pour tester l'inscription puis le vote, utiliser l'un des codes étudiants libres : `p31 3001`, `p31 3002` ou `p31 3003` (UFR **SAT**, dont le scrutin est ouvert).
@@ -506,15 +582,22 @@ Encadrement : **Awa DIATTARA** & **Abdou Khadre GUEYE** — UE Compléments de p
 
 ## 12. Limites connues et pistes d'amélioration
 
-**Traité dans la refonte `mg4` :** protection des routes administrateur (`auth:admin`) et étudiant (`auth`), index unique
-`etudiant_id` + `vote_id`, contrôle des dates du scrutin, suppression des listes, tests automatisés, fichier `.env.example`.
+**Traité dans la refonte `mg4` :** protection des routes administrateur et étudiant, vote unique garanti par la base,
+contrôle des dates du scrutin, secret du vote avec reçu, mot de passe oublié, import des codes, pages de campagne,
+journal d'administration, procès-verbal, tests automatisés.
+
+**Limites à connaître :**
+- **Anonymat** : l'application ne conserve aucun lien entre un étudiant et son bulletin. Une personne ayant accès au serveur *pendant* le vote (journaux de requêtes, sauvegardes prises entre deux votes) pourrait toutefois recouper des informations : pour un scrutin à fort enjeu, l'hébergement doit être confié à un tiers de confiance.
+- **Suppression en cours de scrutin** : supprimer un électeur ne retire pas son bulletin (il est anonyme) ; supprimer une liste retire ses bulletins mais pas les émargements. Le procès-verbal signale alors l'écart.
+- **Réalisations des listes** : elles sont déclaratives ; l'administrateur les relit avant publication mais ne les certifie pas.
+- **E-mails** : envoyés au fil de l'eau, sans file d'attente ; au-delà de quelques centaines d'électeurs, configurer une file (`QUEUE_CONNECTION`).
 
 **Pistes d'amélioration :**
-- Séparer l'identité du votant du contenu du bulletin (émargement d'un côté, urne anonyme de l'autre) pour garantir le secret du vote vis-à-vis de l'administrateur de la base.
-- Vérification de l'adresse e-mail et réinitialisation du mot de passe par e-mail.
-- Double authentification pour l'espace administrateur et journal des actions d'administration.
-- Gestion des membres d'une liste et modification d'une liste depuis l'interface d'administration.
-- Remplacer l'interrogation périodique (5 s) par des WebSockets si le nombre d'électeurs connectés devient important.
+- Vérification de l'adresse e-mail à l'inscription.
+- Double authentification pour l'espace administrateur.
+- Questions des étudiants aux listes, avec modération.
+- Notifications SMS / WhatsApp et application installable (PWA).
+- Photos des membres et modification d'une liste (nom, UFR) depuis l'administration.
 
 ---
 

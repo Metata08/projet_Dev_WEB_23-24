@@ -315,49 +315,61 @@ class UgbvoteSeeder extends Seeder
         
 
 
-        DB::table('vote_etudiants')->insert([
-            [
-                'etudiant_id' => 1, // Id de l'étudiant
-                'vote_id'     => 1, // Id du vote
-                'list_id'     => 1, // Id de la liste
-                'voted_at'    => now()->subDays(2), // Date du vote
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ],
-            [
-                'etudiant_id' => 2, // Id de l'étudiant
-                'vote_id'     => 1, // Id du vote
-                'list_id'     => 2, // Id de la liste
-                'voted_at'    => now()->subDays(2), // Date du vote
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ],
-            [
-                'etudiant_id' => 3, // Id de l'étudiant
-                'vote_id'     => 1, // Id du vote
-                'list_id'     => 1, // Id de la liste
-                'voted_at'    => now()->subDay(), // Date du vote
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ],
-            [
-                'etudiant_id' => 4, // Id de l'étudiant
-                'vote_id'     => 1, // Id du vote
-                'list_id'     => 2, // Id de la liste
-                'voted_at'    => now()->subDay(), // Date du vote
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ],
-            [
-                'etudiant_id' => 5, // Id de l'étudiant
-                'vote_id'     => 1, // Id du vote
-                'list_id'     => 3, // Id de la liste
-                'voted_at'    => now()->subHours(5), // Date du vote
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ],
-        ]);
-        
+        // Émargements (qui a voté) et bulletins anonymes (pour qui) : deux tables sans lien entre elles.
+        foreach ([1 => 2, 2 => 2, 3 => 1, 4 => 1, 5 => 0] as $etudiant => $ilYaJours) {
+            DB::table('emargements')->insert([
+                'etudiant_id' => $etudiant,
+                'vote_id'     => 1,
+                'voted_at'    => now()->subDays($ilYaJours)->subHours(3),
+            ]);
+        }
+
+        foreach ([1, 2, 1, 2, 3] as $liste) {
+            DB::table('bulletins')->insert([
+                'id'      => (string) \Illuminate\Support\Str::uuid(),
+                'vote_id' => 1,
+                'list_id' => $liste,
+            ]);
+        }
+
+        // Pages de campagne de démonstration.
+        DB::table('listes')->where('id_list', 1)->update(['slogan' => 'Ensemble, faisons converger nos ambitions.', 'titre' => 'Notre vision pour la SAT']);
+        DB::table('listes')->where('id_list', 2)->update(['slogan' => 'Du code, des idées, des actes.', 'titre' => 'Une UFR qui ose']);
+
+        DB::table('membres_listes')->where('id', 1)->update(['role' => 'Présidente']);
+        DB::table('membres_listes')->where('id', 2)->update(['role' => 'Secrétaire général']);
+        DB::table('membres_listes')->where('id', 3)->update(['role' => 'Président']);
+        DB::table('membres_listes')->where('id', 4)->update(['role' => 'Trésorier']);
+
+        $propositions = [
+            [1, 'pedagogie', "Salles d'étude ouvertes jusqu'à 23 h en période d'examens."],
+            [1, 'pedagogie', 'Tutorat entre étudiants de master et de licence, chaque semaine.'],
+            [1, 'numerique', 'Wi-Fi fiable dans toutes les salles et les résidences.'],
+            [1, 'social', 'Guichet unique pour les démarches de bourse et d\'inscription.'],
+            [1, 'insertion', 'Ateliers CV et forum des stages chaque semestre.'],
+            [1, 'sport', 'Tournoi inter-UFR et semaine culturelle annuelle.'],
+            [2, 'numerique', 'Hackathons et clubs tech ouverts à toutes les filières.'],
+            [2, 'numerique', 'Prêt d\'ordinateurs portables pour les étudiants boursiers.'],
+            [2, 'restauration', 'Une restauration de qualité à prix étudiant, avec menu affiché en ligne.'],
+            [2, 'social', 'Fonds de solidarité pour les étudiants en difficulté.'],
+            [2, 'pedagogie', 'Compte rendu public après chaque conseil d\'UFR.'],
+            [2, 'insertion', 'Partenariats de stage avec les entreprises de Saint-Louis et de Dakar.'],
+        ];
+
+        foreach ($propositions as [$liste, $theme, $texte]) {
+            DB::table('propositions')->insert(['list_id' => $liste, 'theme' => $theme, 'texte' => $texte, 'created_at' => now(), 'updated_at' => now()]);
+        }
+
+        $realisations = [
+            [1, '2025-2026', 'Extension des horaires de la bibliothèque', 'Obtenue après concertation avec la direction : ouverture le samedi matin.'],
+            [1, '2024-2025', 'Collecte de manuels', 'Plus de 300 ouvrages redistribués aux étudiants de première année.'],
+            [2, '2025-2026', 'Premier hackathon de la SAT', '48 heures, 12 équipes, trois projets accompagnés par des entreprises partenaires.'],
+            [2, '2024-2025', 'Club de programmation', 'Séances hebdomadaires gratuites, ouvertes aux débutants.'],
+        ];
+
+        foreach ($realisations as [$liste, $annee, $titre, $description]) {
+            DB::table('realisations')->insert(['list_id' => $liste, 'annee' => $annee, 'titre' => $titre, 'description' => $description, 'created_at' => now(), 'updated_at' => now()]);
+        }
 
         DB::table('admins')->insert([
             'id'   => 1,

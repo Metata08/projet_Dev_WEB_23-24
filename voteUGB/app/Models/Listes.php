@@ -13,7 +13,9 @@ class Listes extends Model
 
     protected $primaryKey = 'id_list';
 
-    protected $fillable = ['programme', 'titre', 'name_list', 'ufr_id'];
+    protected $fillable = ['programme', 'titre', 'name_list', 'ufr_id', 'slogan', 'logo', 'campagne_validee'];
+
+    protected $casts = ['campagne_validee' => 'boolean'];
 
     public function ufr()
     {
@@ -25,8 +27,23 @@ class Listes extends Model
         return $this->hasMany(MembresListe::class, 'list_id', 'id_list');
     }
 
-    public function voteEtudiants()
+    public function bulletins()
     {
-        return $this->hasMany(VoteEtudiant::class, 'list_id', 'id_list');
+        return $this->hasMany(Bulletin::class, 'list_id', 'id_list');
+    }
+
+    public function propositions()
+    {
+        return $this->hasMany(Proposition::class, 'list_id', 'id_list');
+    }
+
+    public function realisations()
+    {
+        return $this->hasMany(Realisation::class, 'list_id', 'id_list')->orderByDesc('annee');
+    }
+
+    public function getSigleAttribute(): string
+    {
+        return mb_strtoupper(mb_substr($this->name_list, 0, 1));
     }
 }

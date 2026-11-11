@@ -49,6 +49,7 @@
             <button type="submit" class="btn btn-primary btn-lg btn-block">Se connecter <x-icon name="arrow-right" class="icon-fleche" /></button>
         </form>
 
+        <p class="auth-bas"><a class="lien" href="{{ route('password.request') }}">Mot de passe oublié ?</a></p>
         <p class="auth-bas">Vous n'avez pas de compte ? <a class="lien" href="{{ route('inscription') }}">Inscrivez-vous</a></p>
     </section>
 </div>

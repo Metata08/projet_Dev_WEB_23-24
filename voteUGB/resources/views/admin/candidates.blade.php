@@ -25,22 +25,29 @@
         <div class="table-zone">
             <table class="table" id="table-listes">
                 <thead>
-                    <tr><th>Liste</th><th>UFR</th><th>Membres</th><th>Voix</th><th class="droite">Action</th></tr>
+                    <tr><th>Liste</th><th>UFR</th><th>Membres</th><th>Campagne</th><th class="droite">Actions</th></tr>
                 </thead>
                 <tbody>
                     @foreach ($listesC as $liste)
                         <tr>
                             <td class="principal">
                                 <div class="identite">
-                                    <span class="avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($liste->name_list, 0, 1)) }}</span>
+                                    <span class="avatar" aria-hidden="true">{{ $liste->sigle }}</span>
                                     <div><strong>{{ $liste->name_list }}</strong><span class="tronque">{{ $liste->programme }}</span></div>
                                 </div>
                             </td>
                             <td data-titre="UFR"><span class="pill pill-accent">{{ $liste->ufr?->sigle ?? '—' }}</span></td>
                             <td data-titre="Membres">{{ $liste->membres_count }}</td>
-                            <td data-titre="Voix"><strong>{{ $liste->vote_etudiants_count }}</strong></td>
-                            <td data-titre="Action" class="droite">
-                                <form method="POST" action="{{ route('deleteListe', $liste->id_list) }}" data-confirm="Supprimer la liste « {{ $liste->name_list }} » ? Les votes qu'elle a reçus seront également supprimés." data-confirm-titre="Supprimer la liste" data-confirm-action="Supprimer" data-confirm-danger>
+                            <td data-titre="Campagne">
+                                @if ($liste->campagne_validee)
+                                    <span class="pill pill-ok"><x-icon name="check" /> Publiée</span>
+                                @else
+                                    <span class="pill pill-alerte"><x-icon name="clock" /> À valider</span>
+                                @endif
+                            </td>
+                            <td data-titre="Actions" class="droite actions">
+                                <a class="btn btn-sm" href="{{ route('admin.liste', $liste->id_list) }}"><x-icon name="users" /> Gérer</a>
+                                <form method="POST" action="{{ route('deleteListe', $liste->id_list) }}" data-confirm="Supprimer la liste « {{ $liste->name_list }} » ? Les bulletins qu'elle a reçus seront supprimés, mais les étudiants concernés resteront émargés et ne pourront pas revoter." data-confirm-titre="Supprimer la liste" data-confirm-action="Supprimer" data-confirm-danger>
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm" aria-label="Supprimer la liste {{ $liste->name_list }}"><x-icon name="trash" /> Supprimer</button>

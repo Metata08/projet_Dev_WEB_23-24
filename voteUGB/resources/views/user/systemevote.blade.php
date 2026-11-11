@@ -18,14 +18,14 @@
                 @if ($scrutin)<div><span>Clôture</span><strong>{{ $scrutin->date_fin->format('d/m/Y') }}</strong></div>@endif
             </div>
 
-            @if ($bulletin)
-                <div class="alerte alerte-succes"><x-icon name="check-circle" /> <span>Vous avez déjà voté le {{ $bulletin->voted_at->format('d/m/Y à H:i') }}. Un seul vote est autorisé par étudiant.</span></div>
+            @if ($emargement)
+                <div class="alerte alerte-succes"><x-icon name="check-circle" /> <span>Vous avez déjà voté le {{ $emargement->voted_at->format('d/m/Y à H:i') }}. Un seul vote est autorisé par étudiant.</span></div>
                 <a class="btn btn-primary btn-block" href="{{ route('resultat') }}"><x-icon name="chart" /> Voir les résultats</a>
             @elseif (! $scrutin || ! $scrutin->estOuvert())
                 <div class="alerte alerte-erreur"><x-icon name="lock" /> <span>Le scrutin de votre UFR n'est pas ouvert : le vote est impossible pour le moment.</span></div>
                 <a class="btn btn-block" href="{{ route('election') }}">Retour aux listes</a>
             @else
-                <div class="alerte"><x-icon name="alert" /> <span><strong>Votre vote est définitif.</strong> Une fois confirmé, il ne pourra être ni modifié ni annulé.</span></div>
+                <div class="alerte"><x-icon name="alert" /> <span><strong>Votre vote est définitif et anonyme.</strong> Une fois confirmé, il ne pourra être ni modifié ni annulé. Un reçu vous sera remis pour vérifier sa présence dans l'urne.</span></div>
 
                 <form method="POST" action="{{ route('systemevote.vote', ['id' => $liste->id_list]) }}" class="stack" data-envoi>
                     @csrf

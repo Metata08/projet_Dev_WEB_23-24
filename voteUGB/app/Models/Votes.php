@@ -22,11 +22,12 @@ class Votes extends Model
 
     protected $primaryKey = 'id_vote';
 
-    protected $fillable = ['date_debut', 'date_fin'];
+    protected $fillable = ['date_debut', 'date_fin', 'resultats_en_direct'];
 
     protected $casts = [
         'date_debut' => 'date',
         'date_fin' => 'date',
+        'resultats_en_direct' => 'boolean',
     ];
 
     public function ufrs()
@@ -36,7 +37,7 @@ class Votes extends Model
 
     public function bulletins()
     {
-        return $this->hasMany(VoteEtudiant::class, 'vote_id', 'id_vote');
+        return $this->hasMany(Bulletin::class, 'vote_id', 'id_vote');
     }
 
     /** Le scrutin est ouvert du début du premier jour à la fin du dernier jour. */
@@ -53,6 +54,17 @@ class Votes extends Model
         }
 
         return self::OUVERT;
+    }
+
+    public function emargements()
+    {
+        return $this->hasMany(Emargement::class, 'vote_id', 'id_vote');
+    }
+
+    /** Le détail par liste est public si le direct est activé, ou une fois le scrutin clos. */
+    public function resultatsVisibles(): bool
+    {
+        return $this->resultats_en_direct || $this->statut === self::CLOS;
     }
 
     public function estOuvert(): bool

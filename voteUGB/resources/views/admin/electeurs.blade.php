@@ -35,14 +35,14 @@
                             <td data-titre="Code"><span class="mono">{{ $etudiant->code_etudiant }}</span></td>
                             <td data-titre="UFR"><span class="pill pill-accent">{{ $etudiant->ufr?->sigle ?? '—' }}</span></td>
                             <td data-titre="Vote">
-                                @if ($etudiant->bulletins_count > 0)
+                                @if ($etudiant->emargements_count > 0)
                                     <span class="pill pill-ok"><x-icon name="check" /> A voté</span>
                                 @else
                                     <span class="pill">En attente</span>
                                 @endif
                             </td>
                             <td data-titre="Action" class="droite">
-                                <form method="POST" action="{{ route('deleteElecteur', $etudiant->id_etudiant) }}" data-confirm="Supprimer définitivement {{ ucfirst($etudiant->prenom) }} {{ mb_strtoupper($etudiant->nom) }} ? Son éventuel bulletin sera également supprimé." data-confirm-titre="Supprimer l'électeur" data-confirm-action="Supprimer" data-confirm-danger>
+                                <form method="POST" action="{{ route('deleteElecteur', $etudiant->id_etudiant) }}" data-confirm="Supprimer définitivement {{ ucfirst($etudiant->prenom) }} {{ mb_strtoupper($etudiant->nom) }} ? S'il a déjà voté, son bulletin anonyme reste dans l'urne." data-confirm-titre="Supprimer l'électeur" data-confirm-action="Supprimer" data-confirm-danger>
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm" aria-label="Supprimer {{ $etudiant->prenom }} {{ $etudiant->nom }}"><x-icon name="trash" /> Supprimer</button>

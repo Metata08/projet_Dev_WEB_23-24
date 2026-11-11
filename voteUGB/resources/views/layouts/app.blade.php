@@ -17,12 +17,17 @@
 
                 <nav class="nav" id="menu" aria-label="Navigation principale">
                     @if ($moi)
-                        <a class="nav-lien" href="{{ route('election') }}" @if (request()->routeIs('election', 'detailListe', 'systemevote')) aria-current="page" @endif>
+                        <a class="nav-lien" href="{{ route('election') }}" @if (request()->routeIs('election', 'detailListe', 'systemevote', 'comparer')) aria-current="page" @endif>
                             <x-icon name="vote" /> Élections
                         </a>
-                        <a class="nav-lien" href="{{ route('resultat') }}" @if (request()->routeIs('resultat')) aria-current="page" @endif>
+                        <a class="nav-lien" href="{{ route('resultat') }}" @if (request()->routeIs('resultat', 'recu')) aria-current="page" @endif>
                             <x-icon name="chart" /> Résultats
                         </a>
+                        @if ($moi->listeDirigee())
+                            <a class="nav-lien" href="{{ route('maListe') }}" @if (request()->routeIs('maListe')) aria-current="page" @endif>
+                                <x-icon name="sparkles" /> Ma liste
+                            </a>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}" class="nav-mobile-seul" data-confirm="Voulez-vous vraiment vous déconnecter ?" data-confirm-titre="Déconnexion" data-confirm-action="Se déconnecter">
                             @csrf
                             <button type="submit" class="btn"><x-icon name="log-out" /> Se déconnecter</button>
@@ -87,7 +92,8 @@
                     <ul>
                         <li><a href="{{ route('ugbvote') }}">Accueil</a></li>
                         <li><a href="{{ route('election') }}">Élections</a></li>
-                        <li><a href="{{ route('resultat') }}">Résultats en direct</a></li>
+                        <li><a href="{{ route('resultat') }}">Résultats</a></li>
+                        <li><a href="{{ route('recu') }}">Vérifier mon reçu de vote</a></li>
                         @guest('web')<li><a href="{{ route('inscription') }}">Créer un compte</a></li>@endguest
                     </ul>
                 </div>

@@ -316,6 +316,17 @@
     $$('.btn.charge').forEach(function (b) { b.classList.remove('charge'); b.disabled = false; });
   });
 
+  $$('[data-copier]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var source = $(b.getAttribute('data-copier'));
+      var libelle = $('span', b);
+      if (!source || !navigator.clipboard) { return; }
+      navigator.clipboard.writeText(source.textContent.trim()).then(function () {
+        if (libelle) { libelle.textContent = 'Copié !'; window.setTimeout(function () { libelle.textContent = 'Copier'; }, 2000); }
+      }).catch(function () { /* presse-papiers refusé : le reçu reste affiché */ });
+    });
+  });
+
   $$('[data-imprimer]').forEach(function (b) { b.addEventListener('click', function () { window.print(); }); });
 
   /* ---------- Recherche dans les tableaux ------------------------------ */
@@ -388,10 +399,14 @@
     var afficher = function (d) {
       $$('[data-total]', pageResultats).forEach(function (el) { animerNombre(el, d.total_votes, 900); });
       $$('[data-inscrits]', pageResultats).forEach(function (el) { animerNombre(el, d.inscrits, 900); });
+      $$('[data-votants]', pageResultats).forEach(function (el) { animerNombre(el, d.votants, 900); });
+      // Le classement vient d'être dévoilé (clôture) : on recharge pour l'afficher.
+      if (d.visible && $('[data-masque]', pageResultats)) { window.location.reload(); return; }
+      var classement = $('[data-classement]', pageResultats);
+      if (!classement) { return; }
       $$('[data-participation]', pageResultats).forEach(function (el) { animerNombre(el, d.participation, 900); });
       $$('[data-maj]', pageResultats).forEach(function (el) { el.textContent = d.maj; });
 
-      var classement = $('[data-classement]', pageResultats);
       var decalage = 0;
       d.resultats.forEach(function (ligne, i) {
         var li = $('[data-liste="' + ligne.id + '"]', classement);

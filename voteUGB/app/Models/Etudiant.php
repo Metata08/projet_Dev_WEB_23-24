@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Notifications\ReinitialiserMotDePasse;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Etudiant extends Authenticatable
 {
+    use Notifiable;
+
     protected $table = 'etudiants';
 
     protected $primaryKey = 'id_etudiant';
@@ -36,19 +40,32 @@ class Etudiant extends Authenticatable
         return $this->belongsTo(UFR::class, 'ufr_id', 'id_ufr');
     }
 
-    public function bulletins()
+    public function emargements()
     {
-        return $this->hasMany(VoteEtudiant::class, 'etudiant_id', 'id_etudiant');
+        return $this->hasMany(Emargement::class, 'etudiant_id', 'id_etudiant');
     }
 
-    /** Bulletin déposé par l'étudiant pour un scrutin donné (ou null). */
-    public function bulletinPour(?Votes $scrutin): ?VoteEtudiant
+    /** Émargement de l'étudiant pour un scrutin donné (ou null s'il n'a pas voté). */
+    public function emargementPour(?Votes $scrutin): ?Emargement
     {
         if (! $scrutin) {
             return null;
         }
 
-        return $this->bulletins()->where('vote_id', $scrutin->id_vote)->first();
+        return $this->emargements()->where('vote_id', $scrutin->id_vote)->first();
+    }
+
+    /** Liste dont l'étudiant est tête de liste (ou null). */
+    public function listeDirigee(): ?Listes
+    {
+        return Listes::whereHas('membres', fn ($q) => $q->where('id_membre', $this->id_etudiant)->where('tete_liste', true))
+            ->orderBy('id_list')
+            ->first();
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ReinitialiserMotDePasse($token));
     }
 
     public function getNomCompletAttribute(): string

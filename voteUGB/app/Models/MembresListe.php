@@ -9,7 +9,7 @@ class MembresListe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_membre', 'list_id', 'tete_liste'];
+    protected $fillable = ['id_membre', 'list_id', 'tete_liste', 'role'];
 
     protected $casts = ['tete_liste' => 'boolean'];
 

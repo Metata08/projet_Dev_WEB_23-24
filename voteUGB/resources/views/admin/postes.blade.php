@@ -37,8 +37,15 @@
                         <input class="sans-icone" type="date" id="fin-{{ $ufr->id_ufr }}" name="date_fin" value="{{ $scrutin?->date_fin->toDateString() }}" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-block"><x-icon name="check" /> Enregistrer la période</button>
+                <label class="case">
+                    <input type="checkbox" name="resultats_en_direct" value="1" @checked($scrutin?->resultats_en_direct ?? true)>
+                    <span>Résultats visibles en direct par les étudiants <span class="doux petit">(sinon dévoilés à la clôture ; la participation reste visible)</span></span>
+                </label>
+                <button type="submit" class="btn btn-block"><x-icon name="check" /> Enregistrer</button>
             </form>
+            @if ($scrutin)
+                <a class="btn btn-ghost btn-block" href="{{ route('admin.pv', $ufr->id_ufr) }}"><x-icon name="printer" /> Procès-verbal</a>
+            @endif
         </section>
     @endforeach
 </div>

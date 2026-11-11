@@ -8,7 +8,7 @@
     <header class="page-tete">
         <div class="reveal">
             <span class="surtitre"><x-icon name="building" /> UFR {{ $donnees['ufr'] }}</span>
-            <h1 class="titre-l">Résultats <span class="texte-degrade">en direct</span></h1>
+            <h1 class="titre-l">Résultats <span class="texte-degrade">{{ $donnees['visible'] ? 'en direct' : 'à la clôture' }}</span></h1>
             <div class="rangee">
                 @include('partials.scrutin-etat')
                 <span class="pill"><x-icon name="refresh" /> Mis à jour à <span data-maj>{{ $donnees['maj'] }}</span></span>
@@ -18,11 +18,18 @@
     </header>
 
     <div class="tuiles">
-        <div class="card tuile reveal"><span class="pastille-icone"><x-icon name="vote" /></span><div><strong data-total>{{ $donnees['total_votes'] }}</strong><span>Votes exprimés</span></div></div>
+        <div class="card tuile reveal"><span class="pastille-icone"><x-icon name="vote" /></span><div><strong data-votants>{{ $donnees['votants'] }}</strong><span>Ont voté</span></div></div>
         <div class="card tuile reveal" data-i="1"><span class="pastille-icone"><x-icon name="users" /></span><div><strong data-inscrits>{{ $donnees['inscrits'] }}</strong><span>Étudiants inscrits</span></div></div>
         <div class="card tuile reveal" data-i="2"><span class="pastille-icone"><x-icon name="chart" /></span><div><strong><span data-participation>{{ $donnees['participation'] }}</span> %</strong><span>Participation</span></div></div>
     </div>
 
+    @unless ($donnees['visible'])
+        <section class="card vide reveal" data-masque>
+            <span class="pastille-icone"><x-icon name="lock" /></span>
+            <h2 class="titre-m">Le classement sera dévoilé à la clôture</h2>
+            <p>Pour ne pas influencer le scrutin, le détail des voix reste secret jusqu'au {{ $scrutin?->date_fin->format('d/m/Y') }} à minuit. La participation, elle, est suivie en direct.</p>
+        </section>
+    @else
     <div class="resultats">
         <section class="card card-pad reveal">
             <h2 class="titre-m">Classement des listes</h2>
@@ -62,5 +69,8 @@
             </ul>
         </aside>
     </div>
+    @endunless
+
+    <p class="centre petit doux reveal pied-resultats"><x-icon name="shield" /> Les bulletins sont anonymes. <a class="lien" href="{{ route('recu') }}">Vérifier mon reçu de vote</a></p>
 </div>
 @endsection

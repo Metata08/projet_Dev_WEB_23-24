@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Etudiant;
 use App\Models\Listes;
 use App\Models\UFR;
-use App\Models\VoteEtudiant;
+use App\Models\Emargement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +19,7 @@ class login_controller extends Controller
                 'ufr' => UFR::count(),
                 'listes' => Listes::count(),
                 'inscrits' => Etudiant::count(),
-                'votes' => VoteEtudiant::count(),
+                'votes' => Emargement::count(),
             ],
         ]);
     }

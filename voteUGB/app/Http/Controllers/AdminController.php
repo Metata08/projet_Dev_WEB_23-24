@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Etudiant;
 use App\Models\Listes;
 use App\Models\UFR;
-use App\Models\VoteEtudiant;
+use App\Models\Emargement;
 use App\Models\Votes;
 use App\Support\Depouillement;
+use App\Support\Journal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -36,12 +37,14 @@ class AdminController extends Controller
         }
 
         $request->session()->regenerate();
+        Journal::note('Connexion');
 
         return redirect()->intended(route('dashboardAdmin'));
     }
 
     public function logoutAdmin(Request $request)
     {
+        Journal::note('Déconnexion');
         Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -63,13 +66,15 @@ class AdminController extends Controller
     public function listeElecteurs()
     {
         return view('admin.electeurs', [
-            'etudiants' => Etudiant::with('ufr')->withCount('bulletins')->orderBy('nom')->orderBy('prenom')->get(),
+            'etudiants' => Etudiant::with('ufr')->withCount('emargements')->orderBy('nom')->orderBy('prenom')->get(),
         ]);
     }
 
     public function deleteElecteur($id)
     {
-        Etudiant::findOrFail($id)->delete();
+        $etudiant = Etudiant::findOrFail($id);
+        $etudiant->delete();
+        Journal::note('Électeur supprimé', $etudiant->nom_complet.' ('.$etudiant->code_etudiant.')');
 
         return redirect()->route('listeElecteurs')->with('success', 'Électeur supprimé.');
     }
@@ -77,7 +82,7 @@ class AdminController extends Controller
     public function listeCandidats()
     {
         return view('admin.candidates', [
-            'listesC' => Listes::with('ufr')->withCount(['membres', 'voteEtudiants'])->orderBy('ufr_id')->orderBy('name_list')->get(),
+            'listesC' => Listes::with('ufr')->withCount(['membres', 'bulletins'])->orderBy('ufr_id')->orderBy('name_list')->get(),
             'ufrs' => UFR::orderBy('nom')->get(),
         ]);
     }
@@ -96,12 +101,16 @@ class AdminController extends Controller
             'ufr_id' => $donnees['ufr'],
         ]);
 
+        Journal::note('Liste ajoutée', $donnees['nom']);
+
         return redirect()->route('listeCandidats')->with('success', 'Liste « '.$donnees['nom'].' » ajoutée.');
     }
 
     public function deleteListe($id)
     {
-        Listes::findOrFail($id)->delete();
+        $liste = Listes::findOrFail($id);
+        $liste->delete();
+        Journal::note('Liste supprimée', $liste->name_list);
 
         return redirect()->route('listeCandidats')->with('success', 'Liste supprimée.');
     }
@@ -121,7 +130,10 @@ class AdminController extends Controller
         $donnees = $request->validate([
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
+            'resultats_en_direct' => 'nullable|boolean',
         ], [], ['date_debut' => "date d'ouverture", 'date_fin' => 'date de clôture']);
+
+        $donnees['resultats_en_direct'] = $request->boolean('resultats_en_direct');
 
         if ($ufr->scrutin) {
             $ufr->scrutin->update($donnees);
@@ -129,13 +141,15 @@ class AdminController extends Controller
             $ufr->update(['vote_id' => Votes::create($donnees)->id_vote]);
         }
 
+        Journal::note('Scrutin modifié', 'UFR '.$ufr->sigle.' : du '.$donnees['date_debut'].' au '.$donnees['date_fin'].($donnees['resultats_en_direct'] ? ', résultats en direct' : ', résultats à la clôture'));
+
         return redirect()->route('listePostes')->with('success', 'Scrutin de l\'UFR '.$ufr->sigle.' mis à jour.');
     }
 
     private function statistiques(): array
     {
         $inscrits = Etudiant::count();
-        $votants = VoteEtudiant::distinct()->count('etudiant_id');
+        $votants = Emargement::distinct()->count('etudiant_id');
 
         return [
             'ufr' => UFR::count(),
@@ -146,7 +160,7 @@ class AdminController extends Controller
             'maj' => now()->format('H:i:s'),
             // Les UFR les plus actives d'abord.
             'parUfr' => UFR::with('scrutin')->orderBy('nom')->get()
-                ->map(fn (UFR $ufr) => Depouillement::pour($ufr))
+                ->map(fn (UFR $ufr) => Depouillement::pour($ufr, toutVoir: true))
                 ->sortByDesc(fn (array $bloc) => [count($bloc['resultats']) > 0, $bloc['total_votes']])
                 ->values()->all(),
         ];

@@ -2,6 +2,10 @@
 	email : ameth@gmail.com
 	password : ameth31
 
+tête de liste (espace candidat "Ma liste")
+	email : anta@gmail.com
+	password : anta31
+
 admin
 	email : admin@gmail.com
 	password : admin123

@@ -6,7 +6,8 @@ use App\Models\Admin;
 use App\Models\Etudiant;
 use App\Models\Listes;
 use App\Models\UFR;
-use App\Models\VoteEtudiant;
+use App\Models\Bulletin;
+use App\Models\Emargement;
 use App\Models\Votes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -111,16 +112,17 @@ class SecuriteVoteTest extends TestCase
         $this->post('/systemevote/'.$this->autreListeSat->id_list, ['confirmation' => '1'])
             ->assertRedirect(route('election'))->assertSessionHas('error');
 
-        $this->assertSame(1, VoteEtudiant::where('etudiant_id', $this->etudiant->id_etudiant)->count());
+        $this->assertSame(1, Emargement::where('etudiant_id', $this->etudiant->id_etudiant)->count());
+        $this->assertSame(1, Bulletin::count());
     }
 
     public function test_la_base_de_donnees_interdit_le_double_vote(): void
     {
         $ligne = ['etudiant_id' => $this->etudiant->id_etudiant, 'vote_id' => $this->sat->vote_id, 'voted_at' => now()];
-        VoteEtudiant::create($ligne + ['list_id' => $this->listeSat->id_list]);
+        Emargement::create($ligne);
 
         $this->expectException(\Illuminate\Database\UniqueConstraintViolationException::class);
-        VoteEtudiant::create($ligne + ['list_id' => $this->autreListeSat->id_list]);
+        Emargement::create($ligne);
     }
 
     public function test_le_vote_exige_une_confirmation_explicite(): void
@@ -129,7 +131,7 @@ class SecuriteVoteTest extends TestCase
             ->post('/systemevote/'.$this->listeSat->id_list)
             ->assertSessionHasErrors('confirmation');
 
-        $this->assertSame(0, VoteEtudiant::count());
+        $this->assertSame(0, Bulletin::count() + Emargement::count());
     }
 
     public function test_impossible_de_voter_pour_une_liste_d_une_autre_ufr(): void
@@ -140,7 +142,7 @@ class SecuriteVoteTest extends TestCase
         $this->get('/systemevote/'.$this->listeSjp->id_list)->assertNotFound();
         $this->post('/systemevote/'.$this->listeSjp->id_list, ['confirmation' => '1'])->assertNotFound();
 
-        $this->assertSame(0, VoteEtudiant::count());
+        $this->assertSame(0, Bulletin::count() + Emargement::count());
     }
 
     public function test_impossible_de_voter_hors_de_la_periode_du_scrutin(): void
@@ -155,7 +157,7 @@ class SecuriteVoteTest extends TestCase
 
         $this->post('/systemevote/'.$this->listeSat->id_list, ['confirmation' => '1'])->assertSessionHas('error');
 
-        $this->assertSame(0, VoteEtudiant::count());
+        $this->assertSame(0, Bulletin::count() + Emargement::count());
     }
 
     public function test_l_identifiant_de_scrutin_envoye_par_le_navigateur_est_ignore(): void
@@ -165,8 +167,9 @@ class SecuriteVoteTest extends TestCase
         $this->actingAs($this->etudiant, 'web')
             ->post('/systemevote/'.$this->listeSat->id_list, ['confirmation' => '1', 'vote_id' => $autre->id_vote]);
 
-        $this->assertDatabaseHas('vote_etudiants', ['etudiant_id' => $this->etudiant->id_etudiant, 'vote_id' => $this->sat->vote_id]);
-        $this->assertDatabaseMissing('vote_etudiants', ['vote_id' => $autre->id_vote]);
+        $this->assertDatabaseHas('emargements', ['etudiant_id' => $this->etudiant->id_etudiant, 'vote_id' => $this->sat->vote_id]);
+        $this->assertDatabaseMissing('emargements', ['vote_id' => $autre->id_vote]);
+        $this->assertDatabaseMissing('bulletins', ['vote_id' => $autre->id_vote]);
     }
 
     public function test_l_inscription_exige_un_code_etudiant_officiel_et_un_mot_de_passe_robuste(): void
@@ -204,7 +207,7 @@ class SecuriteVoteTest extends TestCase
 
     public function test_les_resultats_sont_limites_a_l_ufr_de_l_etudiant(): void
     {
-        VoteEtudiant::create(['etudiant_id' => $this->etudiant->id_etudiant, 'vote_id' => $this->sat->vote_id, 'list_id' => $this->listeSat->id_list, 'voted_at' => now()]);
+        $this->actingAs($this->etudiant, 'web')->post('/systemevote/'.$this->listeSat->id_list, ['confirmation' => '1']);
 
         $json = $this->actingAs($this->etudiant, 'web')->get('/resultats/json')->assertOk()->json();
 

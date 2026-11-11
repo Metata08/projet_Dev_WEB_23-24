@@ -17,14 +17,16 @@
                 <h2>Rapports</h2>
                 <ul>
                     <li><a href="{{ route('dashboardAdmin') }}" @if (request()->routeIs('dashboardAdmin')) aria-current="page" @endif><x-icon name="dashboard" /> Tableau de bord</a></li>
+                    <li><a href="{{ route('admin.journal') }}" @if (request()->routeIs('admin.journal')) aria-current="page" @endif><x-icon name="clock" /> Journal</a></li>
                 </ul>
             </nav>
             <nav class="admin-nav" aria-label="Gestion">
                 <h2>Gérer</h2>
                 <ul>
                     <li><a href="{{ route('listeElecteurs') }}" @if (request()->routeIs('listeElecteurs')) aria-current="page" @endif><x-icon name="users" /> Électeurs</a></li>
-                    <li><a href="{{ route('listeCandidats') }}" @if (request()->routeIs('listeCandidats')) aria-current="page" @endif><x-icon name="list" /> Listes</a></li>
-                    <li><a href="{{ route('listePostes') }}" @if (request()->routeIs('listePostes')) aria-current="page" @endif><x-icon name="calendar" /> Scrutins</a></li>
+                    <li><a href="{{ route('listeCandidats') }}" @if (request()->routeIs('listeCandidats', 'admin.liste')) aria-current="page" @endif><x-icon name="list" /> Listes</a></li>
+                    <li><a href="{{ route('listePostes') }}" @if (request()->routeIs('listePostes', 'admin.pv')) aria-current="page" @endif><x-icon name="calendar" /> Scrutins</a></li>
+                    <li><a href="{{ route('admin.codes') }}" @if (request()->routeIs('admin.codes')) aria-current="page" @endif><x-icon name="id" /> Codes étudiants</a></li>
                 </ul>
             </nav>
 
