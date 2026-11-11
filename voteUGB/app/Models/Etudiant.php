@@ -3,49 +3,61 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class Etudiant extends Authenticatable
 {
-    protected $primaryKey = 'id_etudiant'; // ou 'matricule' si c'est votre clé
-    // public $incrementing = false;
-    protected $keyType = 'string';
+    protected $table = 'etudiants';
 
-    public $incrementing = true; // Doit être true pour auto-incrémenter
-    protected $table = 'etudiants'; // Vérifiez que c'est le bon nom de votre table
-    protected $fillable = [
-        'nom',
-        'prenom',
-        'code_etudiant',
-        'mail',
-        'ufr_id',
-        'mdp',
-    ];
+    protected $primaryKey = 'id_etudiant';
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $fillable = ['nom', 'prenom', 'code_etudiant', 'email', 'ufr_id', 'mdp'];
 
-    // Renommage du champ mot de passe pour l'authentification
+    protected $hidden = ['mdp'];
+
+    /** Le mot de passe est stocké dans la colonne « mdp ». */
+    public function getAuthPasswordName()
+    {
+        return 'mdp';
+    }
+
     public function getAuthPassword()
     {
         return $this->mdp;
     }
 
-    // Relations
+    /** La table ne possède pas de colonne remember_token. */
+    public function getRememberTokenName()
+    {
+        return '';
+    }
+
     public function ufr()
     {
-        return $this->belongsTo(Ufr::class, 'ufr_id', 'id_ufr');
+        return $this->belongsTo(UFR::class, 'ufr_id', 'id_ufr');
     }
 
-    public function votes()
+    public function bulletins()
     {
-        return $this->hasMany(Votes::class, 'etudiant_id');
+        return $this->hasMany(VoteEtudiant::class, 'etudiant_id', 'id_etudiant');
     }
 
-    // Accesseur pour le nom complet
-    public function getNomCompletAttribute()
+    /** Bulletin déposé par l'étudiant pour un scrutin donné (ou null). */
+    public function bulletinPour(?Votes $scrutin): ?VoteEtudiant
     {
-        return $this->prenom.' '.$this->nom;
+        if (! $scrutin) {
+            return null;
+        }
+
+        return $this->bulletins()->where('vote_id', $scrutin->id_vote)->first();
+    }
+
+    public function getNomCompletAttribute(): string
+    {
+        return ucfirst($this->prenom).' '.mb_strtoupper($this->nom);
+    }
+
+    public function getInitialesAttribute(): string
+    {
+        return mb_strtoupper(mb_substr($this->prenom, 0, 1).mb_substr($this->nom, 0, 1));
     }
 }

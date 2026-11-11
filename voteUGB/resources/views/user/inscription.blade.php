@@ -1,234 +1,110 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.app')
+@section('titre', 'Inscription')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGBvote</title>
+@section('contenu')
+<div class="container auth">
+    <aside class="auth-visuel reveal">
+        <div>
+            <span class="pill"><span class="point point-vif"></span> Inscriptions ouvertes</span>
+            <h2>Rejoignez le scrutin en deux minutes.</h2>
+            <p>Munissez-vous de votre code étudiant officiel : il garantit que seuls les étudiants de l'UGB peuvent voter.</p>
+        </div>
+        <ul class="auth-points">
+            <li><x-icon name="id" /> Code étudiant vérifié auprès de l'université</li>
+            <li><x-icon name="building" /> Vous votez pour les listes de votre UFR</li>
+            <li><x-icon name="shield" /> Un compte, un vote : pas de doublon possible</li>
+        </ul>
+    </aside>
 
+    <section class="card auth-form reveal" data-i="1">
+        <span class="surtitre"><x-icon name="user" /> Nouveau compte</span>
+        <h1 class="titre-l">Inscription</h1>
+        <p class="doux">Tous les champs sont obligatoires.</p>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Tienne&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Audiowide&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Aclonica&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+        <form method="POST" action="{{ route('inscription.register') }}" class="champs" data-envoi data-validation novalidate>
+            @csrf
 
-
-
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/inscription.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-5.3.3-dist/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/systemeDeVote.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/header-footer.css') }}">
-
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="{{ asset('jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('jquery/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('jquery/form-validation.js') }}"></script>
-
-    <!-- <title>UGBvote</title> -->
-</head>
-<!-- header -->
-<header class="">
-    <div class="header-principal w-100 ">
-        <nav class="navbar navbar-expand-lg ">
-            <!-- Logo -->
-            <div class="frugb-vote me-auto">
-                <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
-            </div>
-
-            <!-- Bouton toggle pour les petits écrans -->
-
-
-            <!-- Liens et pseudo -->
-            <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-                <ul class="navbar-nav  liens  d-flex justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-4">
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-5">
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Pseudo à droite -->
-                <div class="pseudo me-5 justify-content-end">
-                    <div class="frame-36">
-                        <div class="avatar-block">
-
-                            <div class="info">
-                            </div>
-                        </div>
+            <div class="champs-2">
+                <div class="champ @error('prenom') invalide @enderror">
+                    <label for="prenom">Prénom</label>
+                    <div class="champ-controle">
+                        <x-icon name="user" />
+                        <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" autocomplete="given-name" maxlength="100" required data-regle="nom">
                     </div>
-
+                    <span class="champ-erreur" data-erreur>@error('prenom'){{ $message }}@enderror</span>
+                </div>
+                <div class="champ @error('nom') invalide @enderror">
+                    <label for="nom">Nom</label>
+                    <div class="champ-controle">
+                        <x-icon name="user" />
+                        <input type="text" id="nom" name="nom" value="{{ old('nom') }}" autocomplete="family-name" maxlength="100" required data-regle="nom">
+                    </div>
+                    <span class="champ-erreur" data-erreur>@error('nom'){{ $message }}@enderror</span>
                 </div>
             </div>
-        </nav>
-        <!-- image-header -->
 
-
-
-        <div class="imageHeader">
-            <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-            <div class="election-du-repr-sentant-des-tudiants">
-                Election du représentant des étudiants
-            </div>
-        </div>
-
-    </div>
-
-</header>
-
-<!-- contenu -->
-
-
-<body>
-
-    <main class="container">
-        <div class="row m-3 justify-content-center">
-            <!-- Image -->
-            <div class="col-md-4 d-none d-md-block rounded h-100">
-                <img src="images/urne.png" alt="image" class="rounded img-fluid urne h-100 w-100 object-fit-cover">
-            </div>
-
-            <!-- Exemple simplifié de votre formulaire d'inscription -->
-            <div class="col-md-8 col-12 d-flex flex-column h-100">
-                <div id="alert"></div>
-                <h1 class="text text-center voter-pour-votre-repr-sentant">Inscrivez-Vous !</h1>
-                <form action="{{ route('inscription.register') }}" id="inscriptionForm" method="POST" novalidate name="formulaire"
-                    class="p-5 shadow rounded bg-white h-100 d-flex flex-column flex-grow-1">
-                    @csrf
-
-                    <div class="row g-3 flex-grow-1">
-                        <div class="col-md-6">
-                            <label for="prenom" class="form-label">Entrez votre prénom</label>
-                            <input type="text" name="prenom" class="form-control" id="prenom" value="{{ old('prenom') }}" required>
-                            @error('prenom') <span class="error">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label for="nom" class="form-label">Entrez votre nom</label>
-                            <input type="text" name="nom" id="nom" class="form-control" value="{{ old('nom') }}" required>
-                            @error('nom') <span class="error">{{ $message }}</span> @enderror
-                        </div>
+            <div class="champs-2">
+                <div class="champ @error('code') invalide @enderror">
+                    <label for="code">Code étudiant</label>
+                    <div class="champ-controle">
+                        <x-icon name="id" />
+                        <input type="text" id="code" name="code" value="{{ old('code') }}" placeholder="p31 0000" maxlength="50" autocomplete="off" required>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="code" class="form-label">Entrez votre Code</label>
-                        <input type="text" name="code" id="code" class="form-control" value="{{ old('code') }}" required>
-                        @error('code') <span class="error">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Entrez votre e-mail</label>
-                        <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
-                        @error('email') <span class="error">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="ufr" class="form-label">Sélectionnez votre UFR</label>
-                        <select name="ufr" id="ufr" class="form-select" required>
-                            <option value="">Veuillez sélectionner votre UFR</option>
-                            <option value="1">SAT</option>
-                            <option value="2">SJP</option>
-                            <option value="3">LSH</option>
-                            <option value="4">S2ATA</option>
+                    <span class="champ-erreur" data-erreur>@error('code'){{ $message }}@enderror</span>
+                </div>
+                <div class="champ @error('ufr') invalide @enderror">
+                    <label for="ufr">UFR</label>
+                    <div class="champ-controle">
+                        <x-icon name="building" />
+                        <select id="ufr" name="ufr" required>
+                            <option value="">Sélectionnez votre UFR</option>
+                            @foreach ($ufrs as $ufr)
+                                <option value="{{ $ufr->id_ufr }}" @selected(old('ufr') == $ufr->id_ufr)>{{ $ufr->sigle }}</option>
+                            @endforeach
                         </select>
-                        @error('ufr') <span class="error">{{ $message }}</span> @enderror
+                        <x-icon name="chevron-down" class="champ-chevron" />
                     </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Entrez votre mot de passe</label>
-                        <input type="password" name="password" id="password" class="form-control w-100 w-md-50 mx-auto" required>
-                        @error('password') <span class="error">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="confpassword" class="form-label">Confirmez votre mot de passe</label>
-                        <input type="password" name="password_confirmation" id="confpassword" class="form-control w-100 w-md-50 mx-auto" required>
-                    </div>
-
-                    <div class="row g-3 mt-auto">
-                        <div class="col">
-                            <button type="submit" class="container-fluid confirm-button">
-                                <span class="button-text">Valider</span>
-                                <div class="icon-container">
-                                    <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
-                                </div>
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button type="reset" class="container-fluid confirm-button-annuler">
-                                <span class="button-text">Annuler</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mt-3 text-center">
-                        <p>Avez-vous déjà un compte? <a href="{{ route('login') }}" class="text-decoration-none connecter-vous">Connectez-vous</a></p>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-    </main>
-
-
-</body>
-
-<!-- footer -->
-<footer class="footer container-fluid">
-    <div class="row align-items-center text-center text-md-start">
-
-        <!-- Logo et réseaux sociaux -->
-        <div class="col-md-4 d-flex flex-column align-items-center">
-            <div class=" logo-footer ">
-                <div class="frugb-vote">
-                    <a href="{{ route('ugbvote') }}">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
-                </div>
-                <div class="button-list d-flex justify-content-center ">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
+                    <span class="champ-erreur" data-erreur>@error('ufr'){{ $message }}@enderror</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Copyright -->
-        <div class="col-md-4 text-center">
-            <p class="_2025-ugb-vote">© 2025 UGBVote</p>
-        </div>
-
-        <!-- Liens utiles -->
-        <div class="col-md-4 text-center">
-            <div class="lienutiles align-items-start">
-                <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
-                    <strong>Lien Utiles</strong><br>
-                    <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
-                    <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
-
-                </p>
+            <div class="champ @error('email') invalide @enderror">
+                <label for="email">Adresse e-mail</label>
+                <div class="champ-controle">
+                    <x-icon name="mail" />
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="etudiant@ugb.edu.sn" autocomplete="email" maxlength="255" required data-regle="email">
+                </div>
+                <span class="champ-erreur" data-erreur>@error('email'){{ $message }}@enderror</span>
             </div>
-        </div>
 
-    </div>
-</footer>
+            <div class="champs-2">
+                <div class="champ @error('password') invalide @enderror">
+                    <label for="password">Mot de passe</label>
+                    <div class="champ-controle">
+                        <x-icon name="lock" />
+                        <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" maxlength="255" required data-regle="motdepasse" data-force="#force">
+                        <button type="button" class="champ-oeil" data-oeil aria-label="Afficher ou masquer le mot de passe">
+                            <x-icon name="eye" class="icon-oeil" /><x-icon name="eye-off" class="icon-oeil-barre" />
+                        </button>
+                    </div>
+                    <div class="force" id="force" data-niveau="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                    <span class="champ-erreur" data-erreur>@error('password'){{ $message }}@enderror</span>
+                    <span class="champ-aide">8 caractères minimum, avec des lettres et des chiffres.</span>
+                </div>
+                <div class="champ">
+                    <label for="password_confirmation">Confirmation</label>
+                    <div class="champ-controle">
+                        <x-icon name="lock" />
+                        <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" maxlength="255" required data-regle="confirmation" data-miroir="#password">
+                    </div>
+                    <span class="champ-erreur" data-erreur></span>
+                </div>
+            </div>
 
-</html>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Créer mon compte <x-icon name="arrow-right" class="icon-fleche" /></button>
+        </form>
+
+        <p class="auth-bas">Vous avez déjà un compte ? <a class="lien" href="{{ route('login') }}">Connectez-vous</a></p>
+    </section>
+</div>
+@endsection

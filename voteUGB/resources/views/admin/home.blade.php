@@ -1,157 +1,69 @@
-@include('admin.includes.session')
-@include('admin.includes.slugify')
-@include('admin.includes.header')
+@extends('layouts.admin')
+@section('titre', 'Tableau de bord')
 
-<body class="hold-transition skin-blue sidebar-mini">
-  <div class="wrapper">
+@section('actions')
+    <span class="pill pill-ok bureau-seul"><span class="point point-vif"></span> En direct · <span data-maj>{{ $stats['maj'] }}</span></span>
+    <button type="button" class="btn btn-sm bureau-seul" data-imprimer><x-icon name="printer" /> Imprimer</button>
+@endsection
 
-    @include('admin.includes.navbar')
-    @include('admin.includes.menubar')
+@section('contenu')
+<div data-tableau-de-bord="{{ route('admin.stats') }}" class="stack">
+    <script type="application/json" data-initial>@json($stats)</script>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <h1>
-        Tableau de bord
-        </h1>
-        <ol class="breadcrumb">
-          <li><a href="{{ route('dashboardAdmin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-          <li class="active">Tableau de bord</li>
-        </ol>
-      </section>
-
-      <!-- Main content -->
-      <section class="content">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-aqua">
-              <div class="inner">
-                <h3>{{ $nombreDePostes }}</h3>
-                <p>Nombre de postes</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-tasks"></i>
-              </div>
-              <a href="#" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>{{ $nombreDeCandidats }}</h3>
-                <p>Nombre de listes</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-black-tie"></i>
-              </div>
-              <a href="#" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3>{{ $nombreTotalElecteurs }}</h3>
-                <p>Nombre total d'électeurs</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-users"></i>
-              </div>
-              <a href="#" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3>{{ $nombreElecteursVotants }}</h3>
-                <p>Les électeurs ont voté</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-edit"></i>
-              </div>
-              <a href="#" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12">
-            <h3>Décompte des votes
-              <span class="pull-right">
-                <a href="#" class="btn btn-success btn-sm btn-flat"><span class="glyphicon glyphicon-print"></span> Imprimer</a>
-              </span>
-            </h3>
-          </div>
-        </div>
-
-
-        <div class="container my-4">
-          <div id="chart-container">
-            <canvas id="groupedBarChart"></canvas>
-          </div>
-        </div>
-      </section>
-
-
+    <div class="tuiles">
+        <div class="card tuile reveal"><span class="pastille-icone"><x-icon name="building" /></span><div><strong data-stat="ufr">{{ $stats['ufr'] }}</strong><span>UFR</span></div></div>
+        <div class="card tuile reveal" data-i="1"><span class="pastille-icone"><x-icon name="list" /></span><div><strong data-stat="listes">{{ $stats['listes'] }}</strong><span>Listes candidates</span></div></div>
+        <div class="card tuile reveal" data-i="2"><span class="pastille-icone"><x-icon name="users" /></span><div><strong data-stat="inscrits">{{ $stats['inscrits'] }}</strong><span>Électeurs inscrits</span></div></div>
+        <div class="card tuile reveal" data-i="3"><span class="pastille-icone"><x-icon name="vote" /></span><div><strong data-stat="votants">{{ $stats['votants'] }}</strong><span>Ont voté</span></div></div>
     </div>
-    <!-- Inclusions JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <div class="resultats">
+        <section class="card card-pad reveal">
+            <div class="rangee entre">
+                <h2 class="titre-m">Décompte des votes par UFR</h2>
+                <span class="pill"><x-icon name="refresh" /> Actualisation automatique</span>
+            </div>
+            <div data-decompte>
+                @foreach ($stats['parUfr'] as $bloc)
+                    <div class="ufr-bloc" data-ufr="{{ $bloc['ufr'] }}">
+                        <div class="rangee entre">
+                            <h3 class="titre-s">UFR {{ $bloc['ufr'] }}</h3>
+                            <span class="petit doux"><span data-ufr-total>{{ $bloc['total_votes'] }}</span> vote(s) · <span data-ufr-part>{{ $bloc['participation'] }}</span> % de participation</span>
+                        </div>
+                        <ol class="classement">
+                            @forelse ($bloc['resultats'] as $ligne)
+                                <li class="{{ $ligne['en_tete'] ? 'en-tete' : '' }}" data-liste="{{ $ligne['id'] }}">
+                                    <div class="rang-tete">
+                                        <h3>{{ $ligne['liste'] }}</h3>
+                                        <span class="couronne" title="En tête"><x-icon name="trophy" /></span>
+                                        <span class="voix"><span data-voix>{{ $ligne['votes'] }}</span> voix</span>
+                                        <span class="pct"><span data-pct>{{ $ligne['pourcentage'] }}</span> %</span>
+                                    </div>
+                                    <div class="jauge"><b data-largeur="{{ $ligne['pourcentage'] }}"></b></div>
+                                </li>
+                            @empty
+                                <li class="doux petit">Aucune liste déclarée.</li>
+                            @endforelse
+                        </ol>
+                    </div>
+                @endforeach
+            </div>
+        </section>
 
-    <!-- Passage de la variable positions via JSON -->
-    <script>
-      var positions = JSON.parse('{!! json_encode($positions) !!}');
-    </script>
-
-<script>
-  var dataGrouped = positions;
-
-  var positions = [...new Set(dataGrouped.map(item => item.position))]; // ["sat", "dakar"]
-  var candidats = [...new Set(dataGrouped.map(item => item.candidat))]; // ["crak", "convergence"]
-
-  var datasets = candidats.map(candidat => ({
-    label: candidat,
-    data: positions.map(position =>
-      (dataGrouped.find(d => d.candidat === candidat && d.position === position) || {}).nombre_de_votes || 0
-    ),
-    backgroundColor: 'rgba(' + Math.floor(Math.random() * 255) + ',' +
-                              Math.floor(Math.random() * 255) + ',' +
-                              Math.floor(Math.random() * 255) + ', 0.7)',
-    borderWidth: 1
-  }));
-
-  var ctx = document.getElementById('groupedBarChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: positions,
-      datasets: datasets
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true } }
-    }
-  });
-</script>
-
-    @include('admin.includes.scripts')
-
-
-    @include('admin.includes.footer')
-
-  </div>
-
-</body>
-
-</html>
+        <aside class="card card-pad reveal" data-i="1">
+            <h2 class="titre-m">Participation globale</h2>
+            <div class="anneau">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="piste" cx="60" cy="60" r="50"/>
+                    <circle class="arc serie-2" cx="60" cy="60" r="50" data-jauge-participation/>
+                </svg>
+                <div class="anneau-centre"><strong><span data-stat="participation">{{ $stats['participation'] }}</span>%</strong><span>des inscrits</span></div>
+            </div>
+            <ul class="legende">
+                <li><i class="serie-2"></i><span>Ont voté</span><b data-stat="votants">{{ $stats['votants'] }}</b></li>
+                <li><i class="serie-3"></i><span>Inscrits</span><b data-stat="inscrits">{{ $stats['inscrits'] }}</b></li>
+            </ul>
+        </aside>
+    </div>
+</div>
+@endsection

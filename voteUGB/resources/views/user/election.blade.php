@@ -1,281 +1,67 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.app')
+@section('titre', 'Élections')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGBvote</title>
-    <!-- Liens pour les icônes et CSS -->
-    <link href="https://fonts.googleapis.com/css?family=Audiowide&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Aclonica&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/election.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-5.3.3-dist/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/systemeDeVote.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('contenu')
+@php($peutVoter = $scrutin && $scrutin->estOuvert() && ! $bulletin)
+<div class="container">
+    <header class="page-tete">
+        <div class="reveal">
+            <span class="surtitre"><x-icon name="building" /> UFR {{ $etudiant->ufr?->sigle }}</span>
+            <h1 class="titre-l">Votez pour votre <span class="texte-degrade">représentant</span></h1>
+            <p class="chapo">Bonjour {{ ucfirst($etudiant->prenom) }}, découvrez les listes candidates de votre UFR, consultez leur programme et exprimez votre choix.</p>
+            <div class="rangee">@include('partials.scrutin-etat')</div>
+        </div>
+        <div class="reveal" data-i="1">@include('partials.rebours')</div>
+    </header>
 
-<header class="">
-    <!-- Votre header ici -->
-    <div class="header-principal w-100">
-        <nav class="navbar navbar-expand-lg">
-            <!-- Logo -->
-            <div class="frugb-vote me-auto">
-                <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+    @if (session('vote_ok'))
+        <canvas class="confettis" data-confettis aria-hidden="true"></canvas>
+    @endif
+
+    @if ($bulletin)
+        <div class="card card-pad succes-vote reveal">
+            <span class="succes-coche"><x-icon name="check" /></span>
+            <div>
+                <h2 class="titre-m">A voté ! Merci pour votre participation.</h2>
+                <p class="doux">Votre bulletin a été enregistré le {{ $bulletin->voted_at->format('d/m/Y à H:i') }}. Un seul vote est autorisé par étudiant.</p>
             </div>
-            <!-- Bouton toggle pour petits écrans -->
-            <button type="button" class="navbar-toggler d-lg-none ms-auto" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Liens -->
-            <div class="liens-speudo collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav liens d-flex justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('election') }}">
-                            <div class="frame-4">
-                                <div class="elections">Élections</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('resultat',['id'=>$etudiant->ufr_id]) }}">
-                            <div class="frame-5">
-                                <div class="resultats">Résultats</div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- Pseudo -->
-                <div class="pseudo me-5 justify-content-end">
-                    <div class="frame-36">
-                        <div class="avatar-block">
-                            <div class="avatar">
-                                <div class="initials">V</div>
-                            </div>
-                            @if(isset($etudiant))
-                            <div class="info">
-                                <div class="title text-capitalize">{{ $etudiant->prenom }}</div>
-                                <div class="description text-uppercase">{{ $etudiant->nom }}</div>
-                            </div>
+            <a class="btn btn-primary" href="{{ route('resultat') }}"><x-icon name="chart" /> Voir les résultats</a>
+        </div>
+    @endif
+
+    @if ($listes->isEmpty())
+        <div class="card vide reveal">
+            <span class="pastille-icone"><x-icon name="list" /></span>
+            <h2 class="titre-m">Aucune liste pour l'instant</h2>
+            <p>Aucune liste n'est encore déclarée pour votre UFR. Revenez un peu plus tard.</p>
+        </div>
+    @else
+        <div class="grille-listes">
+            @foreach ($listes as $i => $liste)
+                @php($tete = $liste->membres->first()?->etudiant)
+                <article class="card card-survol halo liste-carte ton-{{ $i % 4 + 1 }} reveal" data-i="{{ $i % 3 }}" data-inclinaison data-inclinaison-force="5">
+                    <div class="liste-visuel">
+                        <span class="liste-numero">LISTE {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        <span class="liste-sigle" aria-hidden="true">{{ mb_strtoupper(mb_substr($liste->name_list, 0, 1)) }}</span>
+                    </div>
+                    <div class="liste-corps">
+                        <h2>{{ $liste->name_list }}</h2>
+                        <div class="liste-meta">
+                            @if ($tete)<span><x-icon name="user" /> {{ $tete->nom_complet }}</span>@endif
+                            <span><x-icon name="users" /> {{ $liste->membres_count }} {{ $liste->membres_count > 1 ? 'membres' : 'membre' }}</span>
+                        </div>
+                        <div class="liste-actions">
+                            <a class="btn" href="{{ route('detailListe', ['id' => $liste->id_list]) }}"><x-icon name="file" /> Programme</a>
+                            @if ($peutVoter)
+                                <a class="btn btn-primary" href="{{ route('systemevote', ['id' => $liste->id_list]) }}">Voter <x-icon name="vote" /></a>
+                            @else
+                                <span class="btn btn-primary" aria-disabled="true" title="{{ $bulletin ? 'Vous avez déjà voté' : 'Le scrutin n\'est pas ouvert' }}">{{ $bulletin ? 'A voté' : 'Fermé' }} <x-icon name="{{ $bulletin ? 'check' : 'lock' }}" /></span>
                             @endif
                         </div>
                     </div>
-
-
-                    <!-- Image cliquable avec confirmation pour se déconnecter -->
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <!-- Formulaire de déconnexion caché -->
-
-                        <!-- Image cliquable avec confirmation pour se déconnecter -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                            <div class="frame-93 ms-3">
-                                <img alt="img" class="log-out" src="{{ asset('image/user_icons/log-out0.svg') }}" />
-                            </div>
-                        </a>
-
-                </div>
-            </div>
-        </nav>
-        <!-- Image-header -->
-        <div class="imageHeader">
-            <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-            <div class="election-du-repr-sentant-des-tudiants">
-                Election du représentant des étudiants
-            </div>
-        </div>
-    </div>
-</header>
-
-<body>
-
-    <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Succès</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    {{ session('success') }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Déclenchement du modal si un message de succès est présent -->
-    @if(session('success'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        });
-    </script>
-    @endif
-
-
-
-    <!-- LE CONTENU DE VOTRE PAGE -->
-
-
-
-
-    <div class="container-fluid m-3 p-3">
-        <!-- Votre contenu ici -->
-        <div class="voter">
-            <div class="voter-pour-votre-repr-sentant">
-                Voter pour votre représentant
-            </div>
-            <div class="frame-58 d-flex">
-                <div class="election-2024-2025-en-cours-jusqu-au-15-03-2025">
-                    <span>Election <span class="fw-bold">2024-2025 </span>
-                        @if($dateFinVote)
-                        - En cours jusqu’au<span class="fw-bold">
-                            {{ \Carbon\Carbon::parse($dateFinVote)->format('d/m/Y') }}
-                            @else
-                            <p>Aucun vote en cours pour votre UFR.</p>
-                            @endif
-                        </span></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="container" id="custom-cards">
-
-
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch">
-            <!-- Exemple de card -->
-
-            @if(isset($message))
-            <div class="alert alert-info">
-                {{ $message }}
-            </div>
-
-            @elseif(isset($listes))
-            @foreach($listes as $liste)
-
-            <div class="col">
-                <div class="vot-card-container">
-                    <div class="vot-card">
-                        <header class="carte-header">
-                            <div class="logo-carte"> <img src="{{ asset('image/user_image/image-carte.png') }}" alt="Logo" class="list-image img-fluid"></div>
-
-                            <div class="liste-info">
-                                <h2 class="list-nom text-uppercase text-bold">{{ $liste->name_list }}</h2>
-                                <div class="vote-icon-wrapper">
-                                    <img src="{{ asset('image/user_image/pictogrammers-material-vote-512-10.png') }}" alt="Vote icon" />
-                                </div>
-                            </div>
-                        </header>
-                        <nav class="programme-nav">
-                            <a href="{{ route('detailListe',['id'=> $liste->id_list] ) }}"><button class="programme-button">Voir programme</button></a>
-                        </nav>
-                        <footer class="vote-actionn">
-                            <a href="{{ route('systemevote', ['id' => $liste->id_list]) }}" class="text-decoration-none">
-                                <button class="confirm-button">
-                                    <span class="button-text">VOTER</span>
-                                    <div class="icon-container">
-                                        <img alt="icon" class="check-square" src="{{ asset('image/user_icons/check-square0.svg') }}" />
-                                    </div>
-                                </button>
-                            </a>
-
-                        </footer>
-                    </div>
-                </div>
-            </div>
-            <!-- Répétez pour d'autres cards -->
-
-
+                </article>
             @endforeach
-            @else
-            <p class="text-danger">Aucune donnée disponible.</p>
-            @endif
-
-
         </div>
-    </div>
-
-    <!-- FIN DU CONTENU -->
-
-    <!-- Modal de confirmation de déconnexion -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Êtes-vous sûr de vouloir vous déconnecter ?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" id="confirmLogout">Se déconnecter</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
-
-    <script>
-        document.getElementById('confirmLogout').addEventListener('click', function() {
-            document.getElementById('logout-form').submit();
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-<footer class="footer container-fluid">
-    <div class="row align-items-center text-center text-md-start">
-        <!-- Logo et réseaux sociaux -->
-        <div class="col-md-4 d-flex flex-column align-items-center">
-            <div class="logo-footer">
-                <div class="frugb-vote">
-                    <a href="{{ route('ugbvote') }}">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
-                </div>
-                <div class="button-list d-flex justify-content-center">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
-                </div>
-            </div>
-        </div>
-        <!-- Copyright -->
-        <div class="col-md-4 text-center">
-            <p class="_2025-ugb-vote">© 2025 UGBVote</p>
-        </div>
-        <!-- Liens utiles -->
-        <div class="col-md-4 text-center">
-            <div class="lienutiles align-items-start">
-                <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
-                    <strong>Lien Utiles</strong><br>
-                    <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
-                    <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
-                </p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-</html>
+    @endif
+</div>
+@endsection

@@ -1,33 +1,54 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Admin</title>
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <h3 class="text-center">Connexion Admin</h3>
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-                <form action="{{ route('admin.login') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-                </form>
-            </div>
+@extends('layouts.app')
+@section('titre', 'Administration')
+
+@section('contenu')
+<div class="container auth">
+    <aside class="auth-visuel reveal">
+        <div>
+            <span class="pill"><x-icon name="shield" /> Accès restreint</span>
+            <h2>Pilotez l'élection en toute confiance.</h2>
+            <p>Tableau de bord temps réel, gestion des électeurs, des listes et des périodes de scrutin.</p>
         </div>
-    </div>
-</body>
-</html>
+        <ul class="auth-points">
+            <li><x-icon name="dashboard" /> Participation et dépouillement en direct</li>
+            <li><x-icon name="users" /> Gestion des électeurs et des listes</li>
+            <li><x-icon name="lock" /> Session dédiée, protégée et journalisée</li>
+        </ul>
+    </aside>
+
+    <section class="card auth-form reveal" data-i="1">
+        <span class="surtitre"><x-icon name="lock" /> Espace administrateur</span>
+        <h1 class="titre-l">Administration</h1>
+        <p class="doux">Connectez-vous pour démarrer votre session.</p>
+
+        <form method="POST" action="{{ route('admin.login') }}" class="champs" data-envoi>
+            @csrf
+            @if ($errors->any())
+                <div class="alerte alerte-erreur" role="alert"><x-icon name="alert" /> <span>{{ $errors->first() }}</span></div>
+            @endif
+
+            <div class="champ">
+                <label for="email">Adresse e-mail</label>
+                <div class="champ-controle">
+                    <x-icon name="mail" />
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" autocomplete="username" maxlength="255" required autofocus>
+                </div>
+            </div>
+            <div class="champ">
+                <label for="password">Mot de passe</label>
+                <div class="champ-controle">
+                    <x-icon name="lock" />
+                    <input type="password" id="password" name="password" autocomplete="current-password" maxlength="255" required>
+                    <button type="button" class="champ-oeil" data-oeil aria-label="Afficher ou masquer le mot de passe">
+                        <x-icon name="eye" class="icon-oeil" /><x-icon name="eye-off" class="icon-oeil-barre" />
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Ouvrir la session <x-icon name="arrow-right" class="icon-fleche" /></button>
+        </form>
+
+        <p class="auth-bas">Vous êtes étudiant ? <a class="lien" href="{{ route('login') }}">Espace étudiant</a></p>
+    </section>
+</div>
+@endsection

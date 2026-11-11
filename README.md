@@ -12,10 +12,106 @@
 <p align="center">
   <img alt="Laravel" src="https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white">
   <img alt="PHP" src="https://img.shields.io/badge/PHP-%E2%89%A5%208.2-777BB4?logo=php&logoColor=white">
-  <img alt="Bootstrap" src="https://img.shields.io/badge/Bootstrap-UI-7952B3?logo=bootstrap&logoColor=white">
-  <img alt="jQuery" src="https://img.shields.io/badge/jQuery-AJAX-0769AD?logo=jquery&logoColor=white">
-  <img alt="Chart.js" src="https://img.shields.io/badge/Chart.js-dashboard-FF6384?logo=chartdotjs&logoColor=white">
+  <img alt="Design system" src="https://img.shields.io/badge/Design%20system-maison%20(0%20CDN)-ab775b">
+  <img alt="CSP" src="https://img.shields.io/badge/CSP-stricte-522504">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-16%20pass%C3%A9s-2f7a4f">
 </p>
+
+---
+
+## ✨ Refonte 2026 — branche `mg4`
+
+> Toute la plateforme a été redessinée et sécurisée, **en conservant le nom du site et la palette d'origine**
+> (brun `#522504` · caramel `#ab775b` · sable `#f0e0d0`). Les captures ci-dessous sont prises sur l'application
+> réelle (jeu de données de démonstration), sur ordinateur, tablette et téléphone.
+
+![Accueil — ordinateur](image_pages/v2/pc-accueil-hero.jpg)
+
+### Ce qui change
+
+| | Avant | Maintenant |
+|---|---|---|
+| **Interface** | Bootstrap + gabarit AdminLTE, pages indépendantes | Design system maison (`public/assets/app.css`), gabarits Blade communs, thème **clair / sombre** |
+| **Animations** | Carrousel d'images | Fond « aurora » animé, particules interactives, urne animée, apparitions au défilement, compteurs, cartes 3D, transitions entre pages, confettis après le vote |
+| **Responsive** | Partiel | Mise en page fluide (mobile, tablette, PC), menu mobile, tableaux transformés en cartes, zéro défilement horizontal |
+| **Temps réel** | Graphique rechargé en AJAX | Classement, anneau de répartition et participation actualisés toutes les 5 s, avec réordonnancement animé |
+| **Dépendances front** | ≈ 9 400 fichiers tiers dans `public/` (jQuery, CKEditor, Flot…) et plusieurs CDN | **Aucun CDN, aucune bibliothèque** : polices, icônes et scripts auto-hébergés (≈ 1 Mo) |
+| **Administration** | Accessible **sans connexion**, mot de passe **en clair** | Garde `auth:admin`, mot de passe haché (bcrypt), vraie déconnexion |
+| **Vote** | Double vote possible (une fois par liste), `vote_id` fourni par le navigateur | **Un bulletin par étudiant et par scrutin** garanti par un index unique en base ; scrutin déduit côté serveur |
+
+### Sécurité et fiabilité
+
+- **Espace administrateur protégé** : toutes les routes `/admin/*` exigent une session du garde `admin` ; une migration hache automatiquement les mots de passe administrateur qui étaient stockés en clair.
+- **Vote infalsifiable** : index unique `(etudiant_id, vote_id)`, liste obligatoirement dans l'UFR de l'étudiant, période d'ouverture du scrutin contrôlée côté serveur, confirmation explicite obligatoire.
+- **Cloisonnement par UFR** : listes, programmes et résultats d'une autre UFR renvoient une erreur 404.
+- **Anti force brute** : 5 tentatives de connexion par minute (étudiant et administrateur), limites sur l'inscription et le vote.
+- **Inscription renforcée** : code étudiant officiel obligatoire et à usage unique, mot de passe ≥ 8 caractères avec lettres et chiffres, e-mail normalisé.
+- **En-têtes HTTP** : Content-Security-Policy stricte (`script-src 'self'`, `style-src 'self'`, aucun script ni style « inline »), `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, HSTS en HTTPS.
+- **Sessions** : identifiant régénéré à la connexion, session invalidée à la déconnexion, chiffrement activé (`SESSION_ENCRYPT=true`), jeton CSRF sur tous les formulaires.
+- **Surface d'attaque réduite** : suppression des anciens scripts PHP exécutables dans `public/includes/` et des bibliothèques tierces obsolètes.
+- **16 tests automatisés** (`php artisan test`) couvrent ces règles : double vote, vote hors UFR, vote hors période, accès administrateur, inscription, limitation de débit, en-têtes de sécurité.
+
+### Espace étudiant
+
+| Connexion | Inscription (validation en direct) |
+|---|---|
+| ![Connexion](image_pages/v2/pc-connexion.jpg) | ![Inscription](image_pages/v2/pc-inscription.jpg) |
+
+| Listes candidates et compte à rebours | Programme d'une liste |
+|---|---|
+| ![Élections](image_pages/v2/pc-election.jpg) | ![Programme](image_pages/v2/pc-programme.jpg) |
+
+| Bulletin de vote | « A voté ! » (confettis) |
+|---|---|
+| ![Vote](image_pages/v2/pc-vote.jpg) | ![A voté](image_pages/v2/pc-a-vote.jpg) |
+
+**Résultats en direct**
+
+![Résultats](image_pages/v2/pc-resultats.jpg)
+
+### Thème sombre
+
+| Accueil | Résultats |
+|---|---|
+| ![Accueil sombre](image_pages/v2/pc-accueil-sombre.jpg) | ![Résultats sombre](image_pages/v2/pc-resultats-sombre.jpg) |
+
+### Espace administrateur
+
+![Tableau de bord](image_pages/v2/pc-admin-tableau-de-bord.jpg)
+
+| Électeurs | Listes |
+|---|---|
+| ![Électeurs](image_pages/v2/pc-admin-electeurs.jpg) | ![Listes](image_pages/v2/pc-admin-listes.jpg) |
+
+| Ajout d'une liste | Scrutins (périodes de vote par UFR) |
+|---|---|
+| ![Ajout](image_pages/v2/pc-admin-ajout-liste.jpg) | ![Scrutins](image_pages/v2/pc-admin-scrutins.jpg) |
+
+### Tablette
+
+<p align="center">
+  <img src="image_pages/v2/tablette-accueil.jpg" width="32%" alt="Accueil — tablette">
+  <img src="image_pages/v2/tablette-election.jpg" width="32%" alt="Élections — tablette">
+  <img src="image_pages/v2/tablette-admin-tableau-de-bord.jpg" width="32%" alt="Tableau de bord — tablette">
+</p>
+
+### Téléphone
+
+<p align="center">
+  <img src="image_pages/v2/mobile-accueil.jpg" width="24%" alt="Accueil — mobile">
+  <img src="image_pages/v2/mobile-menu.jpg" width="24%" alt="Menu — mobile">
+  <img src="image_pages/v2/mobile-election.jpg" width="24%" alt="Élections — mobile">
+  <img src="image_pages/v2/mobile-vote.jpg" width="24%" alt="Vote — mobile">
+</p>
+<p align="center">
+  <img src="image_pages/v2/mobile-resultats.jpg" width="24%" alt="Résultats — mobile">
+  <img src="image_pages/v2/mobile-inscription.jpg" width="24%" alt="Inscription — mobile">
+  <img src="image_pages/v2/mobile-admin-menu.jpg" width="24%" alt="Menu administrateur — mobile">
+  <img src="image_pages/v2/mobile-admin-electeurs.jpg" width="24%" alt="Électeurs — mobile">
+</p>
+
+Toutes les captures (46) sont dans [`image_pages/v2/`](image_pages/v2). Les sections suivantes reprennent la présentation
+d'origine du projet ; les captures du [manuel d'utilisation](#8-manuel-dutilisation) montrent l'ancienne interface.
 
 ---
 
@@ -105,17 +201,17 @@ La plateforme doit :
 
 ### Côté étudiant
 - ✅ **Inscription** avec contrôle du code étudiant officiel, de l'UFR, de l'unicité de l'e-mail et de la confirmation du mot de passe.
-- ✅ **Validation en direct** des formulaires avec jQuery Validate (messages d'erreur sous chaque champ).
+- ✅ **Validation en direct** des formulaires (messages d'erreur sous chaque champ, jauge de robustesse du mot de passe).
 - ✅ **Connexion / déconnexion** avec messages de confirmation.
 - ✅ **Liste des élections** : affichage des listes candidates de l'UFR de l'étudiant connecté.
 - ✅ **Détail d'une liste** : titre du programme, programme complet et membres de la liste.
 - ✅ **Vote** avec fenêtre de **confirmation** et blocage du **double vote** (message d'erreur explicite).
-- ✅ **Résultats en temps réel** : barres de progression (voix et pourcentage), rafraîchies toutes les 5 s via AJAX (`GET /resultats/json`).
+- ✅ **Résultats en temps réel** : barres de progression (voix et pourcentage), anneau de répartition et participation, rafraîchis toutes les 5 s (`GET /resultats/json`).
 
 ### Côté administrateur
 - ✅ **Connexion administrateur** dédiée (`/admin`, garde d'authentification séparée).
-- ✅ **Tableau de bord** : nombre de postes (UFR), de candidats, d'électeurs inscrits et de votants + graphique des votes par UFR (Chart.js).
-- ✅ **Gestion des listes candidates** (ajout), **des postes** et **des électeurs** (consultation, suppression).
+- ✅ **Tableau de bord** : nombre de postes (UFR), de candidats, d'électeurs inscrits et de votants + décompte des votes par UFR et participation, actualisés en direct.
+- ✅ **Gestion des listes candidates** (ajout, suppression), **des électeurs** (recherche, suppression) et **des scrutins** (dates d'ouverture et de clôture par UFR).
 
 ![Tableau de bord administrateur](image_pages/dashbord_UGBvote.png)
 
@@ -145,10 +241,13 @@ La plateforme doit :
 | GET | `/resultat` | Page des résultats |
 | GET | `/resultats/json` | API JSON des résultats (consommée en AJAX) |
 | GET / POST | `/admin`, `/admin/login` | Connexion administrateur |
-| GET | `/dashboardAdmin` | Tableau de bord |
-| GET | `/listeCandidats`, `/listePostes`, `/listeElecteurs` | Gestion de l'élection |
-| POST | `/enregistrer-list` | Ajout d'une liste candidate |
-| DELETE | `/deleteElecteur/{id}` | Suppression d'un électeur |
+| POST | `/admin/logout` | Déconnexion administrateur |
+| GET | `/admin/tableau-de-bord`, `/admin/stats.json` | Tableau de bord et son flux temps réel |
+| GET / DELETE | `/admin/electeurs`, `/admin/electeurs/{id}` | Consultation et suppression des électeurs |
+| GET / POST / DELETE | `/admin/listes`, `/admin/listes/{id}` | Consultation, ajout et suppression des listes |
+| GET / PUT | `/admin/scrutins`, `/admin/scrutins/{id}` | Périodes de vote par UFR |
+
+Les routes de l'espace étudiant exigent le garde `web`, celles de `/admin/*` le garde `admin`.
 
 ### Organisation du code Laravel
 
@@ -159,17 +258,23 @@ voteUGB/
 │   ├── inscription_controller.php  # inscription + validation des données
 │   ├── user_controller.php         # élections, détail d'une liste, vote, résultats
 │   └── AdminController.php         # connexion admin, tableau de bord, gestion
+├── app/Http/Middleware/SecurityHeaders.php  # CSP et en-têtes de sécurité
+├── app/Support/Depouillement.php   # calcul des résultats d'une UFR
 ├── app/Models/                     # Etudiant, EtudiantOfficiel, UFR, Listes,
 │                                   # MembresListe, Votes, VoteEtudiant, Admin
 ├── database/migrations/            # schéma de la base
 ├── database/seeders/UgbvoteSeeder.php  # jeu de données de démonstration
 ├── resources/views/
+│   ├── layouts/                    # gabarits communs (app, admin)
+│   ├── components/icon.blade.php   # jeu d'icônes SVG auto-hébergé
+│   ├── errors/                     # pages 403, 404, 419, 429, 500, 503
 │   ├── ugbvote.blade.php           # accueil
 │   ├── user/                       # login, inscription, election, detailListe,
 │   │                               # systemevote, resultat
 │   └── admin/                      # login, home (dashboard), candidates, postes, electeurs
-├── public/js/                      # ajax.js (résultats temps réel), systemeVote.js, election.js…
-├── public/jquery/                  # jQuery, jquery.validate, form-validation.js
+├── public/assets/                  # app.css (design system), app.js (animations, temps réel), theme.js
+├── public/fonts/                   # polices Sora et Inter auto-hébergées
+├── tests/Feature/SecuriteVoteTest.php  # règles de sécurité du scrutin
 └── routes/web.php
 ```
 
@@ -197,57 +302,41 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
 ## 7. Manuel d'installation
 
 ### Prérequis
-- PHP ≥ 8.2 avec les extensions `pdo_mysql`, `mbstring`, `openssl`, `xml`
+- PHP ≥ 8.2 avec les extensions `mbstring`, `openssl`, `xml` et `pdo_mysql` (ou `pdo_sqlite`)
 - Composer 2
-- Node.js ≥ 18 et npm (pour Vite)
-- MySQL / MariaDB (XAMPP, WAMP, Laragon… conviennent)
+- MySQL / MariaDB (XAMPP, WAMP, Laragon… conviennent) ou SQLite
+- Node.js n'est **pas** nécessaire : l'interface est servie directement depuis `public/assets/`
 
 ### Étapes
 
-1. **Cloner le dépôt**
+1. **Cloner le dépôt et choisir la branche**
 
    ```bash
-   git clone https://github.com/Metata08/projet_Dev_WEB_23-24.git
+   git clone -b mg4 https://github.com/Metata08/projet_Dev_WEB_23-24.git
    ```
 
    ```bash
    cd projet_Dev_WEB_23-24/voteUGB
    ```
 
-2. **Installer les dépendances**
+2. **Installer les dépendances PHP**
 
    ```bash
    composer install
    ```
 
+3. **Configurer l'environnement**
+
    ```bash
-   npm install
+   cp .env.example .env
    ```
-
-3. **Configurer l'environnement** — créer un fichier `.env` à la racine de `voteUGB/` (aucun `.env.example` n'est fourni) avec au minimum :
-
-   ```dotenv
-   APP_NAME="UGB Vote"
-   APP_ENV=local
-   APP_KEY=
-   APP_DEBUG=true
-   APP_URL=http://localhost:8000
-
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=ugbvote
-   DB_USERNAME=root
-   DB_PASSWORD=
-
-   SESSION_DRIVER=database
-   ```
-
-   puis générer la clé de l'application :
 
    ```bash
    php artisan key:generate
    ```
+
+   Adapter au besoin les variables `DB_*` du fichier `.env` (par défaut : base MySQL `ugbvote`, utilisateur `root`).
+   En production, mettre `APP_ENV=production`, `APP_DEBUG=false` et `SESSION_SECURE_COOKIE=true`.
 
 4. **Créer la base `ugbvote`** dans MySQL, puis lancer les migrations et le jeu de données :
 
@@ -255,13 +344,9 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
    php artisan migrate --seed
    ```
 
-   > ⚠️ Voir la section [Limites connues](#12-limites-connues-et-pistes-damélioration) : certaines migrations doivent être corrigées avant de pouvoir être exécutées sur une base vide.
+   Le jeu de données ouvre le scrutin de l'UFR SAT (du J-3 au J+12) : la démonstration est toujours « en cours ».
 
 5. **Lancer l'application**
-
-   ```bash
-   npm run dev
-   ```
 
    ```bash
    php artisan serve
@@ -269,14 +354,24 @@ Le dictionnaire de données complet (colonnes, types, clés) se trouve dans [`20
 
    L'application est accessible sur <http://localhost:8000>, l'espace administrateur sur <http://localhost:8000/admin>.
 
+6. **Lancer les tests** (base SQLite en mémoire, sans toucher à vos données)
+
+   ```bash
+   php artisan test
+   ```
+
+> **Mise à jour d'une installation existante** : `php artisan migrate` suffit. La migration
+> `2026_11_11_000000_securise_votes_et_admins` hache les mots de passe administrateur encore en clair et, si un
+> étudiant avait plusieurs bulletins pour un même scrutin, ne conserve que le premier avant d'ajouter l'index unique.
+
 ### Comptes de test
 
 | Rôle | E-mail | Mot de passe |
 |---|---|---|
-| Étudiant | `ameth@gmail.com` | `ameth31` |
+| Étudiant (a déjà voté) | `ameth@gmail.com` | `ameth31` |
 | Administrateur | `admin@gmail.com` | `admin123` |
 
-Pour tester l'inscription, utiliser un code présent dans `etudiant_officiels` et non encore utilisé (voir `UgbvoteSeeder.php`).
+Pour tester l'inscription puis le vote, utiliser l'un des codes étudiants libres : `p31 3001`, `p31 3002` ou `p31 3003` (UFR **SAT**, dont le scrutin est ouvert).
 
 ---
 
@@ -411,17 +506,15 @@ Encadrement : **Awa DIATTARA** & **Abdou Khadre GUEYE** — UE Compléments de p
 
 ## 12. Limites connues et pistes d'amélioration
 
-**À corriger pour une installation depuis zéro :**
-- Les migrations `2025_04_01_133423_create_etudiants_table.php` et `2025_04_02_143105_create_listes_table.php` contiennent encore des marqueurs de conflit Git (`<<<<<<< Updated upstream` / `>>>>>>> Stashed changes`) qu'il faut résoudre.
-- Aucune migration ne crée la table `u_f_r_s` (seule une migration l'altère), et deux migrations créent la table `listes`.
-- Aucun fichier `.env.example` n'est fourni (voir l'étape 3 de l'installation).
+**Traité dans la refonte `mg4` :** protection des routes administrateur (`auth:admin`) et étudiant (`auth`), index unique
+`etudiant_id` + `vote_id`, contrôle des dates du scrutin, suppression des listes, tests automatisés, fichier `.env.example`.
 
 **Pistes d'amélioration :**
-- Protéger les routes administrateur par un middleware (`auth:admin`) et la page de vote par `auth`.
-- Renforcer l'unicité du vote au niveau de la base (index unique `etudiant_id` + `vote_id`) en plus du contrôle applicatif.
-- Contrôler les dates de début et de fin du scrutin avant d'accepter un vote.
-- Ajouter la réinitialisation des votes et la modification/suppression des listes côté administrateur.
-- Ajouter des tests automatisés (PHPUnit) sur l'inscription et le vote.
+- Séparer l'identité du votant du contenu du bulletin (émargement d'un côté, urne anonyme de l'autre) pour garantir le secret du vote vis-à-vis de l'administrateur de la base.
+- Vérification de l'adresse e-mail et réinitialisation du mot de passe par e-mail.
+- Double authentification pour l'espace administrateur et journal des actions d'administration.
+- Gestion des membres d'une liste et modification d'une liste depuis l'interface d'administration.
+- Remplacer l'interrogation périodique (5 s) par des WebSockets si le nombre d'électeurs connectés devient important.
 
 ---
 

@@ -2,51 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VoteEtudiant;
-use Illuminate\Http\Request;
 use App\Models\Etudiant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class inscription_controller extends Controller
 {
-    public function showInscriptionForm()
-    {
-        return view('user.inscription'); // Votre formulaire d'inscription
-    }
-
     public function register(Request $request)
     {
-        // Validation des données du formulaire
-        $data = $request->validate([
-            'prenom' => 'required|string|max:255',
-            'nom'    => 'required|string|max:255',
-            'code'   => [
-                'required',
-                'string',
-                'max:255',
-                'unique:etudiants,code_etudiant',
-                Rule::exists('etudiant_officiels', 'code') // Le code doit exister dans la table etudiant_officiels
+        $request->merge([
+            'email' => mb_strtolower(trim((string) $request->input('email'))),
+            'code' => trim((string) $request->input('code')),
+        ]);
+
+        $donnees = $request->validate([
+            'prenom' => ['required', 'string', 'max:100', "regex:/^[\pL\s'\-]+$/u"],
+            'nom' => ['required', 'string', 'max:100', "regex:/^[\pL\s'\-]+$/u"],
+            'code' => [
+                'required', 'string', 'max:50',
+                // Seuls les étudiants validés par l'université peuvent s'inscrire…
+                Rule::exists('etudiant_officiels', 'code'),
+                // … et un code ne peut servir qu'à un seul compte.
+                Rule::unique('etudiants', 'code_etudiant'),
             ],
-            'email'  => 'required|email|max:255|unique:etudiants,email',           
-            'ufr'    => 'required|exists:u_f_r_s,id_ufr', // Vérifie que l'ID de l'UFR existe dans la table u_f_r_s
-            'password' => 'required|string|min:6|confirmed', // Le champ password_confirmation doit être présent dans le formulaire
+            'email' => ['required', 'email', 'max:255', Rule::unique('etudiants', 'email')],
+            'ufr' => ['required', Rule::exists('u_f_r_s', 'id_ufr')],
+            'password' => ['required', 'confirmed', 'max:255', Password::min(8)->letters()->numbers()],
+        ], [
+            'prenom.regex' => 'Le prénom ne doit contenir que des lettres.',
+            'nom.regex' => 'Le nom ne doit contenir que des lettres.',
+            'code.exists' => "Ce code étudiant n'est pas reconnu par l'université.",
+            'code.unique' => 'Un compte existe déjà pour ce code étudiant.',
+            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+            'password.confirmed' => 'Les deux mots de passe ne correspondent pas.',
+        ], [
+            'prenom' => 'prénom',
+            'code' => 'code étudiant',
+            'email' => 'adresse e-mail',
+            'ufr' => 'UFR',
+            'password' => 'mot de passe',
         ]);
 
-        // Création de l'étudiant en base de données
-        $etudiant = Etudiant::create([
-            'prenom'        => $data['prenom'],
-            'nom'           => $data['nom'],
-            'code_etudiant' => $data['code'],  // Correspond à votre champ code dans le formulaire
-            'email'          => $data['email'],
-            'ufr_id'        => $data['ufr'],
-            'mdp'           => Hash::make($data['password']),
+        Etudiant::create([
+            'prenom' => $donnees['prenom'],
+            'nom' => $donnees['nom'],
+            'code_etudiant' => $donnees['code'],
+            'email' => $donnees['email'],
+            'ufr_id' => $donnees['ufr'],
+            'mdp' => Hash::make($donnees['password']),
         ]);
 
-       
-
-        // Redirection vers la page de  connexion
-        return redirect()->route('login')->with('success', 'Inscription réussie !');
+        return redirect()->route('login')
+            ->with('success', 'Inscription réussie ! Connectez-vous pour voter.');
     }
 }

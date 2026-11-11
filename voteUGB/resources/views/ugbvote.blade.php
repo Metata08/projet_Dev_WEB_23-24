@@ -1,223 +1,161 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="description1" content="Plateforme de vote en ligne pour l'élection des représentants étudiants de l'UGB">
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/accueil.css') }}">
+@section('contenu')
+@php
+    $titre = ['Élection', 'du', 'représentant', 'des', 'étudiants'];
+    $etapes = [
+        ["S'inscrire", 'Créez votre compte avec votre code étudiant officiel.'],
+        ['Se connecter', 'Accédez à votre espace personnel sécurisé.'],
+        ['Choisir une liste', 'Comparez les listes et leurs programmes.'],
+        ['Voter', 'Exprimez votre choix : un vote, une voix.'],
+        ['Résultats', 'Suivez le dépouillement en temps réel.'],
+    ];
+@endphp
 
-    <title>UGBvote</title>
-    <link href="https://fonts.googleapis.com/css?family=Audiowide&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Aclonica&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-
-
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-5.3.3-dist/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/systemeDeVote.css') }}">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</head>
-<!-- header -->
-<header class="">
-    <div class="header-principal w-100 ">
-        <nav class="navbar navbar-expand-lg ">
-            <!-- Logo -->
-            <div class="frugb-vote me-auto">
-                <a href="{{ route('ugbvote') }}">
-                    <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                </a>
+<section class="hero">
+    <canvas class="hero-toile" data-particules aria-hidden="true"></canvas>
+    <div class="container hero-grille">
+        <div class="hero-texte">
+            <span class="pill"><span class="point point-vif"></span> Université Gaston Berger · Saint-Louis</span>
+            <h1 class="titre-xl">
+                @foreach ($titre as $i => $mot)
+                    <span class="mot @if ($i === 2) texte-degrade @endif" data-i="{{ $i }}">{{ $mot }}</span>
+                @endforeach
+            </h1>
+            <p class="chapo reveal"><strong>Votre avenir, votre voix.</strong> Élisez des représentants engagés pour vous, depuis votre téléphone, votre tablette ou votre ordinateur — en quelques secondes.</p>
+            <div class="hero-cta reveal" data-i="1">
+                @auth('web')
+                    <a class="btn btn-primary btn-lg" href="{{ route('election') }}">Accéder au vote <x-icon name="arrow-right" class="icon-fleche" /></a>
+                    <a class="btn btn-lg" href="{{ route('resultat') }}"><x-icon name="chart" /> Résultats en direct</a>
+                @else
+                    <a class="btn btn-primary btn-lg" href="{{ route('login') }}">Se connecter <x-icon name="arrow-right" class="icon-fleche" /></a>
+                    <a class="btn btn-lg" href="{{ route('inscription') }}">Créer mon compte</a>
+                @endauth
             </div>
-
-            <!-- Bouton toggle pour les petits écrans -->
-            <button type="button" title="toggle" class="navbar-toggler d-lg-none ms-auto" type="button"
-                data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Liens et pseudo -->
-            <div class="liens-speudo collapse navbar-collapse justify-content-end " id="navbarNav">
-                <ul class="navbar-nav  liens  d-flex justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-4">
-
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <div class="frame-5">
-
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Pseudo à droite -->
-                <div class="pseudo me-5 justify-content-end">
-                    <div class="frame-36">
-                        <div class="avatar-block">
-
-                            <a href="{{ route('login') }}" class="text-decoration-none">
-                                <button class="confirm-button">
-                                    <span class="button-text">Se Connecter</span>
-                                    <div class="icon-container">
-
-                                        <img alt="icon" class="check-square" src="{{asset('image/user_icons/log-in.png') }}" />
-
-                                    </div>
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </nav>
-        <!-- image-header -->
-
-
-
-        <div class="imageHeader">
-            <img alt="img" class="design-sans-titre-1" src="{{ asset('image/user_image/image-header.png') }}" />
-            <div class="election-du-repr-sentant-des-tudiants">
-                Election du représentant des étudiants
-            </div>
+            <ul class="hero-preuves reveal" data-i="2">
+                <li><x-icon name="check-circle" /> Un seul vote par étudiant</li>
+                <li><x-icon name="check-circle" /> Résultats en temps réel</li>
+                <li><x-icon name="check-circle" /> 100 % responsive</li>
+            </ul>
         </div>
 
+        <div class="scene reveal" data-i="2" data-inclinaison>
+            <div class="scene-carte" data-inclinaison-cible>
+                <div class="scene-entete">
+                    <span class="rangee"><x-icon name="vote" /> Urne numérique</span>
+                    <span class="pill pill-ok"><span class="point point-vif"></span> En direct</span>
+                </div>
+                <svg class="urne" viewBox="0 0 320 210" role="img" aria-label="Un bulletin glisse dans l'urne">
+                    <defs>
+                        <linearGradient id="g-urne" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#ab775b"/><stop offset="1" stop-color="#522504"/>
+                        </linearGradient>
+                        <clipPath id="c-fente"><rect x="0" y="-60" width="320" height="162"/></clipPath>
+                    </defs>
+                    <g clip-path="url(#c-fente)">
+                        <g class="bulletin">
+                            <rect x="118" y="26" width="84" height="64" rx="7" fill="#fff" stroke="#e7d2c2" stroke-width="2"/>
+                            <path d="M134 50h34M134 62h52M134 74h24" stroke="#d3a98f" stroke-width="5" stroke-linecap="round"/>
+                            <path d="m172 46 6 6 11-12" fill="none" stroke="#522504" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </g>
+                    <rect x="56" y="100" width="208" height="16" rx="8" fill="#3d1b04"/>
+                    <rect x="112" y="105" width="96" height="6" rx="3" fill="#1c0b01"/>
+                    <path d="M66 116h188l-10 78a10 10 0 0 1-10 9H86a10 10 0 0 1-10-9z" fill="url(#g-urne)"/>
+                    <text x="160" y="170" text-anchor="middle" fill="#f0e0d0" font-family="Sora, sans-serif" font-weight="700" font-size="26" letter-spacing="6">VOTE</text>
+                    <g class="eclat" fill="#ab775b">
+                        <circle cx="96" cy="88" r="4"/><circle cx="224" cy="88" r="4"/><circle cx="74" cy="72" r="3"/><circle cx="246" cy="72" r="3"/><circle cx="160" cy="70" r="3"/>
+                    </g>
+                </svg>
+                <div class="scene-barres" data-demo-barres>
+                    <div class="mini-barre"><span>Liste A</span><i><b data-largeur="64"></b></i><span>64 %</span></div>
+                    <div class="mini-barre"><span>Liste B</span><i><b data-largeur="27"></b></i><span>27 %</span></div>
+                    <div class="mini-barre"><span>Liste C</span><i><b data-largeur="9"></b></i><span>9 %</span></div>
+                </div>
+            </div>
+            <div class="bulle bulle-1"><x-icon name="check-circle" /> A voté !</div>
+            <div class="bulle bulle-2"><x-icon name="shield" /> Vote unique garanti</div>
+        </div>
     </div>
+</section>
 
-</header>
-<!-- contenu -->
-
-<body>
-
-    <main class=" container-fluid " role="main">
-        <section aria-labelledby="process-title">
-            <!-- carousel -->
-
-
-            <div class="text-center p-3 mt-3 ">
-                <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-                    <div class="  carousel-inner ">
-                        <div class="carousel-item  active" data-bs-interval="5000">
-                            <img src="{{ asset('image/carousel/inscription.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
-                        </div>
-                        <div class="carousel-item " data-bs-interval="5000">
-                            <img src="{{ asset('image/carousel/Connecter.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
-                        </div>
-                        <div class="carousel-item ">
-                            <img src="{{ asset('image/carousel/choisir.png  ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
-                        </div>
-                        <div class="carousel-item " data-bs-interval="5000">
-                            <img src="{{ asset('image/carousel/voter.png ') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
-                        </div>
-                        <div class="carousel-item " data-bs-interval="5000">
-                            <img src="{{ asset('image/carousel/resultats.png') }}" class="d-block w-50 my-auto mx-auto rounded img-fluid" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually text-secondary">Précédent</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually text-secondary">Suivant</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="content-section container-fluid  addEventListener  ">
-                <div class="explication">
-                    <div class="section1">
-                        <div class="text-center p-3">
-                            <div class="number" aria-hidden="true">1</div>
-                            <div class="card1">
-                                <h2>Connexion</h2>
-                                <div class="description1">Accédez à votre compte</div>
-                            </div>
-                        </div>
-                        <div class="text-center p-3">
-                            <div class="number" aria-hidden="true">2</div>
-                            <div class="card1">
-                                <h2>Choisir une liste</h2>
-                                <div class="description1">Vous avez le choix entre ces listes</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="section2">
-                        <div class="text-center p-3">
-                            <div class="number" aria-hidden="true">3</div>
-                            <div class="card1">
-                                <h2>Voter</h2>
-                                <div class="description1">Exprimez votre choix</div>
-                            </div>
-                        </div>
-                        <div class="text-center p-3">
-                            <div class="number" aria-hidden="true">4</div>
-                            <div class="card1">
-                                <h2>Résultats</h2>
-                                <div class="description1">Découvrez les résultats</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="slogan">
-                    <h2 class="texte">Votre avenir, votre voix.</h2>
-                    <p>Élisez des représentants engagés pour vous !</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-
-</body>
-<!-- footer -->
-<footer class="footer container-fluid">
-    <div class="row align-items-center text-center p-3 text-md-start">
-
-        <!-- Logo et réseaux sociaux -->
-        <div class="col-md-4 d-flex flex-column align-items-center">
-            <div class=" logo-footer ">
-                <div class="frugb-vote">
-                    <a href="{{ route('ugbvote') }}">
-                        <img alt="img" class="ugb-vote-1" src="{{ asset('image/user_image/logoUBGvote.png') }}" />
-                    </a>
-                </div>
-                <div class="button-list d-flex justify-content-center ">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/imasex.png') }}" alt="Twitter">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-instagram0.svg') }}" alt="Instagram">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/logo-you-tube0.svg') }}" alt="YouTube">
-                    <img class="img-fluid" src="{{ asset('image/user_icons/linked-in0.svg') }}" alt="LinkedIn">
-                </div>
-            </div>
+<section class="section-serree">
+    <div class="container">
+        <div class="card chiffres reveal">
+            <div class="chiffre"><strong data-compteur="{{ $chiffres['ufr'] }}">{{ $chiffres['ufr'] }}</strong><span>UFR participantes</span></div>
+            <div class="chiffre"><strong data-compteur="{{ $chiffres['listes'] }}">{{ $chiffres['listes'] }}</strong><span>Listes candidates</span></div>
+            <div class="chiffre"><strong data-compteur="{{ $chiffres['inscrits'] }}">{{ $chiffres['inscrits'] }}</strong><span>Étudiants inscrits</span></div>
+            <div class="chiffre"><strong data-compteur="{{ $chiffres['votes'] }}">{{ $chiffres['votes'] }}</strong><span>Votes exprimés</span></div>
         </div>
-
-        <!-- Copyright -->
-        <div class="col-md-4 text-center p-3">
-            <p class="_2025-ugb-vote">© 2025 UGBVote</p>
-        </div>
-
-        <!-- Liens utiles -->
-        <div class="col-md-4 text-center p-3">
-            <div class="lienutiles align-items-start">
-                <p class="lien-utiles-www-ugb-sn-portail-ugbnumerique-sn">
-                    <strong>Lien Utiles</strong><br>
-                    <a href="https://www.ugb.sn" class="text-decoration-none" target="_blank">www.ugb.sn</a><br>
-                    <a href="https://portail.ugbnumerique.sn" class="text-decoration-none" target="_blank">portail.ugbnumerique.sn</a>
-
-                </p>
-            </div>
-        </div>
-
     </div>
-</footer>
+</section>
 
-</html>
+<section class="section" id="etapes">
+    <div class="container">
+        <div class="centre stack reveal">
+            <span class="surtitre"><x-icon name="sparkles" /> Comment ça marche</span>
+            <h2 class="titre-l">Voter en cinq étapes, sans file d'attente</h2>
+            <p class="chapo">Du premier clic à la proclamation des résultats, tout se passe en ligne.</p>
+        </div>
+        <ol class="etapes" data-progres>
+            @foreach ($etapes as $i => [$nom, $texte])
+                <li class="card card-survol halo etape reveal" data-i="{{ $i }}">
+                    <span class="etape-num">{{ $i + 1 }}</span>
+                    <h3 class="titre-s">{{ $nom }}</h3>
+                    <p>{{ $texte }}</p>
+                </li>
+            @endforeach
+        </ol>
+    </div>
+</section>
+
+<section class="section" id="garanties">
+    <div class="container">
+        <div class="centre stack reveal">
+            <span class="surtitre"><x-icon name="shield" /> Nos garanties</span>
+            <h2 class="titre-l">Une élection transparente, accessible et fiable</h2>
+        </div>
+        <div class="bento">
+            <article class="card card-pad card-survol halo large reveal">
+                <span class="pastille-icone"><x-icon name="lock" /></span>
+                <h3 class="titre-m">Un étudiant, un vote</h3>
+                <p>Chaque bulletin est rattaché à un compte vérifié. Le double vote est bloqué par la base de données elle-même : aucune fraude possible, même en cas de clics multiples.</p>
+            </article>
+            <article class="card card-pad card-survol halo large reveal" data-i="1">
+                <span class="pastille-icone"><x-icon name="zap" /></span>
+                <h3 class="titre-m">Résultats en temps réel</h3>
+                <p>Le dépouillement se met à jour automatiquement, sans recharger la page. Suivez la participation et le classement des listes à la seconde près.</p>
+            </article>
+            <article class="card card-pad card-survol halo reveal">
+                <span class="pastille-icone"><x-icon name="id" /></span>
+                <h3 class="titre-s">Réservé aux étudiants validés</h3>
+                <p>L'inscription exige un code étudiant officiel reconnu par l'université.</p>
+            </article>
+            <article class="card card-pad card-survol halo reveal" data-i="1">
+                <span class="pastille-icone"><x-icon name="building" /></span>
+                <h3 class="titre-s">Chaque UFR, son scrutin</h3>
+                <p>Vous ne voyez et ne votez que pour les listes de votre propre UFR.</p>
+            </article>
+            <article class="card card-pad card-survol halo reveal" data-i="2">
+                <span class="pastille-icone"><x-icon name="smartphone" /></span>
+                <h3 class="titre-s">Partout, sur tout écran</h3>
+                <p>Mobile, tablette, ordinateur : l'interface s'adapte, en clair comme en sombre.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section-serree">
+    <div class="container">
+        <div class="bandeau reveal">
+            <h2 class="titre-l">Votre avenir, votre voix.</h2>
+            <p>Élisez des représentants engagés pour vous !</p>
+            @auth('web')
+                <a class="btn btn-lg" href="{{ route('election') }}">Voter maintenant <x-icon name="arrow-right" class="icon-fleche" /></a>
+            @else
+                <a class="btn btn-lg" href="{{ route('inscription') }}">Je m'inscris <x-icon name="arrow-right" class="icon-fleche" /></a>
+            @endauth
+        </div>
+    </div>
+</section>
+@endsection

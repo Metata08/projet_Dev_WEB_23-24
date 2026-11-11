@@ -16,15 +16,15 @@ class UgbvoteSeeder extends Seeder
         DB::table('votes')->insert([
             [
                 'id_vote'   => 1,
-                'date_debut'=> '2025-04-04',
-                'date_fin'  => '2025-05-05',
+                'date_debut'=> now()->subDays(3)->toDateString(),
+                'date_fin'  => now()->addDays(12)->toDateString(),
                 'created_at'=> now(),
                 'updated_at'=> now(),
             ],
             [
                 'id_vote'   => 2,
-                'date_debut'=> '2025-04-06',
-                'date_fin'  => '2025-04-15',
+                'date_debut'=> now()->addDays(5)->toDateString(),
+                'date_fin'  => now()->addDays(14)->toDateString(),
                 'created_at'=> now(),
                 'updated_at'=> now(),
             ],
@@ -41,6 +41,20 @@ class UgbvoteSeeder extends Seeder
             [
                 'id_ufr'    => 2,
                 'nom'       => 'sjp',
+                'vote_id'   => 2,
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+            [
+                'id_ufr'    => 3,
+                'nom'       => 'lsh',
+                'vote_id'   => 2,
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+            [
+                'id_ufr'    => 4,
+                'nom'       => 's2ata',
                 'vote_id'   => 2,
                 'created_at'=> now(),
                 'updated_at'=> now(),
@@ -96,6 +110,24 @@ class UgbvoteSeeder extends Seeder
                 'code'      => 'p310001',
                 'created_at'=> '2025-04-02 17:37:55',
                 'updated_at'=> '2025-04-02 17:37:57',
+            ],
+            [
+                'id'        => 9,
+                'code'      => 'p31 3001', // code libre : permet de tester l'inscription
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+            [
+                'id'        => 10,
+                'code'      => 'p31 3002', // code libre : permet de tester l'inscription
+                'created_at'=> now(),
+                'updated_at'=> now(),
+            ],
+            [
+                'id'        => 11,
+                'code'      => 'p31 3003', // code libre : permet de tester l'inscription
+                'created_at'=> now(),
+                'updated_at'=> now(),
             ],
         ]);
         
@@ -196,7 +228,7 @@ class UgbvoteSeeder extends Seeder
         DB::table('listes')->insert([
             [
                 'id_list'   => 1,
-                'programme' => 'programme d\'election de la liste',
+                'programme' => "Un campus connecté : Wi-Fi fiable dans toutes les salles et résidences.\nDes salles d'étude ouvertes plus tard en période d'examens.\nUn guichet unique pour les démarches de bourse et d'inscription.\nDes ateliers CV, stages et insertion professionnelle chaque semestre.",
                 'name_list' => 'Convergeons vers un avenir meilleur',
                 'ufr_id'    => 1,
                 'created_at'=> now(),
@@ -204,7 +236,7 @@ class UgbvoteSeeder extends Seeder
             ],
             [
                 'id_list'   => 2,
-                'programme' => 'programme d\'election de la liste',
+                'programme' => "Des hackathons et clubs tech ouverts à toutes les filières.\nUne restauration de qualité à prix étudiant.\nPlus de transparence : un compte rendu public après chaque conseil d'UFR.\nUn fonds de solidarité pour les étudiants en difficulté.",
                 'name_list' => 'craquer pour crack',
                 'ufr_id'    => 1,
                 'created_at'=> now(),
@@ -288,7 +320,7 @@ class UgbvoteSeeder extends Seeder
                 'etudiant_id' => 1, // Id de l'étudiant
                 'vote_id'     => 1, // Id du vote
                 'list_id'     => 1, // Id de la liste
-                'voted_at'    => '2025-04-01 13:01:25', // Date du vote
+                'voted_at'    => now()->subDays(2), // Date du vote
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -296,7 +328,7 @@ class UgbvoteSeeder extends Seeder
                 'etudiant_id' => 2, // Id de l'étudiant
                 'vote_id'     => 1, // Id du vote
                 'list_id'     => 2, // Id de la liste
-                'voted_at'    => '2025-04-01 17:43:01', // Date du vote
+                'voted_at'    => now()->subDays(2), // Date du vote
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -304,7 +336,7 @@ class UgbvoteSeeder extends Seeder
                 'etudiant_id' => 3, // Id de l'étudiant
                 'vote_id'     => 1, // Id du vote
                 'list_id'     => 1, // Id de la liste
-                'voted_at'    => '2025-04-02 01:14:54', // Date du vote
+                'voted_at'    => now()->subDay(), // Date du vote
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -312,7 +344,7 @@ class UgbvoteSeeder extends Seeder
                 'etudiant_id' => 4, // Id de l'étudiant
                 'vote_id'     => 1, // Id du vote
                 'list_id'     => 2, // Id de la liste
-                'voted_at'    => '2025-04-02 17:21:45', // Date du vote
+                'voted_at'    => now()->subDay(), // Date du vote
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -320,7 +352,7 @@ class UgbvoteSeeder extends Seeder
                 'etudiant_id' => 5, // Id de l'étudiant
                 'vote_id'     => 1, // Id du vote
                 'list_id'     => 3, // Id de la liste
-                'voted_at'    => '2025-04-02 18:44:55', // Date du vote
+                'voted_at'    => now()->subHours(5), // Date du vote
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -331,7 +363,7 @@ class UgbvoteSeeder extends Seeder
             'id'   => 1,
             'name' => 'Admin principal',
             'email'=> 'admin@gmail.com',
-            'password' => 'admin123',
+            'password' => Hash::make('admin123'),
             'created_at'=> now(),
             'updated_at'=> now(),
         ]);

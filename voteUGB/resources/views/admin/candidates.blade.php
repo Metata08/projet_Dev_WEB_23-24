@@ -1,118 +1,91 @@
-@include('admin.includes.session')
-@include('admin.includes.slugify')
-@include('admin.includes.header')
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+@extends('layouts.admin')
+@section('titre', 'Listes')
 
-  @include('admin.includes.navbar')
-  @include('admin.includes.menubar')
+@section('actions')
+    <button type="button" class="btn btn-primary btn-sm" data-ouvrir="#modale-liste"><x-icon name="plus" /> <span class="bureau-seul">Ajouter une liste</span></button>
+@endsection
 
- 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-         <!-- Bouton pour ouvrir le pop-up -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addListModal">
-        Ajouter une liste
-    </button>
-      <h1>
-        Listes
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="{{ route('dashboardAdmin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Listes</li>
-      </ol>
-    </section>
+@section('contenu')
+<section class="card reveal">
+    <div class="card-pad rangee entre">
+        <div>
+            <h2 class="titre-m">{{ $listesC->count() }} liste(s) candidate(s)</h2>
+            <p class="doux petit">Les étudiants ne voient que les listes de leur UFR.</p>
+        </div>
+        <label class="recherche">
+            <span class="sr-only">Rechercher une liste</span>
+            <x-icon name="search" />
+            <input type="search" placeholder="Rechercher une liste…" data-filtre="#table-listes">
+        </label>
+    </div>
 
+    @if ($listesC->isEmpty())
+        <div class="vide"><span class="pastille-icone"><x-icon name="list" /></span><h3 class="titre-m">Aucune liste</h3><p>Ajoutez la première liste candidate.</p></div>
+    @else
+        <div class="table-zone">
+            <table class="table" id="table-listes">
+                <thead>
+                    <tr><th>Liste</th><th>UFR</th><th>Membres</th><th>Voix</th><th class="droite">Action</th></tr>
+                </thead>
+                <tbody>
+                    @foreach ($listesC as $liste)
+                        <tr>
+                            <td class="principal">
+                                <div class="identite">
+                                    <span class="avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($liste->name_list, 0, 1)) }}</span>
+                                    <div><strong>{{ $liste->name_list }}</strong><span class="tronque">{{ $liste->programme }}</span></div>
+                                </div>
+                            </td>
+                            <td data-titre="UFR"><span class="pill pill-accent">{{ $liste->ufr?->sigle ?? '—' }}</span></td>
+                            <td data-titre="Membres">{{ $liste->membres_count }}</td>
+                            <td data-titre="Voix"><strong>{{ $liste->vote_etudiants_count }}</strong></td>
+                            <td data-titre="Action" class="droite">
+                                <form method="POST" action="{{ route('deleteListe', $liste->id_list) }}" data-confirm="Supprimer la liste « {{ $liste->name_list }} » ? Les votes qu'elle a reçus seront également supprimés." data-confirm-titre="Supprimer la liste" data-confirm-action="Supprimer" data-confirm-danger>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" aria-label="Supprimer la liste {{ $liste->name_list }}"><x-icon name="trash" /> Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p class="vide doux" data-aucun hidden>Aucun résultat pour cette recherche.</p>
+        </div>
+    @endif
+</section>
 
-    <!-- Main content -->
-    <section class="content">
-    @if(isset($listesC) && $listesC->count() > 0)
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Nom de la Liste</th>
-                <th scope="col">Programme</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($listesC as $liste)
-                <tr>
-                    <td>{{ $liste->name_list }}</td>
-                    <td>{{ $liste->programme }}</td>
-                    <td>
-                        <!-- Bouton de suppression -->
-                        <form action="{{ route('deleteElecteur', $liste->id_list) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE') <!-- Utiliser DELETE au lieu de POST -->
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet électeur ?')">
-                                <i class="fa fa-trash"></i>
-                            
-                            </button>
-                        </form>
-
-                        <!-- Bouton d'édition -->
-                        <a href="#" class="btn btn-secondary">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-@else
-    <p class="text-center">Aucun électeur trouvé.</p>
-@endif
-    </section>
-  </div>
-  
-  @include('admin.includes.footer')
-
-</div>
-
- <!-- Fenêtre modale -->
-<div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Ajouter une liste</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<dialog class="modale" id="modale-liste" aria-labelledby="modale-liste-titre" @if ($errors->any()) data-ouverte @endif>
+    <form method="POST" action="{{ route('enregistrerList') }}" data-envoi>
+        @csrf
+        <div class="modale-corps">
+            <h2 class="titre-m" id="modale-liste-titre">Ajouter une liste</h2>
+            <div class="champ">
+                <label for="nom">Nom de la liste</label>
+                <input class="sans-icone" type="text" id="nom" name="nom" value="{{ old('nom') }}" maxlength="120" required>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('enregistrerList') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="nom" class="form-label">Nom de la liste</label>
-                        <input type="text" class="form-control" id="nom" name="nom" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="programme" class="form-label">Programme</label>
-                        <textarea class="form-control" id="programme" name="programme" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="ufr" class="form-label">UFR</label>
-                        <select class="form-select" id="ufr" name="ufr" required>
-                            <option value="">Veuillez sélectionner votre UFR</option>
-                            @foreach(App\Models\UFR::all() as $ufr)
-                                <option value="{{ $ufr->nom }}" {{ old('ufr') == $ufr->nom ? 'selected' : '' }}>
-                                    {{ $ufr->nom }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                </form>
+            <div class="champ">
+                <label for="ufr">UFR</label>
+                <div class="champ-controle">
+                    <select class="sans-icone" id="ufr" name="ufr" required>
+                        <option value="">Sélectionnez une UFR</option>
+                        @foreach ($ufrs as $ufr)
+                            <option value="{{ $ufr->id_ufr }}" @selected(old('ufr') == $ufr->id_ufr)>{{ $ufr->sigle }}</option>
+                        @endforeach
+                    </select>
+                    <x-icon name="chevron-down" class="champ-chevron" />
+                </div>
+            </div>
+            <div class="champ">
+                <label for="programme">Programme</label>
+                <textarea id="programme" name="programme" maxlength="10000" required placeholder="Une proposition par ligne…">{{ old('programme') }}</textarea>
+                <span class="champ-aide">Astuce : une proposition par ligne pour un affichage en liste à puces.</span>
             </div>
         </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-@include('admin.includes.scripts')
-</body>
-</html>
+        <div class="modale-actions">
+            <button type="button" class="btn" data-fermer>Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</dialog>
+@endsection

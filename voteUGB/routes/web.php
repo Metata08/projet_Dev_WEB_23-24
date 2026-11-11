@@ -1,109 +1,71 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\inscription_controller;
 use App\Http\Controllers\login_controller;
-use App\Http\Controllers\ResultatController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user_controller;
-// use App\Http\Controllers\Auth\login_controller;
-use App\Http\Controllers\EtudiantController;
-use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Pages publiques
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [login_controller::class, 'accueil']);
+Route::get('/ugbvote', [login_controller::class, 'accueil'])->name('ugbvote');
 
-Route::get('/', function () {
-    return view('ugbvote');
+/*
+|--------------------------------------------------------------------------
+| Authentification des étudiants
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest:web')->group(function () {
+    Route::get('/login', [login_controller::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [login_controller::class, 'login'])->middleware('throttle:connexion')->name('login.post');
+    Route::get('/inscription', [login_controller::class, 'inscription'])->name('inscription');
+    Route::post('/inscription', [inscription_controller::class, 'register'])->middleware('throttle:inscription')->name('inscription.register');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Espace étudiant (authentification obligatoire)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:web')->group(function () {
+    Route::post('/logout', [login_controller::class, 'logout'])->name('logout');
 
-// Définir la route pour la page de  ugbvote
-Route::get('/ugbvote', [login_controller::class, 'accueil' ])->name('ugbvote');
+    Route::get('/election', [user_controller::class, 'election'])->name('election');
+    Route::get('/detailListe/{id}', [user_controller::class, 'detailListe'])->whereNumber('id')->name('detailListe');
+    Route::get('/systemevote/{id}', [user_controller::class, 'showSystemeVote'])->whereNumber('id')->name('systemevote');
+    Route::post('/systemevote/{id}', [user_controller::class, 'storeVote'])->whereNumber('id')->middleware('throttle:vote')->name('systemevote.vote');
 
-Route::get('/login', [login_controller::class, 'showLoginForm'])->name('login');
-
-Route ::get ('/inscription', [login_controller::class, 'inscription'])->name('inscription');
-
-Route::get('/election', [user_controller::class, 'election'])->name('election');
-
-Route::get('/detailListe/{id}', [user_controller::class, 'detailListe'])->name('detailListe');
-
-
-
-// Définir la route pour la page resultat
-Route::get('/resultat', [user_controller::class, 'resultat'])->name('resultat');
-
-
-// pour la connexion pour les user
-
-Route::post('/login', [login_controller::class, 'login'])->name('login.post');
-Route::post('/logout', [login_controller::class, 'logout'])->name('logout');
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/election', function () {
-        return view('user.election'); 
-    })->name('election');
+    Route::get('/resultat', [user_controller::class, 'resultat'])->name('resultat');
+    Route::get('/resultats/json', [user_controller::class, 'resultatsJson'])->name('resultats.json');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Espace administrateur (garde « admin »)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest:admin')->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::post('/admin/login', [AdminController::class, 'loginAdmin'])->middleware('throttle:connexion')->name('admin.login');
+});
 
-Route::post('/inscription', [inscription_controller::class, 'register'])->name('inscription.register');
+Route::middleware('auth:admin')->prefix('admin')->group(function () {
+    Route::post('/logout', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
 
-// Définir la route pour la page systemVote 
-Route::get('/systemevote/{id}', [user_controller::class, 'showSystemeVote'])->name('systemevote');
-Route::post('/systemevote/{id}', [user_controller::class, 'storeVote'])->name('systemevote.vote');
+    Route::get('/tableau-de-bord', [AdminController::class, 'dashboardAdmin'])->name('dashboardAdmin');
+    Route::get('/stats.json', [AdminController::class, 'statsJson'])->name('admin.stats');
 
-// Afficher la page de connexion
-Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/electeurs', [AdminController::class, 'listeElecteurs'])->name('listeElecteurs');
+    Route::delete('/electeurs/{id}', [AdminController::class, 'deleteElecteur'])->whereNumber('id')->name('deleteElecteur');
 
-// Vérifier l'authentification
-Route::post('/admin/login', [AdminController::class, 'loginAdmin'])->name('admin.login');
+    Route::get('/listes', [AdminController::class, 'listeCandidats'])->name('listeCandidats');
+    Route::post('/listes', [AdminController::class, 'enregistrerList'])->name('enregistrerList');
+    Route::delete('/listes/{id}', [AdminController::class, 'deleteListe'])->whereNumber('id')->name('deleteListe');
 
-Route::get('/dashboardAdmin', [AdminController::class, 'dashboardAdmin'])->name('dashboardAdmin');
-Route::post('/logoutAdmin', [AdminController::class, 'logoutAdmin'])->name('logoutAdmin');
-Route::get('/listeCandidats', [AdminController::class, 'listeCandidats'])->name('listeCandidats');
-Route::get('/listePostes', [AdminController::class, 'listePostes'])->name('listePostes');
-Route::get('/afficherEtudiant', [AdminController::class, 'afficherEtudiant'])->name('afficherEtudiant');
-Route::get('/listeElecteurs', [AdminController::class, 'listeElecteurs'])->name('listeElecteurs');
-
-Route::delete('/deleteElecteur/{id}', [AdminController::class, 'deleteElecteur'])->name('deleteElecteur');
-Route::post('/enregistrer-list', [AdminController::class, 'enregistrerList'])->name('enregistrerList');
-
-
-
-use Illuminate\Support\Facades\DB;
-
-Route::get('/resultats/json', function () {
-    // 1) récupérer tous les résultats agrégés
-    $positions = DB::table('vote_etudiants')
-        ->join('listes', 'vote_etudiants.list_id', '=', 'listes.id_list')
-        ->join('u_f_r_s', 'u_f_r_s.id_ufr', '=', 'listes.ufr_id')
-        ->select(
-            'u_f_r_s.nom as position',
-            'listes.name_list as candidat',
-            DB::raw('COUNT(vote_etudiants.id) as nombre_de_votes')
-        )
-        ->groupBy('u_f_r_s.nom', 'listes.id_list')
-        ->orderBy('u_f_r_s.nom')
-        ->orderByDesc('nombre_de_votes')
-        ->get();
-
-    // 2) total des votes
-    $total = DB::table('vote_etudiants')->count();
-
-    // 3) formater le résultat en calculant le pourcentage
-    $resultats = $positions->map(function($row) use($total){
-        $votes = (int)$row->nombre_de_votes;
-        $pct = $total > 0
-            ? round( ($votes / $total) * 100 , 2 )
-            : 0;
-        return [
-            'liste'       => $row->candidat,
-            'votes'       => $votes,
-            'pourcentage' => $pct,
-        ];
-    });
-
-    return Response::json([
-        'total_votes' => $total,
-        'resultats'   => $resultats,
-    ]);
-})->name('resultats.json');
-
+    Route::get('/scrutins', [AdminController::class, 'listePostes'])->name('listePostes');
+    Route::put('/scrutins/{id}', [AdminController::class, 'majScrutin'])->whereNumber('id')->name('majScrutin');
+});

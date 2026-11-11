@@ -2,75 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Etudiant;
 use App\Models\Listes;
-use Illuminate\View\View;
+use App\Models\UFR;
+use App\Models\VoteEtudiant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class login_controller extends Controller
 {
-    // Accueil
+    /** Page d'accueil publique, avec quelques chiffres clés. */
     public function accueil()
     {
-        return view('ugbvote');
+        return view('ugbvote', [
+            'chiffres' => [
+                'ufr' => UFR::count(),
+                'listes' => Listes::count(),
+                'inscrits' => Etudiant::count(),
+                'votes' => VoteEtudiant::count(),
+            ],
+        ]);
     }
 
-    // Formulaire de connexion
     public function showLoginForm()
     {
         return view('user.login');
     }
 
-
-
-    // inscription
     public function inscription()
     {
-        return view('user.inscription');
+        return view('user.inscription', ['ufrs' => UFR::orderBy('nom')->get()]);
     }
 
-    // Traitement de la connexion
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
+        $identifiants = $request->validate([
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|max:255',
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $identifiants['email'] = mb_strtolower(trim($identifiants['email']));
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = Auth::user();
-            // $request->session()->put('ufr_id', $user->ufr_id);
-
-            // Récupérer les listes pour l'UFR de l'étudiant
-            $listes = Listes::where('ufr_id', $user->ufr_id)->get();
-
-            if ($listes->isEmpty()) { #
-                return view('user.election')->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.');
-            }
-            
-            return view('user.election', ['listes' => $listes, 'etudiant' => $user])->with('success', 'Connexion réussie');
+        if (! Auth::guard('web')->attempt($identifiants)) {
+            // Message volontairement générique : on ne révèle pas si le compte existe.
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => 'E-mail ou mot de passe incorrect.']);
         }
 
-        return back()
-            ->withInput($request->only('email'))
-            ->withErrors(['login' => 'E-mail ou mot de passe incorrect']);
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('election'))
+            ->with('success', 'Connexion réussie. Bienvenue '.ucfirst(Auth::user()->prenom).' !');
     }
 
-    // Déconnexion
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Déconnexion réussie');
-    }
 
-    public function compose(View $view)    
-    {                
-        $view->with('etudiant', Auth::check() ? Auth::user() : null);    
+        return redirect()->route('login')->with('success', 'Vous êtes déconnecté. À bientôt !');
     }
 }

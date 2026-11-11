@@ -2,121 +2,127 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Etudiant;
 use App\Models\Listes;
-use App\Models\MembresListe;
 use App\Models\VoteEtudiant;
-use Illuminate\Contracts\View\View;
+use App\Support\Depouillement;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View as ViewFacade;
-
-
-
-
+use Illuminate\Support\Facades\DB;
 
 class user_controller extends Controller
 {
-
-    //fonction detailListe
-    public function detailListe($id_list)
+    /** Listes candidates de l'UFR de l'étudiant connecté. */
+    public function election()
     {
+        $etudiant = Auth::user();
+        $scrutin = $etudiant->ufr?->scrutin;
 
-
-        $membres = MembresListe::with('etudiant')->where('list_id', $id_list)->get();
-
-
-        // Récupérer la liste par son ID
-        $liste = Listes::find($id_list);
-
-        if (!$liste) {
-            return redirect()->back()->with('error', 'Liste introuvable');
-        }
-
-        // Retourner la vue avec les données de la liste
-        return view('user.detailListe', compact('liste', 'membres'));
-    }
-
-    //fonction election
-    public function election(Request $request)
-    { 
-
-
-        // Vérification et tentative d'authentification
-        if (1) {
-            // $request->session()->regenerate();
-
-            $user = Auth::user();
-            // $request->session()->put('ufr_id', $user->ufr_id);
-
-            // Par exemple, récupérer les listes de vote pour cet UFR
-            $listes = Listes::where('ufr_id',  $user->ufr_id)->get();
-
-            if ($listes->isEmpty()) { #
-                return view('user.election')->with('message', 'Aucune liste disponible pour votre UFR pour l\'instant.');
-            }
-
-            return view('user.election', ['listes' => $listes, 'etudiant' => $user])->with('success', 'Connexion réussie');
-        }
-    }
-
-    //fonction page_vote
-    public function page_vote(): View
-    {
-        return view('user.systemevote');
-    }
-
-    //fonction resultat
-    public function resultat(): View
-    {
-        return view('user.resultat');
-    }
-
-
-    public function storeVote($id_list, Request $request)
-    {
-
-        $voteId = $request->input('vote_id');
-
-        
-        if (!$voteId) {
-            return redirect()->back()->with('error','Erreur : Aucun vote en cours trouve');
-        }
-
-        $etudiantId = Auth::user()->id_etudiant;
-
-        // Vérifier si l'étudiant a déjà voté pour ce vote
-        $existingVote = VoteEtudiant::where('etudiant_id', $etudiantId)
-            ->where('vote_id', $voteId)
-            ->where('list_id', $id_list)
-            ->first();
-
-        if ($existingVote) {
-            return redirect()->back()->with('error', 'Vous avez déjà voté pour ce vote en cours.');
-        }
-
-        // Créer l'enregistrement du vote
-        VoteEtudiant::create([
-            'etudiant_id' => $etudiantId,
-            'vote_id'     => $voteId,
-            'list_id'     => $id_list,  // Ajoutez l'ID de la liste si nécessaire
-            'voted_at'    => now(),
-            // Ajoutez d'autres champs si nécessaire, par exemple 'choix'
+        return view('user.election', [
+            'etudiant' => $etudiant,
+            'scrutin' => $scrutin,
+            'bulletin' => $etudiant->bulletinPour($scrutin),
+            'listes' => Listes::where('ufr_id', $etudiant->ufr_id)
+                ->with(['membres' => fn ($q) => $q->where('tete_liste', true)->with('etudiant')])
+                ->withCount('membres')
+                ->orderBy('name_list')
+                ->get(),
         ]);
-
-        return redirect()->back()->with('success', 'Votre vote a bien été enregistré.');
     }
 
+    public function detailListe($id)
+    {
+        $etudiant = Auth::user();
+        $liste = $this->listeDeMonUfr($id, $etudiant);
+        $scrutin = $etudiant->ufr?->scrutin;
 
-    //fonction showSystemeVote
+        return view('user.detailListe', [
+            'liste' => $liste,
+            'membres' => $liste->membres()->with('etudiant')->orderByDesc('tete_liste')->get(),
+            'scrutin' => $scrutin,
+            'bulletin' => $etudiant->bulletinPour($scrutin),
+        ]);
+    }
+
+    /** Écran de confirmation avant dépôt du bulletin. */
     public function showSystemeVote($id)
     {
-        // Récupérer la liste correspondant à l'ID passé dans l'URL
-        $liste = Listes::find($id);
-        if (!$liste) {
-            return redirect()->back()->with('error', 'Liste introuvable');
-        }
-        // Vous pouvez également récupérer d'autres données nécessaires ici
+        $etudiant = Auth::user();
+        $liste = $this->listeDeMonUfr($id, $etudiant);
+        $scrutin = $etudiant->ufr?->scrutin;
 
-        return view('user.systemevote', compact('liste'));
+        return view('user.systemevote', [
+            'liste' => $liste,
+            'teteDeListe' => $liste->membres()->where('tete_liste', true)->with('etudiant')->first()?->etudiant,
+            'scrutin' => $scrutin,
+            'bulletin' => $etudiant->bulletinPour($scrutin),
+        ]);
+    }
+
+    /**
+     * Dépôt du bulletin.
+     *
+     * Toutes les règles sont vérifiées côté serveur ; rien ne dépend de ce
+     * qu'envoie le navigateur en dehors de l'identifiant de la liste choisie :
+     *  - la liste doit appartenir à l'UFR de l'étudiant ;
+     *  - le scrutin est celui de son UFR et doit être ouvert ;
+     *  - un seul bulletin par étudiant et par scrutin (contrainte d'unicité en base).
+     */
+    public function storeVote($id, Request $request)
+    {
+        $request->validate(['confirmation' => 'accepted'], [
+            'confirmation.accepted' => 'Veuillez confirmer votre choix avant de voter.',
+        ]);
+
+        $etudiant = Auth::user();
+        $liste = $this->listeDeMonUfr($id, $etudiant);
+        $scrutin = $etudiant->ufr?->scrutin;
+
+        if (! $scrutin || ! $scrutin->estOuvert()) {
+            return redirect()->route('election')
+                ->with('error', "Le scrutin de votre UFR n'est pas ouvert : aucun vote ne peut être enregistré.");
+        }
+
+        try {
+            DB::transaction(function () use ($etudiant, $scrutin, $liste) {
+                VoteEtudiant::create([
+                    'etudiant_id' => $etudiant->id_etudiant,
+                    'vote_id' => $scrutin->id_vote,
+                    'list_id' => $liste->id_list,
+                    'voted_at' => now(),
+                ]);
+            });
+        } catch (UniqueConstraintViolationException) {
+            return redirect()->route('election')
+                ->with('error', 'Vous avez déjà voté pour ce scrutin : un seul vote par étudiant.');
+        }
+
+        return redirect()->route('election')->with('vote_ok', true);
+    }
+
+    public function resultat()
+    {
+        $etudiant = Auth::user();
+
+        return view('user.resultat', [
+            'scrutin' => $etudiant->ufr?->scrutin,
+            'donnees' => Depouillement::pour($etudiant->ufr),
+        ]);
+    }
+
+    /** Flux JSON rafraîchi automatiquement par la page des résultats. */
+    public function resultatsJson()
+    {
+        return response()->json(Depouillement::pour(Auth::user()->ufr))
+            ->header('Cache-Control', 'no-store');
+    }
+
+    /** Une liste n'est visible que par les étudiants de son UFR. */
+    private function listeDeMonUfr($id, Etudiant $etudiant): Listes
+    {
+        return Listes::where('id_list', $id)
+            ->where('ufr_id', $etudiant->ufr_id)
+            ->firstOrFail();
     }
 }

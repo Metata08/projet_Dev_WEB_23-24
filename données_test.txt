@@ -5,3 +5,9 @@
 admin
 	email : admin@gmail.com
 	password : admin123
+
+codes étudiants officiels libres (pour tester l'inscription puis le vote)
+	p31 3001
+	p31 3002
+	p31 3003
+	(mot de passe : 8 caractères minimum, avec lettres et chiffres)
