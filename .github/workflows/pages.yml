@@ -1,0 +1,87 @@
+name: Démo sur GitHub Pages
+
+# GitHub Pages ne sert que des fichiers statiques : ce workflow lance la vraie application
+# (PHP + SQLite) dans le runner, la parcourt, et publie une copie statique cliquable.
+on:
+  push:
+    branches: [mg4, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    name: Tests et génération de la démo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: voteUGB
+    env:
+      APP_ENV: local
+      APP_DEBUG: 'false'
+      APP_URL: http://127.0.0.1:8000
+      DB_CONNECTION: sqlite
+      SESSION_DRIVER: file
+      CACHE_STORE: file
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: log
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Préparer l'application et les données de démonstration
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+          php artisan migrate --seed --force
+
+      - name: Lancer les tests
+        run: php artisan test
+
+      - name: Démarrer l'application
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > storage/logs/serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/up > /dev/null && exit 0; sleep 1; done
+          cat storage/logs/serve.log; exit 1
+
+      - name: Générer la démo statique
+        run: node scripts/demo-statique.mjs "$GITHUB_WORKSPACE/_site"
+
+      - name: Journal de l'application (en cas d'échec)
+        if: failure()
+        run: tail -n 80 storage/logs/laravel.log || true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publier:
+    name: Publication
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

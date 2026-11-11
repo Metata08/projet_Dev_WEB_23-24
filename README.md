@@ -27,6 +27,19 @@
 
 ![Accueil — ordinateur](image_pages/v2/pc-accueil-hero.jpg)
 
+### Démo en ligne et intégration continue
+
+- **Démo cliquable** : <https://metata08.github.io/projet_Dev_WEB_23-24/> — publiée automatiquement à chaque push sur `mg4` ou `main`.
+  GitHub Pages ne peut pas exécuter PHP : il s'agit d'une **copie statique** générée à partir de la vraie application
+  (toutes les pages, la navigation, les animations et les deux thèmes). Les formulaires y sont simulés et rien n'est
+  enregistré ; le bandeau en bas de page permet de passer de l'étudiant au candidat et à l'administrateur.
+- **Tests** : le workflow `Tests` lance les 24 tests sur PHP 8.2 et 8.3 à chaque push et pull request.
+- Régénérer la démo en local, l'application tournant sur le port 8000 avec une base fraîchement « seedée » :
+
+  ```bash
+  node scripts/demo-statique.mjs ../_site
+  ```
+
 ### Ce qui change
 
 | | Avant | Maintenant |

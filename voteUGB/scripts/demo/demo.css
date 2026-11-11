@@ -1,0 +1,12 @@
+/* Bandeau de la démonstration statique */
+.demo-bandeau {
+  position: fixed; left: 50%; bottom: 0.8rem; transform: translateX(-50%); z-index: 100;
+  display: flex; align-items: center; gap: 0.2rem; padding: 0.3rem; max-width: calc(100% - 1.5rem);
+  border-radius: 999px; background: #2e1402; color: #f0e0d0;
+  font: 600 0.78rem/1 "Inter", system-ui, sans-serif; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+}
+.demo-bandeau strong { padding: 0.5rem 0.7rem; color: #d3a98f; white-space: nowrap; }
+.demo-bandeau a { padding: 0.5rem 0.75rem; border-radius: 999px; color: #f0e0d0; text-decoration: none; white-space: nowrap; }
+.demo-bandeau a:hover { background: #ab775b; color: #fff; }
+.toasts { bottom: 4rem; }
+@media (max-width: 420px) { .demo-bandeau strong { display: none; } }
